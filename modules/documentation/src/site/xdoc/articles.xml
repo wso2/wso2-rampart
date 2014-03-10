@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<h1>Apache Rampart Knowledge Base</h1>
+<p>This page contains articles, tutorials, presentations and
+question and answers published on various Web sites on the Apache
+Rampart. </p>
+<h2>Articles:</h2>
+<ul>
+<li><a href="http://wso2.org/library/240">
+UsernameToken Authentication with Rampart</a>- By Ruchith Ferenando</li>
+<li><a href="http://www.xml.com/pub/a/2007/05/02/sure-reliable-web-services-with-apache.html">
+Secure, Reliable Web Services with Apache</a>- By Kyle Gabhart</li>
+<li><a href="http://wso2.org/library/3132">
+Understanding WS - Security Policy Language</a>- By Nandana Mihindukulasooriya</li>
+<li><a href="http://wso2.org/library/1027">
+Integrating WS-Security and WS-SecureConversation Implementations with Apache Sandesha2 </a>- By Chamikara Jayalath</li>
+</ul>
+
+<h2>Tutorials</h2>
+<ul>
+<li><a href="http://wso2.org/library/140">Secure Message Exchanges with Multiple Users</a>- By
+Ruchith Fernando</li>
+<li><a href="http://wso2.org/library/174">Setting Up Keystores for a Client and a Service</a>- By
+Ruchith Fernando</li>
+<li><a href="http://wso2.org/library/3190">Web Services Security with Apache Rampart - Part 1 (Transport Level Security)</a>- By
+Nandana Mihindukulasooriya</li>
+<li><a href="http://wso2.org/library/3415">Web Services Security with Apache Rampart - Part 2 (Message-Level Security)</a>- By
+Nandana Mihindukulasooriya</li>
+</ul>
+
+<h2>Presentations</h2>
+<ul>
+<li><a href="http://wso2.org/library/136">Secure Web Services with Apache Rampart</a>- By
+Ruchith Fernando</li>
+<li><a href="http://wso2.org/library/2534">Apache Rahas</a>- By
+Ruchith Fernando</li>
+</ul>
+<h2>Interviews</h2>
+<ul>
+<li><a href="http://wso2.org/library/695">Secure Messaging with Apache Rampart/Java</a>- By
+Ruchith Fernando</li>
+</ul>
+<h2>Questions and Answers</h2>
+<ul>
+<li><a href="http://wso2.org/library/2507">Timestamp validation fails! Why?</a></li>
+<li><a href="http://wso2.org/library/2506">How can I convert an LLOM AXIOM tree into a DOOM AXIOM tree?</a></li>
+<li><a href="http://wso2.org/library/169">How can I obtain UsernameToken information at the service?</a></li>
+<li><a href="http://wso2.org/library/116">Unexpected number of X509Data: for Signature. Why?</a></li>
+</ul>
+</body>
+</html>

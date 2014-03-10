@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+      <soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">
+         <wsa:Action>http://www.w3.org/2005/08/addressing/soap/fault</wsa:Action>
+         <wsa:RelatesTo>urn:uuid:AEDBA74A8D1FC94B631214227032877</wsa:RelatesTo>
+      </soapenv:Header>
+      <soapenv:Body>
+      <ns:echoResponse xmlns:ns="http://sample01.policy.samples.rampart.apache.org">
+         <ns:return>Hello world</ns:return>
+      </ns:echoResponse>
+      </soapenv:Body>
+   </soapenv:Envelope>

@@ -1,0 +1,64 @@
+<!--
+  ~  Licensed to the Apache Software Foundation (ASF) under one
+  ~  or more contributor license agreements.  See the NOTICE file
+  ~  distributed with this work for additional information
+  ~  regarding copyright ownership.  The ASF licenses this file
+  ~  to you under the Apache License, Version 2.0 (the
+  ~  "License"); you may not use this file except in compliance
+  ~  with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~   * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
+  <document>
+      <properties>
+        <title>Setting up a Security Token Service</title>
+    </properties>
+    <head>
+    </head>
+    <body>
+    <h1>Setting up a Security Token Service</h1>
+            <h3>Setting up a Security Token Service</h3>
+        <p>Security Token Service can be set up as per WS-Trust specification using Rampart. The default security token service shipped with the rampart distribution is contained in the rampart-trust.mar module. It can issue SCT tokens and SAML tokens. Sample05 contains a client that connects to the default STS and obtain a SAML token. The services.xml in the sample contains "saml-issuer-config" parameter that is used to configure the default SAML issuer.</p>
+        <strong>STS with a custom issuer</strong>
+        <p>First the default rampart.mar has to be removed from the modules. Then write you own issuer implementing the <code>"org.apache.rahas.TokenIssuer"</code> interface. Let's say that your issuer is <code>"org.custom.MyIssuer"</code>. Then create a Axis2 service archive with the following in the services.xml. Drop the archive into the repository and you have a STS with a CustomToken issuer.</p>
+
+        <pre>
+
+&lt;module ref="rampart" /&gt;
+
+&lt;operation name="IssueToken"
+        mep="http://www.w3.org/2006/01/wsdl/in-out"&gt;
+    &lt;messageReceiver
+            class="org.apache.rahas.STSMessageReceiver"/&gt;
+
+    &lt;!-- Action mapping to accept RST requests --&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT&lt;/actionMapping&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Issue&lt;/actionMapping&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Renew&lt;/actionMapping&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Cancel&lt;/actionMapping&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel&lt;/actionMapping&gt;
+    &lt;actionMapping&gt;http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Validate&lt;/actionMapping&gt;
+
+    &lt;parameter name="token-dispatcher-configuration"&gt;
+        &lt;token-dispatcher-configuration&gt;
+        &lt;!-- Issuers. You may have many issuers. --&gt;
+        &lt;issuer class="org.custom.MyIssuer" default="true"&gt;
+                &lt;configuration
+                        type="parameter"&gt;saml-issuer-config&lt;/configuration&gt;
+                &lt;tokenType&gt;http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1&lt;/tokenType&gt;
+            &lt;/issuer&gt;
+        &lt;/token-dispatcher-configuration&gt;
+    &lt;/parameter&gt;
+
+&lt;/operation&gt;
+
+</pre>
+    </body>
+ </document>

@@ -1,0 +1,22 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+     <soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing">
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" soapenv:mustUnderstand="1">
+           <wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="Timestamp-12468716">
+              <wsu:Created>2008-06-23T13:17:13.841Z</wsu:Created>
+              <wsu:Expires>2008-06-23T13:22:13.841Z</wsu:Expires>
+           </wsu:Timestamp>
+           <wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UsernameToken-31571602">
+              <wsse:Username>alice</wsse:Username>
+              <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">bobPW</wsse:Password>
+           </wsse:UsernameToken>
+        </wsse:Security>
+        <wsa:To>http://localhost:8081/axis2/services/sample01</wsa:To>
+        <wsa:MessageID>urn:uuid:AEDBA74A8D1FC94B631214227032877</wsa:MessageID>
+        <wsa:Action>urn:echo</wsa:Action>
+     </soapenv:Header>
+     <soapenv:Body>
+        <ns1:echo xmlns:ns1="http://sample01.policy.samples.rampart.apache.org">
+           <param0>Hello world</param0>
+        </ns1:echo>
+     </soapenv:Body>
+  </soapenv:Envelope>

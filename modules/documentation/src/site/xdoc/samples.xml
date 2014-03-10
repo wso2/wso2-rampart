@@ -1,0 +1,135 @@
+<!--
+  ~  Licensed to the Apache Software Foundation (ASF) under one
+  ~  or more contributor license agreements.  See the NOTICE file
+  ~  distributed with this work for additional information
+  ~  regarding copyright ownership.  The ASF licenses this file
+  ~  to you under the Apache License, Version 2.0 (the
+  ~  "License"); you may not use this file except in compliance
+  ~  with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing,
+  ~  software distributed under the License is distributed on an
+  ~   * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~  KIND, either express or implied.  See the License for the
+  ~  specific language governing permissions and limitations
+  ~  under the License.
+  -->
+  <document>
+    <properties>
+        <title>Apache Rampart Samples</title>
+    </properties>
+    <head>
+    </head>
+  <body>
+        <h1>Rampart Samples</h1>
+        <h2> Basic samples </h2>
+        <p>These samples use parameter based configuration model. This will be a great starting point to get a basic understanding of how WS Security really works.  </p>
+        <h2> Policy samples </h2>
+        <p>These samples use WS Security Policy Language for configuration. It is recommended to use policy based configuration model for all production scenarios </p>
+        <h3>Running Samples</h3>
+        <p>Now we'll look at how to run the first sample inside samples/policy folder.</p>
+        <ol>
+            <li>Open a console and change the directory to sample/policy and give the following command. This will start the server at port 8080</li>
+            <pre>
+<code>$ant service.01</code>
+            </pre>
+            <li>Open a new console and change the directory to sample/policy and type the following command.</li>
+            <pre>
+<code>$ant client.01</code>
+            </pre>
+        </ol>
+        <p>Congratulations! Now you have executed the first sample. Rest of the samples can be run by changing the sample number.</p>
+        <br></br>
+        <br></br>
+        <h3>Samples</h3>
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 01</td></tr>
+                <tr/>           
+           </tbody>
+        </table>
+        <div  style="margin-left:2px;margin-right:-2px;">UsernameToken Authentication, The policy uses a TransportBinding and requires a SignedSupportingToken which 
+is a UsernameToken and the inclusion of a TimeStamp. </div>
+        <ul>
+            <li><a href="samples/policy/sample01.xml">Policy</a></li>
+            <li><a href="samples/msgs/req01.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res01.xml">Response Message</a></li>
+        </ul>
+
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 02</td></tr>
+                <tr/>
+           </tbody>
+        </table>
+        <div class="b" style="margin-left:2px;margin-right:-2px;">Sign only, An AsymmetricBinding is used. Entire headers and body to be signed.
+Algorithm suite is TripleDesRsa15.</div>
+        <ul>
+            <li><a href="samples/policy/sample02.xml">Policy</a></li>
+            <li><a href="samples/msgs/req02.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res02.xml">Response Message</a></li>
+        </ul>
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 03</td></tr>
+                <tr/>           
+           </tbody>
+        </table>
+        <div class="b" style="margin-left:2px;margin-right:-2px;">Sign and Encrypt messages, An AsymmetricBinding is used. Entire headers and body to be signed. 
+EncryptionParts specifies the Body to be encrypted. </div>
+        <ul>
+            <li><a href="samples/policy/sample03.xml">Policy</a></li>
+            <li><a href="samples/msgs/req03.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res03.xml">Response Message</a></li>
+        </ul>
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 04</td></tr>
+                <tr/>
+           </tbody>
+        </table>
+        <div class="b" style="margin-left:2px;margin-right:-2px;">SecureConversation , The secure session is bootstrapped using a SymetricBinding which uses derived keys based on an ephemeral key. 
+Messages in the secure conversation includes a timestamp, all headers are signed along with the timestamp, signature encrypted and body encrypted.</div>
+        <ul>
+            <li><a href="samples/policy/sample04.xml">Policy</a></li>
+            <li><a href="samples/msgs/rst04.xml">Bootstrap request (RST)</a></li>
+            <li><a href="samples/msgs/rstr04.xml">Bootstrap response (RSTR)</a></li>
+            <li><a href="samples/msgs/req04.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res04.xml">Response Message</a></li>
+            <li><a href="samples/msgs/creq04.xml">Cancel request </a></li>
+            <li><a href="samples/msgs/cres04.xml">Cancel response</a></li>
+        </ul>
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 05</td></tr>                
+                <tr/>            
+           </tbody>
+        </table>
+        <div class="b" style="margin-left:2px;margin-right:-2px;">WS-Trust - RST - Resquest Security Token Service - Issuing a SAML token - issuing a token </div>
+        <ul>
+            <li><a href="samples/policy/sample05.xml">Policy</a></li>
+            <li><a href="samples/msgs/req05.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res05.xml">Response Message</a></li>
+        </ul>
+        <br></br>
+        <table class="bodyTable">
+            <tbody>
+                <tr class="a"><td>Sample 06</td></tr>              
+                <tr/>
+           </tbody>
+        </table>
+        <div class="b" style="margin-left:2px;margin-right:-2px;">WS-Trust ( With WS Metada Exchange) - RST - Resquest Security Token Service - Issuing a SAML token  </div>
+        <ul>
+            <li><a href="samples/policy/sample01.xml">Policy</a></li>
+            <li><a href="samples/msgs/req06.xml">Request Message</a></li>
+            <li><a href="samples/msgs/res06.xml">Response Message</a></li>
+        </ul>
+  </body>
+ </document>

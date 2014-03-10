@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project name="Apache Rampart release build" default="dist">
+
+    <property name="rampart.version" value="SNAPSHOT"/>
+    <property name="rampart.bin.dist" value="rampart"/>
+    <property name="rampart.src.dist" value="rampart-src"/>
+    <property name="rampart.docs.dist" value="rampart-docs"/>
+    
+    <property name="dir.dist" value="dist"/>
+    <property name="dir.dist.bin" value="${dir.dist}/bin/${rampart.bin.dist}-${rampart.version}"/>
+    <property name="dir.dist.src" value="${dir.dist}/src/${rampart.src.dist}-${rampart.version}"/>
+    <property name="dir.dist.docs" value="${dir.dist}/docs/${rampart.docs.dist}-${rampart.version}"/>
+    
+    <property name="dir.mvn2.repo" value="${user.home}/.m2/repository"/>
+    
+    <property name="version.bcprov13" value="132"/>
+    <property name="version.bcprov15" value="132"/>
+        
+    <property name="version.xmlsec" value="1.4.0"/>
+    <property name="version.opensaml" value="1.1"/>
+    <property name="version.wss4j" value="SNAPSHOT"/>
+    
+        
+    <condition property="jdk14.present">
+      <equals arg1="${ant.java.version}" arg2="1.4"/>
+    </condition>
+
+    <target name="init">
+    		<mkdir dir="${dir.dist}"/>
+    </target>
+    
+    <target name="dist" depends="clean, bin-dist, src-dist, docs-dist">
+        <copy todir="${dir.dist}" file="modules/rampart-mar/target/rampart-${rampart.version}.mar"/>
+		<copy todir="${dir.dist}" file="modules/rampart-trust-mar/target/rahas-${rampart.version}.mar"/>
+	    <copy todir="${dir.dist}" file="modules/rampart-core/target/rampart-core-${rampart.version}.jar"/>
+        <copy todir="${dir.dist}" file="modules/rampart-policy/target/rampart-policy-${rampart.version}.jar"/>
+        <copy todir="${dir.dist}" file="modules/rampart-trust/target/rampart-trust-${rampart.version}.jar"/>
+    </target>
+
+    <target name="bin-dist" depends="init">
+    		
+        <mkdir dir="${dir.dist.bin}"/>
+		
+        <copy todir="${dir.dist.bin}">
+            <fileset dir="release-docs">
+            </fileset>
+        </copy>
+        
+        <!-- Modules -->
+        <echo>Copying mars in to modules</echo>
+        <copy todir="${dir.dist.bin}" file="modules/rampart-mar/target/rampart-${rampart.version}.mar"/>
+        <copy todir="${dir.dist.bin}" file="modules/rampart-trust-mar/target/rahas-${rampart.version}.mar"/>
+        
+        <!-- All dep jars -->
+        <echo>Copying dependencies into lib</echo>
+        <mkdir dir="${dir.dist.bin}/lib"/>
+        
+        <copy todir="${dir.dist.bin}/lib" file="modules/rampart-core/target/rampart-core-${rampart.version}.jar"/>
+        <copy todir="${dir.dist.bin}/lib" file="modules/rampart-policy/target/rampart-policy-${rampart.version}.jar"/>
+        <copy todir="${dir.dist.bin}/lib" file="modules/rampart-trust/target/rampart-trust-${rampart.version}.jar"/>
+        <copy todir="${dir.dist.bin}/lib" file="${dir.mvn2.repo}/org/apache/santuario/xmlsec/${version.xmlsec}/xmlsec-${version.xmlsec}.jar"/>
+        <copy todir="${dir.dist.bin}/lib" file="${dir.mvn2.repo}/opensaml/opensaml/${version.opensaml}/opensaml-${version.opensaml}.jar"/>
+        <copy todir="${dir.dist.bin}/lib" file="${dir.mvn2.repo}/org/apache/ws/security/wss4j/${version.wss4j}/wss4j-${version.wss4j}.jar"/>
+        <antcall target="copy-bc-jar-14" />
+        <antcall target="copy-bc-jar-15" />
+
+        <echo>Copying samples</echo>
+        <!-- copy samples -->
+        <mkdir dir="${dir.dist.bin}/samples"/>
+        
+        <copy todir="${dir.dist.bin}/samples">
+            <fileset dir="modules/rampart-samples/">
+            </fileset>
+        </copy>
+        
+        <zip destfile="${dir.dist}/${rampart.bin.dist}-${rampart.version}.zip">
+            <zipfileset dir="${dir.dist.bin}/../"/>
+        </zip>
+        
+        <delete dir="${dir.dist.bin}/../"/>
+
+    </target>
+    
+    <target name="copy-bc-jar-14" if="${jdk14.present}">
+		<copy todir="${dir.dist.bin}/lib" file="${dir.mvn2.repo}/bouncycastle/bcprov-jdk13/${version.bcprov13}/bcprov-jdk13-${version.bcprov13}.jar"/>
+    </target>
+
+    <target name="copy-bc-jar-15" unless="${jdk14.present}">
+		<copy todir="${dir.dist.bin}/lib" file="${dir.mvn2.repo}/bouncycastle/bcprov-jdk15/${version.bcprov15}/bcprov-jdk15-${version.bcprov15}.jar"/>
+    </target>
+    
+    <target name="src-dist" depends="init">
+
+        <mkdir dir="${dir.dist.src}"/>
+		
+        <copy todir="${dir.dist.src}">
+            <fileset dir="release-docs">
+                <exclude name="build.xml"/>
+                <exclude name="README.txt"/>
+            </fileset>
+        </copy>
+        
+        <copy todir="${dir.dist.src}">
+			<fileset dir="modules">
+			    <include name="rampart-core/**/*"/>
+				<include name="rampart-policy/**/*"/>
+			    <include name="rampart-trust/**/*"/>
+			    <include name="rampart-samples/**/*"/>
+			    <exclude name=".svn"/>
+			</fileset>
+    		</copy>
+        
+        <zip destfile="${dir.dist}/${rampart.src.dist}-${rampart.version}.zip">
+            <zipfileset dir="${dir.dist.src}/../"/>
+        </zip>
+        
+        <delete dir="${dir.dist.src}/../"/>        
+    </target>
+
+    <target name="docs-dist">
+
+        <mkdir dir="${dir.dist.docs}"/>
+
+        <copy todir="${dir.dist.docs}">
+            <fileset dir="release-docs">
+                <exclude name="build.xml"/>
+                <exclude name="README.txt"/>
+            </fileset>
+        </copy>
+        
+        <mkdir dir="${dir.dist.docs}/core"/>
+        <mkdir dir="${dir.dist.docs}/policy"/>
+        <mkdir dir="${dir.dist.docs}/trust"/>
+        
+        <copy todir="${dir.dist.docs}/core">
+        		<fileset dir="modules/rampart-core/target/site/apidocs/">
+        		</fileset>
+        </copy>
+        
+        <copy todir="${dir.dist.docs}/policy">
+        		<fileset dir="modules/rampart-policy/target/site/apidocs/">
+        		</fileset>
+        </copy>
+
+        <copy todir="${dir.dist.docs}/trust">
+        		<fileset dir="modules/rampart-trust/target/site/apidocs/">
+        		</fileset>
+        </copy>
+        
+        <zip destfile="${dir.dist}/${rampart.docs.dist}-${rampart.version}.zip">
+            <zipfileset dir="${dir.dist.docs}/../"/>
+        </zip>
+            
+        <delete dir="${dir.dist.docs}/../"/>
+    </target>
+
+    <target name="clean">
+		<delete dir="${dir.dist}"/>
+    </target>
+    
+</project>

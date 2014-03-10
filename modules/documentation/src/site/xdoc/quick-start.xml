@@ -1,0 +1,38 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	</head>
+	<body>
+		<h1>Rampart Quick Start Guide</h1>
+
+		<h3>Installing Rampart module in Axis2</h3>
+		<p>Steps to install</p>
+		<ol>
+			<li>If you haven't installed Axis2, then download and extract the standard binary distribution. Make sure you have set the AXIS2_HOME environment variable</li>
+			<li>Run ant from the "samples" directory to copy the required libraries and modules to relevant directories in AXIS2_HOME.</li>
+		</ol>
+		<p></p>
+
+	    <h3>Engaging Rampart</h3>
+		<p>When securing a SOAP message, the sender must know the security actions to be performed on the message and the receiver must know enough details to process and validate the security of the message. Therefore when using Rampart with Axis2, it must be engaged at both ends.</p>
+		<p>Observe how module has been engaged in server side by opening samples/policy/sample01/services.xml. The following line has engaged the module.</p>
+		<p>Engaging Rampart at client side is done programatically as follows.</p>
+		<pre>
+            ServiceClient client = new ServiceClient(ctx, null);<br/>
+            client.engageModule("rampart");
+        </pre>
+		<h3>Understanding policy</h3>
+		<p>WS-Security Policy can be used to indicate what security actions that needs be performed on SOAP messages and and what actions should be validated. The file 'samples/policy/sample01/policy.xml' configures Rampart to add Username Token with Timestamp to this message. The element &lt;RampartConfig&gt; in policy.xml defines Rampart specific configurations. </p>
+		<p>Policy at serverside is included in samples/policy/sample01/services.xml file. This configures Rampart module at serverside to validate the message for Username Token an Timestamp.</p>
+		<p>More details on RampartConfig can be found <a href="rampartconfig-guide.html">here</a>.</p>
+
+	    <h3>Viewing the Message on wire</h3>
+		<p>It is interesting to view the secured SOAP message on the wire using TCP monitor. Change the "client.port" property in samples/policy/build.xml file to the listening port of TCP monitor. This will send all the messages through TCP monitor when you execute the ant script. Observe the &lt;wsse:Security&gt; header in the SOAP message.</p>
+
+
+
+	</body>
+</html>
+

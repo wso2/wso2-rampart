@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.apache.rampart</groupId>
+        <artifactId>rampart-project</artifactId>
+        <version>1.6.1-wso2v12-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>rampart-integration</artifactId>
+    <packaging>jar</packaging>
+    <name>Rampart - Integration</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-mars</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.rampart</groupId>
+                                    <artifactId>rampart</artifactId>
+                                    <version>${rampart.mar.version}</version>
+                                    <type>mar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/artifacts</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.rampart</groupId>
+                                    <artifactId>rahas</artifactId>
+                                    <version>${rahas.mar.version}</version>
+                                    <type>mar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/artifacts</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.axis2</groupId>
+                                    <artifactId>addressing</artifactId>
+                                    <version>${axis2.version}</version>
+                                    <type>mar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/artifacts</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-source</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
+                                    <arg line="-uri src/main/resources/ping/ping.wsdl -ss -o target/generated-code -p org.apache.axis2.oasis.ping -d xmlbeans -g" />
+                                    <classpath refid="maven.dependency.classpath" />
+                                    <classpath refid="maven.compile.classpath" />
+                                    <classpath refid="maven.runtime.classpath" />
+                                </java>
+                                <!-- copy the service impl -->
+                                <copy file="src/main/resources/ping/src/org/apache/axis2/oasis/ping/PingPortSkeleton.java" tofile="target/generated-code/src/org/apache/axis2/oasis/ping/PingPortSkeleton.java" overwrite="yes" />
+                                <!-- Password callback class for the interop service -->
+                                <copy file="src/main/resources/ping/src/org/apache/axis2/security/PWCallback.java" tofile="target/generated-code/src/org/apache/axis2/security/PWCallback.java" overwrite="yes" />
+                                <!-- Interop client -->
+                                <copy file="src/main/resources/ping/src/org/apache/axis2/security/InteropScenarioClient.java" tofile="target/generated-code/src/org/apache/axis2/security/InteropScenarioClient.java" overwrite="yes" />
+
+                                <copy todir="target/test-classes">
+                                    <fileset dir="target/generated-code/resources">
+                                        <include name="**/*" />
+                                    </fileset>
+                                </copy>
+
+
+                                <javac srcdir="target/generated-code" destdir="target/classes" fork="true">
+                                    <classpath refid="maven.dependency.classpath" />
+                                    <classpath refid="maven.compile.classpath" />
+                                    <classpath refid="maven.runtime.classpath" />
+                                </javac>
+
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-test-resources</id>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="addressing.mar" value="addressing-${axis2.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-classes/modules/addressing-${axis2.version}.mar" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-classes/modules/rampart-${rampart.mar.version}.mar" />
+
+                                <mkdir dir="target/temp-ramp" />
+                                <mkdir dir="target/temp-ramp/META-INF" />
+
+                                <copy overwrite="yes" file="target/classes/org/apache/rampart/Service.class" tofile="target/temp-ramp/org/apache/rampart/Service.class" />
+                                <copy overwrite="yes" file="target/classes/org/apache/rampart/PWCallback.class" tofile="target/temp-ramp/org/apache/rampart/PWCallback.class" />
+                                <copy overwrite="yes" file="src/test/resources/rampart/store.jks" tofile="target/temp-ramp/store.jks" />
+                                <!--path id="ramp.client.props" location="test-resources/rampart"/-->
+                                <!--maven:addPath id="maven.dependency.classpath" refid="ramp.client.props" -->
+                                <mkdir dir="target/test-resources/rampart_client_repo" />
+                                <mkdir dir="target/test-resources/rampart_client_repo/conf" />
+                                <mkdir dir="target/test-resources/rampart_client_repo/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rampart_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/rahas-${rahas.mar.version}.mar" tofile="target/test-resources/rampart_client_repo/modules/rahas-${rahas.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rampart_client_repo/modules/addressing-${axis2.version}.mar" />
+                                <mkdir dir="target/test-resources/rampart_service_repo" />
+                                <mkdir dir="target/test-resources/rampart_service_repo/conf" />
+                                <mkdir dir="target/test-resources/rampart_service_repo/services" />
+                                <mkdir dir="target/test-resources/rampart_service_repo/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rampart_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/rahas-${rahas.mar.version}.mar" tofile="target/test-resources/rampart_service_repo/modules/rahas-${rahas.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rampart_service_repo/modules/addressing-${axis2.version}.mar" />
+
+                                <!-- Service 1 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-1.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService1.aar" basedir="target/temp-ramp" />
+                                <!-- Service 2 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-2.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService2.aar" basedir="target/temp-ramp" />
+                                <!-- Service 3 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-3.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService3.aar" basedir="target/temp-ramp" />
+                                <!-- Service 4 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-4.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService4.aar" basedir="target/temp-ramp" />
+                                <!-- Service 5 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-5.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService5.aar" basedir="target/temp-ramp" />
+                                <!-- Service 6 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-6.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService6.aar" basedir="target/temp-ramp" />
+                                <!-- Service 7 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-7.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService7.aar" basedir="target/temp-ramp" />
+                                <!-- Service 8 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-8.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService8.aar" basedir="target/temp-ramp" />
+                                <!-- Service 9 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-9.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService9.aar" basedir="target/temp-ramp" />
+                                <!-- Service 10 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-10.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService10.aar" basedir="target/temp-ramp" />
+                                <!-- Service 11 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-11.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService11.aar" basedir="target/temp-ramp" />
+                                <!-- Service 12 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-12.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService12.aar" basedir="target/temp-ramp" />
+                                <!-- Service 13 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-13.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService13.aar" basedir="target/temp-ramp" />
+                                <!-- Service 14 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-14.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService14.aar" basedir="target/temp-ramp" />
+                                <!-- Service 15 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-15.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService15.aar" basedir="target/temp-ramp" />
+                                <!-- Service 16 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-16.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService16.aar" basedir="target/temp-ramp" />
+                                <!-- Service 17 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-17.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService17.aar" basedir="target/temp-ramp" />
+                                <!-- Service 18 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-18.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService18.aar" basedir="target/temp-ramp" />
+                                <!-- Service 19 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-19.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService19.aar" basedir="target/temp-ramp" />
+                                <!-- Service 20 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-20.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService20.aar" basedir="target/temp-ramp" />
+                                <!-- Service 21 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-21.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService21.aar" basedir="target/temp-ramp" />
+                                <!-- Service 22 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-22.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService22.aar" basedir="target/temp-ramp" />
+                                <!-- Service 23 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-23.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService23.aar" basedir="target/temp-ramp" />
+                                <!-- Service 24 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-24.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService24.aar" basedir="target/temp-ramp" />
+                               <!-- Service 25 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-25.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService25.aar" basedir="target/temp-ramp" />
+                                <!-- Service 26 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-26.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService26.aar" basedir="target/temp-ramp" />
+                                 <!-- Service 27 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-27.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService27.aar" basedir="target/temp-ramp" />
+                                <!-- Service 28 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-28.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService28.aar" basedir="target/temp-ramp" />
+                                <!-- Service 29 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-29.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService29.aar" basedir="target/temp-ramp" />
+                                <!-- Service 30 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-30.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService30.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service 31 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-31.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService31.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service 32 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-32.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService32.aar" basedir="target/temp-ramp" />
+
+				<!-- Service 33 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-33.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService33.aar" basedir="target/temp-ramp" />
+
+				<!-- Service 34 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-34.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureService34.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service SC-1 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties" />
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-1.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC1.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service SC-2 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties" />
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-2.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC2.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service SC-3 -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties" />
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-3.xml" tofile="target/temp-ramp/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC3.aar" basedir="target/temp-ramp" />
+
+                                <!-- Service SC-4 This is with standard secure conversation specification -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties"/>
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-4.xml" tofile="target/temp-ramp/META-INF/services.xml"/>
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC4.aar"  basedir="target/temp-ramp"/>
+
+                                <!-- Service SC-5 This is with standard secure conversation specification -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties"/>
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-5.xml" tofile="target/temp-ramp/META-INF/services.xml"/>
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC5.aar" basedir="target/temp-ramp"/>
+
+                                <!-- Service SC-6 This is with standard secure conversation specification -->
+                                <copy overwrite="yes" file="src/test/resources/rampart/issuer.properties" tofile="target/temp-ramp/issuer.properties"/>
+                                <copy overwrite="yes" file="src/test/resources/rampart/services-sc-6.xml" tofile="target/temp-ramp/META-INF/services.xml"/>
+                                <jar jarfile="target/test-resources/rampart_service_repo/services/SecureServiceSC6.aar" basedir="target/temp-ramp"/>
+
+                                <!--
+                                 Set up the infra for rahas tests and the rahas client repo
+                                -->
+                                <mkdir dir="target/temp-rahas" />
+                                <mkdir dir="target/temp-rahas/META-INF" />
+                                <copy overwrite="yes" file="target/classes/org/apache/rahas/Service.class" tofile="target/temp-rahas/org/apache/rahas/Service.class" />
+                                <copy overwrite="yes" file="target/classes/org/apache/rahas/PWCallback.class" tofile="target/temp-rahas/org/apache/rahas/PWCallback.class" />
+                                <copy overwrite="yes" todir="target/temp-rahas">
+                                    <fileset dir="src/test/resources/rahas">
+                                        <include name="issuer.properties" />
+                                        <include name="rahas-sts.jks" />
+                                    </fileset>
+                                </copy>
+                                <!--path id="rahas.client.props" location="test-resources/rahas" -->
+                                <!--addPath id="maven.dependency.classpath" refid="rahas.client.props"-->
+                                <mkdir dir="target/test-resources/rahas_client_repo" />
+                                <mkdir dir="target/test-resources/rahas_client_repo/conf" />
+                                <mkdir dir="target/test-resources/rahas_client_repo/modules" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rahas_client_repo/modules/addressing-${axis2.version}.mar" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rahas_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <!-- Rahas Test1: SAML Token test -->
+                                <mkdir dir="target/test-resources/rahas_service_repo_1" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_1/conf" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_1/services" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_1/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_1/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/rahas-${rahas.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_1/modules/rahas-${rahas.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rahas_service_repo_1/modules/addressing-${axis2.version}.mar" />
+                                <!-- copy the services.xml and create the aar -->
+                                <copy overwrite="yes" file="src/test/resources/rahas/s1-services.xml" tofile="target/temp-rahas/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rahas_service_repo_1/services/SecureService.aar" basedir="target/temp-rahas" />
+                                <!-- Rahas Test1: SAML Token test : END -->
+                                <!--
+                                 Rahas Test 3 & 4: RahasSAMLTokenUTForHoKTest and RahasSAMLTokenUTForHoKV1205Test
+                                -->
+                                <mkdir dir="target/test-resources/rahas_service_repo_3" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_3/conf" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_3/services" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_3/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_3/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/rahas-${rahas.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_3/modules/rahas-${rahas.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rahas_service_repo_3/modules/addressing-${axis2.version}.mar" />
+                                <!-- copy the services.xml and create the aar -->
+                                <copy overwrite="yes" file="src/test/resources/rahas/s3-services.xml" tofile="target/temp-rahas/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rahas_service_repo_3/services/SecureService.aar" basedir="target/temp-rahas" />
+                                <!--
+                                 Rahas Test 3 & 4: RahasSAMLTokenUTForHoKTest and RahasSAMLTokenUTForHoKV1205Test : END
+                                -->
+                                <mkdir dir="target/test-resources/default_security_client_repo" />
+                                <mkdir dir="target/test-resources/default_security_client_repo/conf" />
+                                <mkdir dir="target/test-resources/default_security_client_repo/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/default_security_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/default_security_client_repo/modules/addressing-${axis2.version}.mar" />
+                                <copy file="src/test/resources/conf/axis2.xml" tofile="target/test-resources/default_security_client_repo/conf/axis2.xml" />
+                                <!--
+                        RahasSAMLTokenAttributeTest
+                        -->
+                                <mkdir dir="target/test-resources/rahas_service_repo_5" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_5/conf" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_5/services" />
+                                <mkdir dir="target/test-resources/rahas_service_repo_5/modules" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_5/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/rahas-${rahas.mar.version}.mar" tofile="target/test-resources/rahas_service_repo_5/modules/rahas-${rahas.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/rahas_service_repo_5/modules/addressing-${axis2.version}.mar" />
+                                <!-- copy the services.xml and create the aar -->
+                                <copy overwrite="yes" file="src/test/resources/rahas/s5-services.xml" tofile="target/temp-rahas/META-INF/services.xml" />
+                                <jar jarfile="target/test-resources/rahas_service_repo_5/services/SecureService.aar" basedir="target/temp-rahas" />
+
+                                <!--RahasAttributeTest END-->
+                                <!-- Scenario 1 -->
+                                <mkdir dir="target/test-resources/scenario1_client_repo" />
+                                <mkdir dir="target/test-resources/scenario1_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario1_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario1_client_repo/services" />
+                                <mkdir dir="target/test-resources/scenario1_service_repo" />
+                                <mkdir dir="target/test-resources/scenario1_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario1_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario1_service_repo/modules" />
+                                <!-- setup scenario 1 client repository-->
+                                <copy file="src/test/resources/security/s1.client.axis2.xml" tofile="target/test-resources/scenario1_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario1_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <!-- setup scenario 1 service repository-->
+                                <copy file="src/test/resources/security/s1.service.axis2.xml" tofile="target/test-resources/scenario1_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario1_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+
+                                <mkdir dir="target/temp-interop/META-INF" />
+
+                                <!-- Create the .aar file -->
+                                <copy file="src/test/resources/security/s1.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario1_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+                                <!-- Scenario 2 - Setup the client and service repos -->
+                                <mkdir dir="target/test-resources/scenario2_client_repo" />
+                                <mkdir dir="target/test-resources/scenario2_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario2_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario2_service_repo" />
+                                <mkdir dir="target/test-resources/scenario2_service_repo/ conf" />
+                                <mkdir dir="target/test-resources/scenario2_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario2_service_repo/modules" />
+                                <copy file="src/test/resources/security/s2.client.axis2.xml" tofile="target/test-resources/scenario2_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario2_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s2.service.axis2.xml" tofile="target/test-resources/scenario2_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario2_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s2.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario2_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario 2a - set up repos -->
+                                <mkdir dir="target/test-resources/scenario2a_client_repo" />
+                                <mkdir dir="target/test-resources/scenario2a_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario2a_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario2a_service_repo" />
+                                <mkdir dir="target/test-resources/scenario2a_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario2a_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario2a_service_repo/modules" />
+                                <copy file="src/test/resources/security/s2a.client.axis2.xml" tofile="target/test-resources/scenario2a_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario2a_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s2a.service.axis2.xml" tofile="target/test-resources/scenario2a_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario2a_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s2a.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario2a_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+                                <!-- Scenario 3 -->
+                                <mkdir dir="target/test-resources/scenario3_client_repo" />
+                                <mkdir dir="target/test-resources/scenario3_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario3_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario3_service_repo" />
+                                <mkdir dir="target/test-resources/scenario3_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario3_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario3_service_repo/modules" />
+                                <copy file="src/test/resources/security/s3.client.axis2.xml" tofile="target/test-resources/scenario3_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario3_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s3.service.axis2.xml" tofile="target/test-resources/scenario3_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario3_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s3.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario3_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario 4 -->
+                                <mkdir dir="target/test-resources/scenario4_client_repo" />
+                                <mkdir dir="target/test-resources/scenario4_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario4_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario4_service_repo" />
+                                <mkdir dir="target/test-resources/scenario4_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario4_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario4_service_repo/modules" />
+                                <copy file="src/test/resources/security/s4.client.axis2.xml" tofile="target/test-resources/scenario4_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario4_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s4.service.axis2.xml" tofile="target/test-resources/scenario4_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario4_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s4.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario4_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario 5 -->
+                                <mkdir dir="target/test-resources/scenario5_client_repo" />
+                                <mkdir dir="target/test-resources/scenario5_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario5_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario5_service_repo" />
+                                <mkdir dir="target/test-resources/scenario5_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario5_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario5_service_repo/modules" />
+                                <copy file="src/test/resources/security/s5.client.axis2.xml" tofile="target/test-resources/scenario5_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario5_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s5.service.axis2.xml" tofile="target/test-resources/scenario5_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario5_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s5.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario5_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario 6 -->
+                                <mkdir dir="target/test-resources/scenario6_client_repo" />
+                                <mkdir dir="target/test-resources/scenario6_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario6_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario6_service_repo" />
+                                <mkdir dir="target/test-resources/scenario6_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario6_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario6_service_repo/modules" />
+                                <copy file="src/test/resources/security/s6.client.axis2.xml" tofile="target/test-resources/scenario6_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario6_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s6.service.axis2.xml" tofile="target/test-resources/scenario6_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario6_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s6.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario6_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario 7 -->
+                                <mkdir dir="target/test-resources/scenario7_client_repo" />
+                                <mkdir dir="target/test-resources/scenario7_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario7_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenario7_service_repo" />
+                                <mkdir dir="target/test-resources/scenario7_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenario7_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenario7_service_repo/modules" />
+                                <copy file="src/test/resources/security/s7.client.axis2.xml" tofile="target/test-resources/scenario7_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario7_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s7.service.axis2.xml" tofile="target/test-resources/scenario7_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenario7_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/s7.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenario7_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Scenario ST1 -->
+                                <mkdir dir="target/test-resources/scenarioST1_client_repo" />
+                                <mkdir dir="target/test-resources/scenarioST1_client_repo/conf" />
+                                <mkdir dir="target/test-resources/scenarioST1_client_repo/modules" />
+                                <mkdir dir="target/test-resources/scenarioST1_service_repo" />
+                                <mkdir dir="target/test-resources/scenarioST1_service_repo/conf" />
+                                <mkdir dir="target/test-resources/scenarioST1_service_repo/services" />
+                                <mkdir dir="target/test-resources/scenarioST1_service_repo/modules" />
+                                <copy file="src/test/resources/security/sST1.client.axis2.xml" tofile="target/test-resources/scenarioST1_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenarioST1_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/sST1.service.axis2.xml" tofile="target/test-resources/scenarioST1_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/scenarioST1_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/sST1.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/scenarioST1_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- MTOM Optimized Security Test -->
+                                <mkdir dir="target/test-resources/mtom_sec_client_repo" />
+                                <mkdir dir="target/test-resources/mtom_sec_client_repo/conf" />
+                                <mkdir dir="target/test-resources/mtom_sec_client_repo/modules" />
+                                <mkdir dir="target/test-resources/mtom_sec_service_repo" />
+                                <mkdir dir="target/test-resources/mtom_sec_service_repo/conf" />
+                                <mkdir dir="target/test-resources/mtom_sec_service_repo/services" />
+                                <mkdir dir="target/test-resources/mtom_sec_service_repo/modules" />
+                                <copy file="src/test/resources/security/secMtom.client.axis2.xml" tofile="target/test-resources/mtom_sec_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/mtom_sec_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/secMtom.service.axis2.xml" tofile="target/test-resources/mtom_sec_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/mtom_sec_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="src/test/resources/security/secMtom.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <jar jarfile="target/test-resources/mtom_sec_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+
+                                <!-- Test with addressing and MTOM  -->
+                                <mkdir dir="target/test-resources/complete_client_repo" />
+                                <mkdir dir="target/test-resources/complete_client_repo/conf" />
+                                <mkdir dir="target/test-resources/complete_client_repo/modules" />
+                                <mkdir dir="target/test-resources/complete_service_repo" />
+                                <mkdir dir="target/test-resources/complete_service_repo/conf" />
+                                <mkdir dir="target/test-resources/complete_service_repo/services" />
+                                <mkdir dir="target/test-resources/complete_service_repo/modules" />
+                                <!-- Test with addressing and MTOM client repository-->
+                                <copy file="src/test/resources/security/complete.client.axis2.xml" tofile="target/test-resources/complete_client_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/complete_client_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/complete_client_repo/modules/addressing-${axis2.version}.mar" />
+                                <!-- Test with addressing and MTOMservice repository-->
+                                <copy file="src/test/resources/security/complete.service.axis2.xml" tofile="target/test-resources/complete_service_repo/conf/axis2.xml" />
+                                <copy file="target/artifacts/rampart-${rampart.mar.version}.mar" tofile="target/test-resources/complete_service_repo/modules/rampart-${rampart.mar.version}.mar" />
+                                <copy file="target/artifacts/addressing-${axis2.version}.mar" tofile="target/test-resources/complete_service_repo/modules/addressing-${axis2.version}.mar" />
+                                <copy file="src/test/resources/security/complete.service.xml" tofile="target/temp-interop/META-INF/services.xml" overwrite="true" />
+                                <!-- Create the .aar file -->
+                                <jar jarfile="target/test-resources/complete_service_repo/services/PingPort.aar" basedir="target/temp-interop" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+				<source>target/generated-code/resources</source>
+			    </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin-->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.rampart</groupId>
+            <artifactId>rampart-policy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rampart</groupId>
+            <artifactId>rampart-trust</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rampart</groupId>
+            <artifactId>rampart-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-http</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-transport-local</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-codegen</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-xmlbeans</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb-codegen</artifactId>
+            <version>${axis2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <templateDirectory>${basedir}</templateDirectory>
+                    <menu ref="parent" />
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>

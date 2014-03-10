@@ -1,0 +1,97 @@
+<!--
+~ Licensed to the Apache Software Foundation (ASF) under one
+~ or more contributor license agreements. See the NOTICE file
+~ distributed with this work for additional information
+~ regarding copyright ownership. The ASF licenses this file
+~ to you under the Apache License, Version 2.0 (the
+~ "License"); you may not use this file except in compliance
+~ with the License. You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing,
+~ software distributed under the License is distributed on an
+~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~ KIND, either express or implied. See the License for the
+~ specific language governing permissions and limitations
+~ under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Windows (vers 14 June 2007), see www.w3.org" />
+<meta http-equiv="content-type" content="" />
+<title>Apache Rampart 1.2 Release</title>
+</head>
+<body>
+<!--Google Anayitcs tracking code-->
+<script type="text/javascript" src=
+"http://www.google-analytics.com/urchin.js">
+</script><script type="text/javascript">
+//<![CDATA[
+_uacct = "UA-1954378-3";
+urchinTracker();
+//]]>
+</script>
+<!--End of Google Anayitcs tracking code-->
+<h2>Apache Rampart 1.2 Release</h2>
+<div>
+<table border="1" cellpadding="1">
+<tbody>
+<tr>
+<th scope="col">Distribution Name</th>
+<th scope="col">Description</th>
+<!--<th scope="col">Items</th>-->
+<th scope="col">Download</th>
+</tr>
+<tr>
+<td><a name="std-bin" id="std-bin"></a><strong>Standard Binary
+Distribution</strong></td>
+<td>This is the complete version of Apache Rampart and will contain samples
+as well.</td>
+<td><a href="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip" title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip" onClick=
+"javascript:urchinTracker ('/downloads/rampart-1.2.zip');">zip</a>
+<a href="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip.md5"
+title="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip.md5">MD5</a>
+<a href="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip.asc"
+title="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2.zip.asc">PGP</a></td>
+</tr>
+<tr>
+<td><a name="src" id="src"></a> <strong>Source
+Distribution</strong></td>
+<td>This will contain the sources of Apache Rampart distribution.</td>
+<td><a href="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip" title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip" onClick=
+"javascript:urchinTracker ('/downloads/rampart-1.2-src.zip');">zip</a>
+<a href=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip.md5"
+title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip.md5">MD5</a>
+<a href=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip.asc"
+title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-src.zip.asc">PGP</a></td>
+</tr>
+<tr>
+<td><strong>Documents Distribution</strong></td>
+<td>This will contain all the documentation in one package.</td>
+<td><a href="http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip" title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip" onClick=
+"javascript:urchinTracker ('/downloads/rampart-1.2-docs.zip');">zip</a>
+<a href=
+"hhttp://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip.md5"
+title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip.md5">MD5</a>
+<a href=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip.asc"
+title=
+"http://archive.apache.org/dist/ws/rampart/1_2/rampart-1.2-docs.zip.asc">PGP</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<assembly>
+    <id>src</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <fileSet>
+            <directory>../..</directory>
+            <outputDirectory>rampart-src-${rampart.version}</outputDirectory>
+            <includes>
+                <include>**/modules/**/*</include>
+                <include>**/pom.xml</include>
+                <include>src</include>
+                <include>release-docs/*</include>
+            </includes>
+            <excludes>
+                <exclude>**/target</exclude>
+                <exclude>**/target/**/*</exclude>
+                <exclude>**/build</exclude>
+                <exclude>**/build/**/*</exclude>
+                <exclude>**/.settings</exclude>
+                <exclude>**/.classpath</exclude>
+                <exclude>**/.project</exclude>
+                <exclude>**/.wtpmodules</exclude>
+                <exclude>**/*.iml</exclude>
+                <exclude>**/.settings</exclude>
+                <exclude>**/.settings/**/*</exclude>
+                <exclude>**/.svn/**</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>

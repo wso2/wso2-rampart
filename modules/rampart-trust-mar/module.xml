@@ -1,0 +1,67 @@
+<module name="rahas" class="org.apache.rahas.Rahas">
+    <Description>This module is used to STS enable a service where it adds
+        the RequestSecurityToken operation to a service that the module is engaged to</Description>
+
+    <supported-policy-namespaces namespaces="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy, http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702
+"/>
+    
+    <operation name="RequestSecurityToken" mep="http://www.w3.org/2006/01/wsdl/in-out">
+        <messageReceiver class="org.apache.rahas.STSMessageReceiver"/>
+
+		<!-- Action mapping to accept SCT requests. For submissive version. -->
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT</actionMapping>
+
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Issue</actionMapping>
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Renew</actionMapping>
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Cancel</actionMapping>
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel</actionMapping>
+		<actionMapping>http://schemas.xmlsoap.org/ws/2005/02/trust/RST/Validate</actionMapping>
+
+        <!-- Action mapping to accept SCT requests. For standard secure conversation version -->
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/SCT</actionMapping>
+
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Issue</actionMapping>
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Renew</actionMapping>
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Cancel</actionMapping>
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/SCT/Cancel</actionMapping>
+		<actionMapping>http://docs.oasis-open.org/ws-sx/ws-trust/200512/RST/Validate</actionMapping>
+
+		<parameter name="token-dispatcher-configuration">
+			<token-dispatcher-configuration>
+                <!-- Issuers. You may have many issuers. -->
+                <issuer class="org.apache.rahas.impl.SCTIssuer" default="true">
+					<configuration type="parameter">sct-issuer-config</configuration>
+					<tokenType>http://schemas.xmlsoap.org/ws/2005/02/sc/sct</tokenType>
+					<tokenType>http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/sct</tokenType>
+				</issuer>
+				<issuer class="org.apache.rahas.impl.SAMLTokenIssuer">
+					<configuration type="parameter">saml-issuer-config</configuration>
+					<tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1</tokenType>
+				</issuer>
+                <issuer class="org.apache.rahas.impl.SAML2TokenIssuer">
+                        <configuration type="parameter">saml-issuer-config</configuration>
+                        <tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0</tokenType>
+                </issuer>
+                
+				<validator class="org.apache.rahas.impl.SAMLTokenValidator" default="true">
+                    <configuration type="parameter">saml-issuer-config</configuration>
+                    <tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1</tokenType>
+                </validator>
+
+                <!-- Only a single canceler is allowed -->
+                <canceler class="org.apache.rahas.impl.TokenCancelerImpl">
+					<configuration type="parameter">token-canceler-config</configuration>
+				</canceler>
+				
+				<!-- Renewers. You may have many renewers -->
+                <renewer class="org.apache.rahas.impl.SAMLTokenRenewer" default="true">
+                     <configuration type="parameter">saml-issuer-config</configuration>
+                     <tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1</tokenType>
+                </renewer>
+
+            </token-dispatcher-configuration>
+		</parameter>
+
+     </operation>
+
+</module>

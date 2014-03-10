@@ -1,0 +1,37 @@
+********************************************************************************
+**************************** Apache Rampart Tomcat Samples *********************
+********************************************************************************
+
+It is strongly recommended to run other samples before trying this. Because it will create the directory structure to expected by the build file.
+
+UsernameToken Authentication over HTTPS.
+
+Step1: Install Axis2 in Tomcat by reading the Axis2 installation guide available in http://ws.apache.org/axis2/. Then test axis2 in Tomcat.
+
+Step2: Copy keystores into Tomcat by giving the following command in this directory.
+$ant copy.keys
+
+Step3: Copy rampart jars and mars into Tomcat by giving the following command in this directory.
+$ant copy.rampart.to.tomcat
+	
+Step4: Enable HTTPS on Tomcat. For Tomcat5 uncomment the "SSL HTTP/1.1 Connector". The default HTTPS port for Tomcat is 8443. For more information "http://tomcat.apache.org/tomcat-5.0-doc/ssl-howto.html"
+
+Step5: Add the key store information by adding the following into the Connector element in server.xml.
+
+truststoreFile="rampart-sample-keys.jks"
+truststorePass="apache"
+truststoreType="JKS"
+keystoreFile="rampart-sample-keys.jks"
+keystorePass="apache"
+
+Start tomcat and check the service by typing "https://127.0.0.1:8443/axis2/services/listServices" in the browser. If you have changed the SSL port then type the correct port number and please change the build.xml's ssl.port accordingly.
+
+Step6: The following command will copy the ut-over-https.aar into the ${CATALINA_HOME}/webapps/axis2/WEB-INF/services/ut-over-https.aar
+$ant create.and.copy.service
+
+Step7: Start tomcat. View https://127.0.0.1:8443/axis2/services/listServices to see wether the service is available.
+
+Step8: The following command will create and run the client.
+$ant create.and.run.client
+
+

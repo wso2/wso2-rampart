@@ -1,0 +1,234 @@
+This file contains a listing of all Jira issues that have been closed
+for a given release.
+
+Release 1.5.1 - 23 Dec 2010
+===========================
+ 
+** Bug
+    * [RAMPART-316] - commons-lang jar is not available with Axis2 which breaks Sample-08
+    * [RAMPART-315] - Sample-06 is not working in the current trunk
+    * [RAMPART-181] - OptimizePartsConfig does not open namespace tag when serializing the assertion
+    * [RAMPART-186] - Password call back not copied over when the call back is set via a parameter to the axis Service (Secure conversation)
+    * [RAMPART-174] - Rampart module says true to all assertions when canSupportAssertion is called
+    * [RAMPART-202] - RampartEngine throws ClassCastException retrieving SOAPHeaderBlocks
+    * [RAMPART-212] - WSSecurityException: Error in converting SOAP Envelope to Document
+    * [RAMPART-314] - Rampart distribution does not contain OpenSAML 1.1 jars
+    * [RAMPART-198] - Rampart 1.4 assumes WSS10 or WSS11 to be present in the policy
+    * [RAMPART-273] - multiple rampart samples doesn't work
+    * [RAMPART-254] - Public getter/setter setCallbackHander/getCallbackHander mis-spelled [ hander --> handler] in SAMLTokenIssuerConfig
+    * [RAMPART-259] - SAML2TokenIssuer calls DefaultBootstrap.bootstrap() per every request and attribute call back handler not being called
+    * [RAMPART-277] - Rampart ignores token inclusion settings when using the asymmetric security binding
+    * [RAMPART-267] - div class="xleft" does not work
+    * [RAMPART-224] - Error in Rampart configuration schema
+    * [RAMPART-283] - sp:ProtectTokens Assertion Ignored w/ Transport Security Binding
+    * [RAMPART-288] - Supporting Tokens Not Encrypted When Protection Order is Sign Before Encrypting
+    * [RAMPART-300] - Rampart automaticaly tries to load an "Encryption user" if the security policy defines the use of a UsernameToken with a AsymmetricBinding
+    * [RAMPART-225] - SupportingToken UsernameToken is always encrypted
+    * [RAMPART-303] - Incorrect XML Passed to Digest Algorithm when XML Elements Belong to Empty Namespace
+    * [RAMPART-309] - Incorrect XML Passed to Digest Algorithm
+    * [RAMPART-116] - Policy Sample 04 on application scope fails with "Error in key derivation"
+    * [RAMPART-253] - TTL doesn't serialized in to saml-issuer-config from SAMLTokenIssuerConfig
+    * [RAMPART-270] - NPE in RampartMessageData
+    * [RAMPART-274] - renewing a sts token doesn't work
+    * [RAMPART-180] - Wrong NameIdentifier format
+    * [RAMPART-276] - SignedEncryptedElements can incorrectly set the namespace of child xpaths during serialization
+    * [RAMPART-293] - NPE in RampartMessageData prevents fault being returned to service consumer
+    * [RAMPART-308] - All security exceptions reported as wsse:InvalidSecurity
+    * [RAMPART-290] - NullPointerException in RampartEngine.isSecurityFault if the incoming fault message contains an invalid fault code element
+    * [RAMPART-311] - Error AxisFault: A required message part [body] is not signed.
+    * [RAMPART-239] - Axis2: Rampart module should not check the order of WS-Security header tags
+    * [RAMPART-119] - Invalid behavior when empty <sp:SignedParts/> element present in the policy
+    * [RAMPART-310] - Property 'invalidIssuerAddress' missing from error.properties
+    * [RAMPART-154] - org.apache.rahas.client.STSClient.org.apache.rahas.processIssueResponse fails if SamlAssertion is issued.
+    * [RAMPART-130] - MTOM with WS-Security
+    * [RAMPART-97 ] - interop(WSE3.0 + Rampart1.3) Signature varification failed,When request with Non-English Character
+    * [RAMPART-210] - samples/basic/sample11 does not exist in distro rampart-dist-1.4-bin.zip
+    * [RAMPART-22 ] - Exception handling in UsernameTokenProcessor.handleUsernameToken
+    * [RAMPART-111] - Rampart won't send certificate serial + issuer. Only either BinaryToken or Identity, but not always as it should
+    * [RAMPART-187] - Secure conversation clients do not work when the bootstrap policy requires Username Token
+    * [RAMPART-195] - Maven metadata are invalid in official repo preventing the use of rampart in offline mode
+    * [RAMPART-280] - renewToken() does not provide a mechanism to update the token in the token-store
+    * [RAMPART-6  ] - RAMPART : Incoming policy validation of KeyWrap Algorithm.
+    * [RAMPART-7  ] - RAMPART : Incoming policy validation of Bulk Encryption Algorithms.
+    * [RAMPART-266] - Rampart module fails validating signing certificate when security provider is Bouncy Castle
+    * [RAMPART-271] - Build failure in the rampart trunk
+    * [RAMPART-279] - NPE thrown when WS-Trust renew binding implementation
+    * [RAMPART-285] - Interoporability issues in SAML 2.0 implementation
+    * [RAMPART-306] - Rampart Configuration page of the web site should be updated with Crypto Caching configurations
+    * [RAMPART-307] - Spelling error in org.apache.rampart.builder.BindingBuilder - Method getSignatureBuider should be getSignatureBuilder
+    * [RAMPART-206] - RampartUtil.getToken() not setting parent properties on the STS service call resulting in HTTP 401 error
+
+** Improvement
+    * [RAMPART-313] - Improvements to the site axis.apache.org/axis2/java/rampart/
+    * [RAMPART-121] - Handling of KeyStores
+    * [RAMPART-25 ] - Abilty to dynamically set Encryption certificate on client
+    * [RAMPART-258] - A sample is required to demonstrate the SAML 2.0 Token issuing capability in Rampart
+    * [RAMPART-291] - Possible improvements to SAML2TokenIssuer
+    * [RAMPART-265] - Incorrect version references in Rampart 1.4
+
+Release 1.5 01 Feb 2010
+=======================
+ 
+** Bug
+    * [RAMPART-189] - WS-Security rampart uses wrong token in service response
+    * [RAMPART-191] - NullPointerException in AbstractHTTPSender.java:126 leading to "Unexpected number of certificates: 0"
+    * [RAMPART-193] - Missing signature in SOAP fault messages
+    * [RAMPART-209] - https urls are present in the src checkout page for both anonymous and developpers
+    * [RAMPART-230] - Rampart expands message object model unnecessarily
+    * [RAMPART-232] - Problem when body is signed and then an XPath is encrypted
+    * [RAMPART-244] - Invalid behavior when empty <sp:EncryptedParts/> element present in the policy
+    * [RAMPART-247] - Rampart fails to handle scenarios where password type is not set by default in UsernameToken [where 'type' is not included in the UsernameToken element]
+    * [RAMPART-249] - The way attached references and unattached references created incorrectly for SAML tokens and does not interop with WCF
+    * [RAMPART-250] - For SecureConversationToken key identifier type not set properly
+    * [RAMPART-251] - <EncryptedElements/> fails when the element is not namespce qualified
+    * [RAMPART-255] - Sample05 does not work correctly
+    * [RAMPART-257] - "build.xml" file inside the samples/policy does not copy the correct versions of the rampart, rahas, and addressing mar files.
+    * [RAMPART-259] - SAML2TokenIssuer calls DefaultBootstrap.bootstrap() per every request and attribute call back handler not being called
+    * [RAMPART-260] - Sample06 does not work correctly
+    * [RAMPART-262] - SymmetricBinding client can invoke the AsymmetricBinding service policy
+
+** Improvement
+    * [RAMPART-200] - Provide capability to configure x509 supporting token certificates different from the ones used for the assymetric binding
+    * [RAMPART-233] - Tests are required for negative scenario testing
+    * [RAMPART-242] - Test Cases are required for upcoming SAML2.0 support in Rampart
+    * [RAMPART-243] - Updating the README.txt and the contents of the binary distribution corresponding to SAML 2.0 support
+    * [RAMPART-245] - Supporting same type of multiple SupprtingToken
+    * [RAMPART-246] - Need to able to set a AttributeCallbackHandler class by name to the SAMLTokenIssuerConfig
+    * [RAMPART-248] - Caching crypto objects to improve the performance when using the same crypto for signing and encrypting.
+    * [RAMPART-256] - Sample for a policy having multiple supporting tokens - enabling to sign/encrypt with multiple keys
+    * [RAMPART-258] - A sample is required to demonstrate the SAML 2.0 Token issuing capability in Rampart
+
+** New Feature
+  * [RAMPART-231] - Implementing the SAML 2.0 support in Rampart
+
+Release 1.4 - 12/Jun/2008
+=========================
+
+** Bug
+    * [RAMPART-41] - "IncludeToken/Once" is not handled properly in Rampart
+    * [RAMPART-84] - "SupportingTokens" Token Inop for Asymetric Binding (Sign before Encrypt)
+    * [RAMPART-86] - Test the SymmetricBinding implementation
+    * [RAMPART-88] - Policy sample "sample-tomcat" incorrectly adds client.jks to Client's truststore
+    * [RAMPART-89] - License files missing in distribution
+    * [RAMPART-90] - Rampart must respond using the applicable WS-Policy even when returning a fault
+    * [RAMPART-91] - Wrong  KeyIdentifierType in WSSecSignature and WSSecEncryptedKey
+    * [RAMPART-92] - Error in checking generated encrypted parts with the policy
+    * [RAMPART-93] - ValueType is not set correctly in the Signature when a encrypted key is used to sign
+    * [RAMPART-100] - Missing encrypted key token in response when Asymmetric Binding is used
+    * [RAMPART-101] - Rampart uses xmlsec-1.4.0
+    * [RAMPART-102] - Policy Validation Error
+    * [RAMPART-104] - Rampart generates empty reference lists
+    * [RAMPART-107] - Rampart ignores the MTOM assertion in the bootstrap policy in secure conversation
+    * [RAMPART-108] - Policy Validator doesn't check the transport when Transport binding is used with HttpsToken 
+    * [RAMPART-109] - Error in placement of reference list in No-Timestamp scenarios
+    * [RAMPART-110] - Symmetric binding scenario: "Cannot find Reference in Manifest" Exception is thrown
+    * [RAMPART-114] - "Unexpected signature" exception thrown when using Signed/SupportingTokens Assertion
+    * [RAMPART-115] - Incrorrect reference URI in the soap response in Secure Conversation Scenarios
+    * [RAMPART-117] - 1.3 not available on download page
+    * [RAMPART-122] - /sp:EncryptedParts/sp:Header needs qualified attribute names
+    * [RAMPART-123] - client stub are not given the namespace declaration for <sp:EncryptedElements>
+    * [RAMPART-124] - /sp:SignedParts/sp:Header selects no elements if the Name attribute is unspecified
+    * [RAMPART-125] - Encryption of SOAP Headers broken
+    * [RAMPART-127] - Possible Security Hole
+    * [RAMPART-129] - Validation of supporting tokens according to a service's policy
+    * [RAMPART-130] - MTOM with WS-Security
+    * [RAMPART-131] - Rampart security header problem
+    * [RAMPART-132] - Issue with XPath configuration inside RampartUtil
+    * [RAMPART-133] - Supporting tokens are not added to the soap header
+    * [RAMPART-136] - Rampart doesn't support RequiredElements Assertion
+    * [RAMPART-138] - Created response of SymmetricBindingBuilder WITHOUT timestamp is incorrect
+    * [RAMPART-139] - SignatureToken doesn't work for Symetricbinding
+    * [RAMPART-140] - Processing of response fails if a security policy is set
+    * [RAMPART-141] - Issue of Rampart not supporting X509PKIPathv1 token
+    * [RAMPART-143] - Policy with 'Layout' 'Lax' having no subelements leads to a NullPointerException in PolicyEngine
+    * [RAMPART-145] - When we use an issued token for sig/encrypt we must use the attached reference or unattached reference as specified by policy
+    * [RAMPART-146] - The exact elements that are equired to be encrypted are not validated
+    * [RAMPART-147] - Header parts included in EncryptedParts are not processed by Rampart
+    * [RAMPART-148] - Release notes are not copied to source distribution 
+    * [RAMPART-149] - Improvements to the documentation 
+    * [RAMPART-151] - Rahas docs not being built
+    * [RAMPART-153] - Incorrect links given in source checkout page
+    * [RAMPART-157] - Duplicate namespace declaration in SingedEncryptedElements assertion
+    * [RAMPART-160] - Source files are also copied in to Rampart jars
+    * [RAMPART-161] - java.util.ConcurrentModificationException while a token is associated with a user when sevaral users are using a service
+    * [RAMPART-162] - NullPointerException thrown when a non-existing algorythm suite is used in a policy file when invoking a secured service 
+    * [RAMPART-165] - Exception in Rampart Processing causes NPE 
+    * [RAMPART-166] - Wrong SoapFault code accessing a Secure endpoint without security 
+    * [RAMPART-167] - Remove bouncycastle from the distribution and add a note
+    * [RAMPART-168] - When SecureConversationTokens are used Rampart always try to use the attached reference 
+    * [RAMPART-169] - HttpsToken serializer does not support ws-securitypolicy 1.2
+
+** Improvement
+    * [RAMPART-85] - Uncommented and fixed AsymmetricBindingBuilderTest
+    * [RAMPART-94] - Change rampart implementation to use same encrypted key in both request and response messages
+    * [RAMPART-99] - add userCertAlias parameter to Rampart Configuration
+    * [RAMPART-103] - include a note on adding bouncycastle as a security provider in the JRE
+    * [RAMPART-105] - Update RampartTest to include test scenarios for RAMPART-99, RAMPART-102 and RAMPART-104
+    * [RAMPART-106] - Encrypt the Username Token when it is used as a supporting token
+    * [RAMPART-113] - Enforce transport level security when Transport binding is used with Https Token
+    * [RAMPART-120] - sources unavailable in maven repository
+    * [RAMPART-134] - Add WS - Security Policy 1.2 support to Rampart
+    * [RAMPART-135] - Allow custom implementation of PolicyBasedResultsValidator using callback handler mechanism
+    * [RAMPART-137] - Add tests for encrypted supporting token scenarios
+    * [RAMPART-152] - Timestamp Precision In Milliseconds Configuration
+    * [RAMPART-163] - Update the WS wiki with Rampart information
+
+** New Feature
+    * [RAMPART-87] - Add renewal and validation support for issued token
+    * [RAMPART-95] - Support Encrypted Header
+
+
+
+** Task
+    * [RAMPART-158] - Create a FAQ
+    * [RAMPART-159] - Fix Releases/Versions in Rampart JIRA
+    
+Release 1.3 - 06/Sep/07
+=======================    
+
+** Bug
+    * [RAMPART-32] - Processing of <Issuer> and <RequestSecurityTokenTemplate> in class org.apache.ws.secpolicy.builders.IssuedTokenBuilder is wrong.
+    * [RAMPART-42] - TransportBinding does not encrypt the message payload
+    * [RAMPART-49] - RampartPolicyBuilder logs to console/System.out
+    * [RAMPART-52] - UsernameToken Builder Bug.
+    * [RAMPART-53] - rampart causes problems with hierarchies
+    * [RAMPART-57] - Move generated code into target directory in rampart-integration test
+    * [RAMPART-58] - problems engaging rampart per operation
+    * [RAMPART-62] - Build failure on Mac OS
+    * [RAMPART-76] - Rampart 1.3.mar throws error with Axis2 1.3
+    * [RAMPART-79] - setAction in Options does not create a non-null "Action" element in the SOAP Header
+
+** Improvement
+    * [RAMPART-17] - Create Apache Rampart website
+    * [RAMPART-20] - Improve logging
+    * [RAMPART-27] - The user in the configuration for UsernameToken and Signature should be different
+    * [RAMPART-48] - RampartMessageData class needs tightening
+    * [RAMPART-51] - Rampart developer guide
+    * [RAMPART-54] - Reviewed the Developer Guide
+    
+Release 1.2 - 02/Jun/07
+=======================     
+    
+** Bug
+    * [RAMPART-12] - ClassCastException in fault parsing
+    * [RAMPART-28] - Cannot add parts of the header for encryption
+    * [RAMPART-34] - SignedEncryptedSupportingTokens assertion does not work 
+    * [RAMPART-35] - SignedSupportingTokens does not sign the UsernameToken 
+    * [RAMPART-36] - Using the "SupportingTokens" assertion throws exception
+    * [RAMPART-37] - SymmetricBinding is broken 
+    * [RAMPART-43] - When IncludeTimestamp is commented in Sample03 service throws a Nullpointer exception.
+
+
+** New Feature
+    * [RAMPART-38] - AsymmetricBinding does not support UsernameToken as a supporting token
+    * [RAMPART-40] - implementation of the Xpath support 
+
+
+
+
+
+
+
+
+
+

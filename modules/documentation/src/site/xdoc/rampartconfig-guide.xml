@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+  <body>
+<h1>Apache Rampart - Configuration Guide</h1>
+<h2>Rampart Configurations</h2>
+<p>RampartConfig element can have any of the following child elements. Schema is available <a href="rampart-config.xsd">here</a></p>
+<table class="bodyTable"><tbody>
+    <tr class="a"><td><b>Parameter</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
+
+    <tr class="b"><td>user</td><td>The user's name</td><td>Set username of UsernameToken to be used <br></br>
+        &lt;user&gt; bob&lt;/user&gt;</td></tr>
+    <tr class="a"><td>userCertAlias</td><td>The user's cert alias</td><td>Set alias of the key to be used to sign<br></br>
+        &lt;userCertAlias&gt; bob&lt;/userCertAlias&gt;</td></tr>
+    <tr class="b"><td>encryptionUser</td><td>The user's name for encryption.</td><td>
+        &lt;encryptionUser&gt;alice&lt;/encryptionUser&gt;</td></tr>
+    <tr class="a"><td>passwordCallbackClass</td><td>Callback class used to provide the password required to create the
+        UsernameToken or to sign the message</td><td>
+<pre>
+&lt;passwordCallbackClass&gt;
+    org.apache.axis2.security.PWCallback
+&lt;/passwordCallbackClass&gt;
+</pre></td></tr>
+    <tr class="b"><td>policyValidatorCbClass</td><td>Callback class used to provide custom validater  </td><td>
+<pre>
+&lt;policyValidatorCbClass&gt;
+    org.apache.axis2.security.CustomPolicyValidater
+&lt;/policyValidatorCbClass&gt;
+</pre></td></tr>
+    <tr class="a"><td>signatureCrypto</td><td>properties to needed perform signature, such as crypto
+        provider, keystore and its password</td><td>
+<pre>
+&lt;signatureCrypto&gt;
+	&lt;crypto provider="org.apache.ws.security.components.crypto.Merlin"&gt;
+		&lt;property name="org.apache.ws.security.crypto.merlin.keystore.type"&gt;JKS&lt;/property&gt;
+		&lt;property name="org.apache.ws.security.crypto.merlin.file"&gt;client.jks&lt;/property&gt;
+		&lt;property name="org.apache.ws.security.crypto.merlin.keystore.password"&gt;apache&lt;/property&gt;
+	&lt;/crypto&gt;
+&lt;signatureCrypto&gt;
+</pre>
+		</td></tr>
+    <tr class="b"><td>encryptionCypto</td><td>properties to needed perform signature, such as crypto
+        provider, keystore and its password</td><td>
+<pre>
+&lt;encryptionCypto&gt;
+    ....crypto element ......
+&lt;/encryptionCypto&gt;
+</pre></td></tr>
+    <tr class="a"><td>decryptionCrypto</td><td>properties to needed perform signature, such as crypto
+        provider, keystore and its password</td><td>
+<pre>
+&lt;decryptionCrypto&gt;
+    ....crypto element ......
+&lt;/decryptionCrypto&gt;</pre></td></tr>
+ <tr class="b"><td>timestampTTL</td><td>Time to live of Timestamp</td><td>The default timestamp time to live is 300 seconds</td></tr>
+    <tr class="a"><td>timestampMaxSkew</td><td>The maximum tolerence limit for timeskew of the timestamp</td><td>Rampart allows timestamps created slightly ahead of the reciever's time.<br/> This parameter allows to specify the tolerence limit</td></tr>
+    <tr class="b"><td>timestampPrecisionInMilliseconds</td><td> Whether the timestamps precision should be milliseconds </td><td>When this value is set false, generated timestamps doesn't contain milliseconds </td></tr>
+    <tr class="a"><td>optimizeParts</td><td></td><td></td></tr>
+    <tr class="b"><td>tokenStoreClass</td><td></td><td></td></tr>
+    <tr class="a"><td>sslConfig</td><td>SSL Configuration need for Transportbinding</td><td>Can specify the properties such as "javax.net.ssl.trustStore" and "javax.net.ssl.trustStorePassword". Please see below for more information.</td></tr>
+  </tbody></table>
+<br></br>
+<h3>Crypto Provider</h3>
+  <p>org.apache.ws.security.crypto.provider defines the implementation of
+the org.apache.ws.security.components.crypto.Crypto interface to provide the
+crypto information required by WSS4J. The other properties defined are the
+configuration properties used by the implementation class
+(org.apache.ws.security.components.crypto.Merlin).
+<br></br>
+      <a name="ref"></a>
+      <a name="references"></a>
+  </p>
+      <a name="References"></a>
+      <h3>Crypto Caching</h3>
+      <p>Enabling caching of crypto objects will improve the performance of security processing.
+          After
+          enabling crypto caching, the crypto objects will be read from a cache instead of
+          constructing them by reading the keystore files.
+      </p>
+      <p>To enable caching of Crypto objects, two attributes should be added to the crypto elements
+          of signatureCrypto/encryptionCrypto of RampartConfig.
+      </p>
+      <ol>
+          <li xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">
+              <b>cryptoKey</b> - <p>As the value of this attribute, specify the property of a Crypto
+              implementation which points to the location of the keystore. For example in
+              Merlin, the
+              property "org.apache.ws.security.crypto.merlin.file" is unique and its pointing to
+              the
+              location of the keystore. Absence of this attribute will not enable caching.</p>
+          </li>
+          <li xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">
+              <b>cacheRefreshInterval</b> - <p>This is the cache refresh interval specified in
+              milliseconds. Any
+              object that resides in the cache longer than this period will be considered as
+              expired.
+              Cache will not be refreshed if this attribute is not present in the configuration.
+              If you
+              do not want to refresh the cache, provide only the "cryptoKey" attribute.</p>
+          </li>
+      </ol>
+      <p>
+          A sample configuration is provided below. It uses the Merlin crypto implementation for
+          signing and encryption. Here, the value of the cryptoKey attribute is eqaul to
+          "org.apache.ws.security.crypto.merlin.file" and the cache refresh interval is 300000
+          milliseconds.
+      </p>
+      <pre xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">
+          &lt;ramp:RampartConfig xmlns:ramp="http://ws.apache.org/rampart/policy";&gt;
+            &lt;ramp:signatureCrypto&gt;
+                &lt;ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin" cryptoKey="org.apache.ws.security.crypto.merlin.file" cacheRefreshInterval="300000"&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type"&gt;JKS&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.file"&gt;service.jks&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password"&gt;servicePW&lt;/ramp:property&gt;
+                &lt;/ramp:crypto&gt;
+            &lt;/ramp:signatureCrypto&gt;
+            &lt;ramp:encryptionCypto&gt;
+                &lt;ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin" cryptoKey="org.apache.ws.security.crypto.merlin.file" cacheRefreshInterval="300000&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type"&gt;JKS&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.file"&gt;service.jks&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password"&gt;apache&lt;/ramp:property&gt;
+                &lt;/ramp:crypto&gt;
+            &lt;/ramp:encryptionCypto&gt;
+          &lt;/ramp:RampartConfig&gt;
+      </pre>
+      <p>Crypto caching is enabled by default when Merlin is used as the crypto provider. So Rampart will cache the crypto objects
+      with an infinite cache refresh interval. This crypto refresh interval can be overridden by setting the cacheRefreshInterval parameter
+          as described above. If it is required to disable crypto caching when Merlin is used, set the 'enableCryptoCaching' parameter
+          value to 'false'. Please refer to the following example.
+      </p>
+      <pre xmlns="http://www.w3.org/1999/xhtml" xml:space="preserve">
+            &lt;ramp:signatureCrypto&gt;
+                &lt;ramp:crypto provider="org.apache.ws.security.components.crypto.Merlin" enableCryptoCaching="false"&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.type"&gt;JKS&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.file"&gt;service.jks&lt;/ramp:property&gt;
+                    &lt;ramp:property name="org.apache.ws.security.crypto.merlin.keystore.password"&gt;servicePW&lt;/ramp:property&gt;
+                &lt;/ramp:crypto&gt;
+            &lt;/ramp:signatureCrypto&gt;
+      </pre>
+      <br></br>
+      <h3>References</h3>1.
+      <a href="http://ws.apache.org/wss4j">Apache WSS4J -Home</a>
+  </body>
+</html>
