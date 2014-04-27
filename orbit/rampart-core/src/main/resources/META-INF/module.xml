@@ -1,0 +1,63 @@
+<!--
+ ~ Copyright (c) 2005-2011, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<module name="rampart" class="org.apache.rampart.Rampart">
+
+    <Description>This module provides the WS-Security and WS-SecureConversation 
+    functionalities for Axis2, based on Apache WSS4J, Apache XML-Security 
+    and Apache Rahas implementations.
+	</Description>
+	    
+    <InFlow>
+        <handler name="PolicyBasedSecurityInHandler" class="org.apache.rampart.handler.RampartReceiver">
+            <order phase="Security" phaseFirst="true"/>
+        </handler>
+        <handler name="SecurityInHandler" class="org.apache.rampart.handler.WSDoAllReceiver">
+            <order phase="Security"/>
+        </handler>
+        <handler name="PostDispatchVerificationHandler" class="org.apache.rampart.handler.PostDispatchVerificationHandler">
+            <order phase="Dispatch" phaseLast="true"/>
+        </handler>
+        
+    </InFlow>
+
+    <OutFlow>
+        <handler name="SecurityOutHandler" class="org.apache.rampart.handler.WSDoAllSender">
+            <order phase="Security"/>
+        </handler>
+        <handler name="PolicyBasedSecurityOutHandler" class="org.apache.rampart.handler.RampartSender">
+            <order phase="Security" phaseLast="true"/>
+        </handler>
+    </OutFlow>
+    
+    <OutFaultFlow>
+        <handler name="PolicyBasedSecurityOutHandler" class="org.apache.rampart.handler.RampartSender">
+            <order phase="Security" phaseLast="true"/>
+        </handler>
+    </OutFaultFlow>
+
+    <InFaultFlow>
+        <handler name="PolicyBasedSecurityInHandler" class="org.apache.rampart.handler.RampartReceiver">
+            <order phase="Security" phaseFirst="true"/>
+        </handler>
+    </InFaultFlow>
+    
+    <supported-policy-namespaces namespaces="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"/>
+    <local-policy-assertions>
+    	<rampart:RampartConfig xmlns:rampart="http://ws.apache.org/rampart/policy" />
+    </local-policy-assertions>
+</module>
