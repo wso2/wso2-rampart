@@ -460,6 +460,9 @@
         <module>modules/rampart-mar</module>
         <module>modules/rampart-trust-mar</module>
         <module>modules/rampart-integration</module>
+        <module>orbit/rampart-core</module>
+        <module>orbit/rampart-trust</module>
+        <module>orbit/rampart-policy</module>
     </modules>
 
     <properties>

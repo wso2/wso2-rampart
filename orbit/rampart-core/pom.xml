@@ -172,6 +172,7 @@
 	  <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
+            <version>1.0.3</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -228,7 +229,7 @@
     </build>
 
     <properties>
-        <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
+        <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
     </properties>
 
 </project>
