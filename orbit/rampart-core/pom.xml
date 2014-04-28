@@ -23,7 +23,7 @@
     <groupId>org.apache.rampart.wso2</groupId>
     <artifactId>rampart-core</artifactId>
     <packaging>bundle</packaging>
-    <name>Rampart</name>
+    <name>Rampart Core - Orbit</name>
     <description>A custom wso2 products or solution</description>
     <url>http://www.wso2.com</url>
     <version>1.6.1.wso2v13-SNAPSHOT</version>
@@ -230,6 +230,10 @@
 
     <properties>
         <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
+        <imp.pkg.version.axis2>[1.6.1.wso2v11-SNAPSHOT, 1.7.0)</imp.pkg.version.axis2>
+        <imp.pkg.version.axiom>[1.2.11.wso2v5-SNAPSHOT, 1.3.0)</imp.pkg.version.axiom>
+        <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
+        <imp.pkg.version.wss4j>[1.5.11.wso2v3,2)</imp.pkg.version.wss4j>
     </properties>
 
 </project>
