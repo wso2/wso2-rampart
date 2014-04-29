@@ -210,7 +210,7 @@
 			            <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>
                         <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator</Bundle-Activator>
                         <Private-Package>org.wso2.carbon.rampart.internal</Private-Package>
-                        <Export-Package>org.apache.rampart.*;version="1.6.1-wso2v13"</Export-Package>
+                        <Export-Package>org.apache.rampart.*;version="1.6.1-wso2v13-SNAPSHOT"</Export-Package>
                         <Import-Package>
 	                    !org.apache.rampart.*,
                             org.apache.commons.logging.*; version="1.0.4",
