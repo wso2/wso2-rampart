@@ -66,16 +66,15 @@
 
     <distributionManagement>
         <repository>
-            <id>wso2-maven2-repository</id>
-            <name>WSO2 Maven2 Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/maven2/</url>
+            <id>wso2.releases</id>
+            <name>WSO2 Release Distribution Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
         </repository>
-
         <snapshotRepository>
-            <id>wso2-maven2-snapshot-repository</id>
-            <name>WSO2 Maven2 Snapshot Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/snapshots/maven2/</url>
-        </snapshotRepository>
+            <id>wso2.snapshots</id>
+            <name>Internal Reposiroty</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+       </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -90,7 +89,7 @@
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-trust</artifactId>
-            <version>1.6.1-wso2v13-SNAPSHOT</version>
+            <version>${rampart.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.axis2</groupId>
@@ -191,7 +190,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>                        
 			            <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>                        
                         <Export-Package>
-                            org.apache.rahas.*;version="1.6.1-wso2v13"
+                            org.apache.rahas.*;version="${rampart.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.apache.rahas,
@@ -217,6 +216,7 @@
     </build>
 
     <properties>
+        <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
         <imp.pkg.version.axis2>[1.6.1.wso2v11-SNAPSHOT, 1.7.0)</imp.pkg.version.axis2>
         <imp.pkg.version.axiom>[1.2.11.wso2v5-SNAPSHOT, 1.3.0)</imp.pkg.version.axiom>
         <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
