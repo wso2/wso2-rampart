@@ -67,16 +67,15 @@
 
     <distributionManagement>
         <repository>
-            <id>wso2-maven2-repository</id>
-            <name>WSO2 Maven2 Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/maven2/</url>
+            <id>wso2.releases</id>
+            <name>WSO2 Release Distribution Repository</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
         </repository>
-
         <snapshotRepository>
-            <id>wso2-maven2-snapshot-repository</id>
-            <name>WSO2 Maven2 Snapshot Repository</name>
-            <url>scp://dist.wso2.org/home/httpd/dist.wso2.org/snapshots/maven2/</url>
-        </snapshotRepository>
+            <id>wso2.snapshots</id>
+            <name>Internal Reposiroty</name>
+            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
+       </snapshotRepository>
     </distributionManagement>
 
     <dependencies>
@@ -109,7 +108,7 @@
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>1.6.1-wso2v13-SNAPSHOT</version>
+            <version>${rampart.version}</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -241,6 +240,7 @@
     </build>
 
     <properties>
+        <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
         <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
         <orbit.version.wss4j>1.5.11.wso2v7-SNAPSHOT</orbit.version.wss4j>
         <imp.pkg.version.axis2>[1.6.1.wso2v11-SNAPSHOT, 1.7.0)</imp.pkg.version.axis2>
