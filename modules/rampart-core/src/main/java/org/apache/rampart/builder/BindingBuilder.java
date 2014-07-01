@@ -798,12 +798,6 @@ public abstract class BindingBuilder {
         Document doc = rmd.getDocument();
 
         Vector results = (Vector) rmd.getMsgContext().getProperty(WSHandlerConstants.RECV_RESULTS);
-        /**
-         * if results is null, it is not need to sign confirmation.
-         */
-        if (results == null) {
-            return;
-        }
         /*
          * loop over all results gathered by all handlers in the chain. For each handler result get
          * the various actions. After that loop we have all signature results in the
