@@ -94,39 +94,32 @@
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart</artifactId>
-            <version>${project.version}</version>
             <type>mar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rahas</artifactId>
-            <version>${project.version}</version>
             <type>mar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-trust</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>bouncycastle</groupId>
             <artifactId>bcprov-jdk14</artifactId>
-            <version>${bcprov.jdk14.version}</version>
         </dependency>
         <dependency>
             <groupId>bouncycastle</groupId>
             <artifactId>bcprov-jdk15</artifactId>
-            <version>${bcprov.jdk15.version}</version>
         </dependency>
     </dependencies>
 
