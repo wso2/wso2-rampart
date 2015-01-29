@@ -557,6 +557,10 @@
         <imp.pkg.version.axiom>[1.2.11.wso2v5, 1.3.0)</imp.pkg.version.axiom>
         <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
         <imp.pkg.version.wss4j>[1.5.11.wso2v3,2)</imp.pkg.version.wss4j>
+        <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
+        <orbit.version.wss4j>1.5.11.wso2v7</orbit.version.wss4j>
+        <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
+        <imp.pkg.version.commons.logging>1.0.4</imp.pkg.version.commons.logging>
 
     </properties>
 
