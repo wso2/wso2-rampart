@@ -42,7 +42,7 @@
     </modules>
 
     <properties>
-        <rampart.version>1.6.1-wso2v13</rampart.version>
+        <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
     </properties>
 
     <repositories>
@@ -80,17 +80,4 @@
             </releases>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>wso2.snapshots</id>
-            <name>Internal Reposiroty</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-       </snapshotRepository>
-    </distributionManagement>
 </project>
