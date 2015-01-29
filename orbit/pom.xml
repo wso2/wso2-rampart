@@ -42,7 +42,7 @@
     </modules>
 
     <properties>
-        <rampart.version>1.6.1-wso2v13</rampart.version>
+        <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
     </properties>
 
     <repositories>

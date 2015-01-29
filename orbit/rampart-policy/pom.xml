@@ -28,13 +28,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.rampart.wso2</groupId>
     <artifactId>rampart-policy</artifactId>
     <packaging>bundle</packaging>
     <name>Rampart Security Policy</name>
     <description>A custom wso2 products or solution</description>
     <url>http://www.wso2.com</url>
-    <version>1.6.1.wso2v13-SNAPSHOT</version>
 
     <repositories>
         <repository>
