@@ -225,7 +225,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <preparationGoals>clean install</preparationGoals>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <autoVersionSubmodules>false</autoVersionSubmodules>
                 </configuration>
             </plugin>
             <plugin>
