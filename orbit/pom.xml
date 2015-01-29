@@ -43,7 +43,7 @@
 
     <properties>
         <rampart.version>1.6.1-wso2v13-SNAPSHOT</rampart.version>
-	<exp.pkg.version.rampart>1.6.1-wso2v13-SNAPSHOT</exp.pkg.version.rampart>
+	<exp.pkg.version.rampart>1.6.1-wso2v13</exp.pkg.version.rampart>
     </properties>
 
     <repositories>
