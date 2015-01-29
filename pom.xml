@@ -559,16 +559,12 @@
         <orbit.version.wss4j>1.5.11.wso2v7</orbit.version.wss4j>
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
         <imp.pkg.version.commons.logging>1.0.4</imp.pkg.version.commons.logging>
+        <project.scm.id>my-scm-server</project.scm.id>
 
     </properties>
 
     <distributionManagement>
-        <!--repository>
-            <id>wso2.releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-        </repository-->
-	<repository>
+        <repository>
             <id>nexus-releases</id>
             <name>WSO2 Nexus Release Repository</name>
             <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
@@ -577,6 +573,6 @@
             <id>wso2.snapshots</id>
             <name>Internal Reposiroty</name>
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-       </snapshotRepository>
+        </snapshotRepository>
     </distributionManagement>
 </project>
