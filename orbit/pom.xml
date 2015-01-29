@@ -41,6 +41,10 @@
         <module>rampart-policy</module>
     </modules>
 
+    <properties>
+        <rampart.version>1.6.1-wso2v13</rampart.version>
+    </properties>
+
     <repositories>
         <repository>
             <id>wso2-nexus</id>
