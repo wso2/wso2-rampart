@@ -373,6 +373,73 @@
                 <artifactId>axiom-impl</artifactId>
                 <version>${axiom.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rampart</artifactId>
+                <version>${project.version}</version>
+                <type>mar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rahas</artifactId>
+                <version>${project.version}</version>
+                <type>mar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rampart-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rampart-policy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart</groupId>
+                <artifactId>rampart-trust</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>bouncycastle</groupId>
+                <artifactId>bcprov-jdk14</artifactId>
+                <version>${bcprov.jdk14.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>bouncycastle</groupId>
+                <artifactId>bcprov-jdk15</artifactId>
+                <version>${bcprov.jdk15.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-transport-http</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-transport-local</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-codegen</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-xmlbeans</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-adb-codegen</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -460,9 +527,7 @@
         <module>modules/rampart-mar</module>
         <module>modules/rampart-trust-mar</module>
         <module>modules/rampart-integration</module>
-        <module>orbit/rampart-core</module>
-        <module>orbit/rampart-trust</module>
-        <module>orbit/rampart-policy</module>
+        <module>orbit</module>
     </modules>
 
     <properties>
@@ -470,7 +535,7 @@
         <rampart.version>${project.version}</rampart.version>
         <rampart.mar.version>${project.version}</rampart.mar.version>
         <rahas.mar.version>${project.version}</rahas.mar.version>
-	
+
         <axis2.version>1.6.1-wso2v11</axis2.version>
         <axiom.version>1.2.11-wso2v5</axiom.version>
 
@@ -487,6 +552,15 @@
         <!-- distribution properties -->
         <dist.dir>rampart-${project.version}</dist.dir>
         <failIfNoTests>false</failIfNoTests>
+        <imp.pkg.version.axis2>[1.6.1.wso2v11, 1.7.0)</imp.pkg.version.axis2>
+        <imp.pkg.version.axis2>[1.6.1.wso2v11, 1.7.0)</imp.pkg.version.axis2>
+        <imp.pkg.version.axiom>[1.2.11.wso2v5, 1.3.0)</imp.pkg.version.axiom>
+        <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
+        <imp.pkg.version.wss4j>[1.5.11.wso2v3,2)</imp.pkg.version.wss4j>
+        <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
+        <orbit.version.wss4j>1.5.11.wso2v7</orbit.version.wss4j>
+        <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
+        <imp.pkg.version.commons.logging>1.0.4</imp.pkg.version.commons.logging>
 
     </properties>
 
