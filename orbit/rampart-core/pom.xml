@@ -202,7 +202,7 @@
                         <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator
                         </Bundle-Activator>
                         <Private-Package>org.wso2.carbon.rampart.internal</Private-Package>
-                        <Export-Package>org.apache.rampart.*;version="${rampart.version}"
+                        <Export-Package>org.apache.rampart.*;version="${exp.pkg.version.rampart}"
                         </Export-Package>
                         <Import-Package>
                             !org.apache.rampart.*,
