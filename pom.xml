@@ -530,8 +530,8 @@
 
     <properties>
 
-        <rampart.version>1.6.1-wso2v13</rampart.version>
-        <exp.pkg.version.rampart>1.6.1-wso2v13</exp.pkg.version.rampart>
+        <rampart.version>1.6.1-wso2v14-SNAPSHOT</rampart.version>
+        <exp.pkg.version.rampart>1.6.1-wso2v14</exp.pkg.version.rampart>
         <rampart.mar.version>${project.version}</rampart.mar.version>
         <rahas.mar.version>${project.version}</rahas.mar.version>
 
