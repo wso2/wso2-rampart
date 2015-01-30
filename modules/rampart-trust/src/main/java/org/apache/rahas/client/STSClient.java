@@ -593,10 +593,13 @@ public class STSClient {
         } else {
             //Return wsu:Id of the token element
             id = token.getAttributeValue(new QName(WSConstants.WSU_NS, "Id"));
-            if ( id == null )
-            {
-            	// If we are dealing with a SAML Assetion, look for AssertionID.
-            	id = token.getAttributeValue(new QName( "AssertionID"));
+            if (id == null) {
+                // Check for ID in case we are dealing with SAML V2.0 assertions
+                id = token.getAttributeValue(new QName("ID"));
+                if (id == null) {
+                    // Check for AssertionID in case we are dealing with SAML V1.1 assertions
+                    id = token.getAttributeValue(new QName("AssertionID"));
+                }
             }
         }
         return id;
