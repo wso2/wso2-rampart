@@ -15,14 +15,12 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.apache.rampart.wso2</groupId>
         <artifactId>rampart-orbit</artifactId>
-        <version>1.6.1.wso2v13-SNAPSHOT</version>
+        <version>1.6.1.wso2v14-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -202,7 +200,7 @@
                         <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator
                         </Bundle-Activator>
                         <Private-Package>org.wso2.carbon.rampart.internal</Private-Package>
-                        <Export-Package>org.apache.rampart.*;version="${rampart.version}"
+                        <Export-Package>org.apache.rampart.*;version="${exp.pkg.version.rampart}"
                         </Export-Package>
                         <Import-Package>
                             !org.apache.rampart.*,
