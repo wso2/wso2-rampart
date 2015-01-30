@@ -212,7 +212,7 @@
                             org.apache.axiom.*; version="${imp.pkg.version.axiom}",
                             org.apache.neethi.*; version="${imp.pkg.version.neethi}",
                             org.apache.ws.security.*; version="${imp.pkg.version.wss4j}",
-                            javax.xml.stream.*; version="${imp.pkg.version.javax.xml},
+                            javax.xml.stream.*; version="${imp.pkg.version.javax.xml}",
                             org.osgi.framework,
                             *;resolution:=optional
                         </Import-Package>
