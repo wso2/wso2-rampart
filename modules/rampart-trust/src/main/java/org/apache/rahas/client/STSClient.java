@@ -592,12 +592,15 @@ public class STSClient {
             id = this.getIdFromSTR(reqUnattRef);
         } else {
             //Return wsu:Id of the token element
+            log.debug("Attached and Unattached references are not present. Get Token ID from wsu:Id");
             id = token.getAttributeValue(new QName(WSConstants.WSU_NS, "Id"));
             if (id == null) {
                 // Check for ID in case we are dealing with SAML V2.0 assertions
+                log.debug("Get Token ID from attribute 'ID' in case we are dealing with SAML V2.0");
                 id = token.getAttributeValue(new QName("ID"));
                 if (id == null) {
                     // Check for AssertionID in case we are dealing with SAML V1.1 assertions
+                    log.debug("Get Token ID from attribute 'AssertionID' in case we are dealing with SAML V1.1");
                     id = token.getAttributeValue(new QName("AssertionID"));
                 }
             }
