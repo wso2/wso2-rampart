@@ -190,6 +190,7 @@ public class STSClient {
      * @return true is the Token was successfully canceled. False otherwise.
      * @throws TrustException
      */
+    @Deprecated
     public boolean cancelToken(String issuerAddress,
                                String tokenId,
                                String action) throws TrustException {
@@ -202,6 +203,39 @@ public class STSClient {
             
             return processCancelResponse(client.sendReceive(rstQn,
                                                             createCancelRequest(tokenId)));
+        } catch (AxisFault e) {
+            log.error("errorInCancelingToken", e);
+            throw new TrustException("errorInCancelingToken", e);
+        }
+    }
+
+    /**
+     * Cancel a given token
+     *
+     * @param tokenId       Token Identifier
+     * @param issuerAddress URI of the token issuer
+     * @param issuerPolicy  Security policy applied to token issuer
+     * @return              Return true if the given token is successfully revoked else return false
+     * @throws TrustException
+     */
+    public boolean cancelToken(String tokenId,
+                               String issuerAddress,
+                               Policy issuerPolicy) throws TrustException {
+
+        try {
+            QName rstQn = new QName("cancelSecurityToken");
+
+            ServiceClient client = getServiceClient(rstQn, issuerAddress);
+            client.getServiceContext().setProperty(RAMPART_POLICY, issuerPolicy);
+            client.getOptions().setSoapVersionURI(this.soapVersion);
+            if (this.addressingNs != null) {
+                client.getOptions().setProperty(AddressingConstants.WS_ADDRESSING_VERSION, this.addressingNs);
+            }
+            client.engageModule("addressing");
+            client.engageModule("rampart");
+
+            this.processPolicy(issuerPolicy, null);
+            return processCancelResponse(client.sendReceive(rstQn, createCancelRequest(tokenId)));
         } catch (AxisFault e) {
             log.error("errorInCancelingToken", e);
             throw new TrustException("errorInCancelingToken", e);
@@ -567,9 +601,8 @@ public class STSClient {
             <wst:RequestedTokenCancelled/>
         </wst:RequestSecurityTokenResponse>
         */
-        return response.
-                getFirstChildWithName(new QName(RahasConstants.
-                        CancelBindingLocalNames.REQUESTED_TOKEN_CANCELED)) != null;
+        return response.getFirstChildWithName(new QName(RahasConstants.WST_NS_05_02, RahasConstants.
+                CancelBindingLocalNames.REQUESTED_TOKEN_CANCELED)) != null;
     }
 
     /**
