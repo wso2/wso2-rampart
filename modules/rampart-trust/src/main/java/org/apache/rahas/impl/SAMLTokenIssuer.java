@@ -16,6 +16,17 @@
 
 package org.apache.rahas.impl;
 
+import java.security.Principal;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNode;
@@ -48,7 +59,9 @@ import org.apache.xml.security.utils.EncryptionConstants;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;
+import org.opensaml.SAMLAudienceRestrictionCondition;
 import org.opensaml.SAMLAuthenticationStatement;
+import org.opensaml.SAMLCondition;
 import org.opensaml.SAMLException;
 import org.opensaml.SAMLNameIdentifier;
 import org.opensaml.SAMLStatement;
@@ -57,16 +70,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-
-import javax.xml.namespace.QName;
-import java.security.Principal;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Issuer to issue SAMl tokens
@@ -78,6 +81,8 @@ public class SAMLTokenIssuer implements TokenIssuer {
     protected OMElement configElement;
 
     protected String configFile;
+
+    protected String audienceRestriction = null;
 
     //TODO: move this to a constant file
 
@@ -631,9 +636,17 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 statements.add(attrStatement);
             }
             statements.add(authStmt);
+            
+            List<SAMLCondition> conditions = null;
+            if(this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0){
+                SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition() ;
+                audienceRestriction.addAudience(this.audienceRestriction);
+                conditions = new ArrayList<SAMLCondition>();
+                conditions.add(audienceRestriction);
+            }
 
             SAMLAssertion assertion = new SAMLAssertion(config.issuerName,
-                    notBefore, notAfter, null, null, statements);
+                    notBefore, notAfter, conditions, null, statements);
 
             // sign the assertion
             X509Certificate[] issuerCerts = crypto
