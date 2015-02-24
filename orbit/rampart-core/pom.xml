@@ -15,14 +15,12 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.apache.rampart.wso2</groupId>
         <artifactId>rampart-orbit</artifactId>
-        <version>1.6.1.wso2v13-SNAPSHOT</version>
+        <version>1.6.1.wso2v15-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -68,19 +66,6 @@
             </releases>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>wso2.snapshots</id>
-            <name>Internal Reposiroty</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-       </snapshotRepository>
-    </distributionManagement>
 
     <dependencies>
 
@@ -206,23 +191,26 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                
+
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-			            <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>
-                        <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator</Bundle-Activator>
+                        <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>
+                        <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator
+                        </Bundle-Activator>
                         <Private-Package>org.wso2.carbon.rampart.internal</Private-Package>
-                        <Export-Package>org.apache.rampart.*;version="${rampart.version}"</Export-Package>
+                        <Export-Package>org.apache.rampart.*;version="${exp.pkg.version.rampart}"
+                        </Export-Package>
                         <Import-Package>
-	                    !org.apache.rampart.*,
-                            org.apache.commons.logging.*; version="${imp.pkg.version.commons.logging}",
+                            !org.apache.rampart.*,
+                            org.apache.commons.logging.*;
+                            version="${imp.pkg.version.commons.logging}",
                             org.apache.axis2.*; version="${imp.pkg.version.axis2}",
-			    org.apache.axiom.*; version="${imp.pkg.version.axiom}",
-			    org.apache.neethi.*; version="${imp.pkg.version.neethi}",
+                            org.apache.axiom.*; version="${imp.pkg.version.axiom}",
+                            org.apache.neethi.*; version="${imp.pkg.version.neethi}",
                             org.apache.ws.security.*; version="${imp.pkg.version.wss4j}",
-                            javax.xml.stream.*; version="${imp.pkg.version.javax.xml},
+                            javax.xml.stream.*; version="${imp.pkg.version.javax.xml}",
                             org.osgi.framework,
                             *;resolution:=optional
                         </Import-Package>

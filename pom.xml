@@ -23,9 +23,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.apache</groupId>
-        <artifactId>apache</artifactId>
-        <version>8</version>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
     </parent>
 
     <groupId>org.apache.rampart</groupId>
@@ -33,9 +33,16 @@
     <artifactId>rampart-project</artifactId>
     <packaging>pom</packaging>
     <description> WS-Security, WS-Trust and WS-SecureConversation implementaion for Apache Axis2 </description>
-    <version>1.6.1-wso2v13-SNAPSHOT</version>
+    <version>1.6.1-wso2v15-SNAPSHOT</version>
     <name>Apache Rampart</name>
     <url>http://axis.apache.org/axis2/java/rampart</url>
+
+   <scm>
+        <url>https://github.com/wso2/wso2-rampart.git</url>
+        <developerConnection>scm:git:https://github.com/wso2/wso2-rampart.git</developerConnection>
+        <connection>scm:git:https://github.com/wso2/wso2-rampart.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -107,16 +114,6 @@
             <organization>WSO2</organization>
         </developer>
     </developers>
-
-    <!--scm>
-        <connection>
-            scm:svn:http://svn.apache.org/repos/asf/axis/axis2/java/rampart/branches/1_6
-        </connection>
-        <developerConnection>
-            scm:svn:https://svn.apache.org/repos/asf/axis/axis2/java/rampart/branches/1_6
-        </developerConnection>
-        <url>http://svn.apache.org/viewvc/axis/axis2/java/rampart/branches/1_6</url>
-    </scm-->
 
     <repositories>
        <repository>
@@ -196,16 +193,6 @@
         	<version>2.1</version>
       	    </extension>
     	</extensions>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <configuration>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
 	    <plugin> 
 		<groupId>org.jvnet.maven.incrementalbuild</groupId> 
@@ -228,11 +215,22 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>2.0-beta-5</version>
                 <inherited>false</inherited>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <preparationGoals>clean install</preparationGoals>
+                    <autoVersionSubmodules>false</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -532,14 +530,15 @@
 
     <properties>
 
-        <rampart.version>${project.version}</rampart.version>
+        <rampart.version>1.6.1-wso2v14</rampart.version>
+        <exp.pkg.version.rampart>1.6.1-wso2v14</exp.pkg.version.rampart>
         <rampart.mar.version>${project.version}</rampart.mar.version>
         <rahas.mar.version>${project.version}</rahas.mar.version>
 
         <axis2.version>1.6.1-wso2v11</axis2.version>
         <axiom.version>1.2.11-wso2v5</axiom.version>
 
-        <wss4j.version>1.5.11-wso2v5</wss4j.version>
+        <wss4j.version>1.5.11-wso2v9</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <opensaml.version>1.1</opensaml.version>
 
@@ -556,24 +555,25 @@
         <imp.pkg.version.axis2>[1.6.1.wso2v11, 1.7.0)</imp.pkg.version.axis2>
         <imp.pkg.version.axiom>[1.2.11.wso2v5, 1.3.0)</imp.pkg.version.axiom>
         <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
-        <imp.pkg.version.wss4j>[1.5.11.wso2v3,2)</imp.pkg.version.wss4j>
+        <imp.pkg.version.wss4j>[1.5.11.wso2v9,2)</imp.pkg.version.wss4j>
         <orbit.version.neethi>2.0.4.wso2v4</orbit.version.neethi>
-        <orbit.version.wss4j>1.5.11.wso2v7</orbit.version.wss4j>
+        <orbit.version.wss4j>1.5.11.wso2v9</orbit.version.wss4j>
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
         <imp.pkg.version.commons.logging>1.0.4</imp.pkg.version.commons.logging>
+        <project.scm.id>my-scm-server</project.scm.id>
 
     </properties>
 
     <distributionManagement>
         <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 Release Distribution Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
+            <id>nexus-releases</id>
+            <name>WSO2 Nexus Release Repository</name>
+            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
             <id>wso2.snapshots</id>
             <name>Internal Reposiroty</name>
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-       </snapshotRepository>
+        </snapshotRepository>
     </distributionManagement>
 </project>

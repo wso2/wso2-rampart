@@ -772,6 +772,9 @@ public class AsymmetricBindingBuilder extends BindingBuilder {
             }
 
             try {
+                // set the digest algorithm specified in the security policy
+                sig.setDigestAlgo(rpd.getAlgorithmSuite().getDigest());
+
                 sig.addReferencesToSign(sigParts, rmd.getSecHeader());
                 sig.computeSignature();
 
