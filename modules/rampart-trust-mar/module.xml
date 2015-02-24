@@ -58,6 +58,10 @@
                      <configuration type="parameter">saml-issuer-config</configuration>
                      <tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1</tokenType>
                 </renewer>
+                <renewer class="org.apache.rahas.impl.SAML2TokenRenewer">
+                    <configuration type="parameter">saml-issuer-config</configuration>
+                    <tokenType>http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0</tokenType>
+                </renewer>
 
             </token-dispatcher-configuration>
 		</parameter>
