@@ -18,6 +18,7 @@ package org.apache.rampart;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.apache.axiom.om.impl.dom.AttrImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axiom.soap.SOAP11Constants;
 import org.apache.axiom.soap.SOAP12Constants;
@@ -140,6 +141,37 @@ public class MessageBuilderTestBase extends TestCase {
         if (qnameList.hasNext()) {
             fail("Incorrect number of children in the security header: " +
                  "next expected element" + qnameList.next().toString());
+        }
+    }
+
+    protected void verifySetAlgorithm(SOAPEnvelope env) {
+        boolean isAlgorithmExists = false;
+        Iterator secHeaderChildren =
+                env.getHeader().
+                        getFirstChildWithName(new QName(WSConstants.WSSE_NS,
+                                                        WSConstants.WSSE_LN)).getChildElements();
+
+        while (secHeaderChildren.hasNext()) {
+            OMElement element = (OMElement) secHeaderChildren.next();
+            if (element.getFirstElement() != null) {
+                Iterator firstElement = element.getFirstElement().getAllAttributes();
+                while (firstElement.hasNext()) {
+                    AttrImpl value = (AttrImpl) firstElement.next();
+                    if (value != null) {
+                        String algorithm = value.getAttributeValue();
+                        isAlgorithmExists = true;
+                        if (algorithm != null) {
+                            if (!algorithm.contains("rsa-1_5")) {
+                                fail("Incorrect Algorithm");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!isAlgorithmExists) {
+            fail("No Algorithm in Header");
         }
     }
 
