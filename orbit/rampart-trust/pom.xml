@@ -179,7 +179,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>
+                        <Axis2Module>${project.artifactId}-${rampart.version}</Axis2Module>
                         <Export-Package>
                             org.apache.rahas.*;version="${exp.pkg.version.rampart}"
                         </Export-Package>
