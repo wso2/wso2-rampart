@@ -356,6 +356,38 @@ public class STSClient {
 
     }
 
+    public boolean renewToken(String tokenId,String tokenType,
+                              String issuerAddress,
+                              Policy issuerPolicy, TokenStorage store) throws TrustException {
+
+        try {
+            QName rstQn = new QName("requestSecurityToken");
+
+            ServiceClient client = getServiceClient(rstQn, issuerAddress);
+
+            client.getServiceContext().setProperty(RAMPART_POLICY, issuerPolicy);
+            client.getOptions().setSoapVersionURI(this.soapVersion);
+            if (this.addressingNs != null) {
+                client.getOptions().setProperty(AddressingConstants.WS_ADDRESSING_VERSION, this.addressingNs);
+            }
+            client.engageModule("addressing");
+            client.engageModule("rampart");
+
+            this.processPolicy(issuerPolicy, null);
+
+            OMElement response = client.sendReceive(rstQn,
+                    createRenewRequest(tokenType, tokenId));
+            store.update(processRenewResponse(version, response, store, tokenId));
+
+            return true;
+
+        } catch (AxisFault e) {
+            log.error("errorInRenewingToken", e);
+            throw new TrustException("errorInRenewingToken", new String[]{issuerAddress}, e);
+        }
+
+    }
+
     /**
      * Processes the response and update the token store
      * @param version

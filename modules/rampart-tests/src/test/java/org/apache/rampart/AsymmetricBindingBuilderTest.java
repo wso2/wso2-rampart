@@ -212,6 +212,8 @@ public class AsymmetricBindingBuilderTest extends MessageBuilderTestBase {
             list.add(new QName(WSConstants.SIG_NS, WSConstants.SIG_LN));
             
             this.verifySecHeader(list.iterator(), ctx.getEnvelope());
+            this.verifySetAlgorithm(ctx.getEnvelope());
+
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

@@ -1,5 +1,14 @@
 package org.apache.rahas.impl;
 
+import java.security.cert.X509Certificate;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
@@ -21,6 +30,7 @@ import org.apache.xml.security.signature.XMLSignature;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
 import org.opensaml.SAMLAttributeStatement;
+import org.opensaml.SAMLAudienceRestrictionCondition;
 import org.opensaml.SAMLCondition;
 import org.opensaml.SAMLException;
 import org.opensaml.SAMLNameIdentifier;
@@ -28,23 +38,12 @@ import org.opensaml.SAMLSubject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
-import java.security.cert.X509Certificate;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
 
     private SAMLTokenIssuerConfig config = null;
     private RahasData data = null;
-    private Element audienceRestriction = null;
+
     private static final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     public void setConfig(SAMLTokenIssuerConfig config) {
@@ -241,14 +240,13 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
             SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(subject, attributeList);
             statements.add(attrStmt);
 
-            List conditions = null;
-
-            if (audienceRestriction != null) {
-                SAMLCondition condition = SAMLCondition.getInstance(audienceRestriction);
-                conditions = new ArrayList();
-                conditions.add(condition);
+            List<SAMLCondition> conditions = null;
+            if(this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0){
+                SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition() ;
+                audienceRestriction.addAudience(this.audienceRestriction);
+                conditions = new ArrayList<SAMLCondition>();
+                conditions.add(audienceRestriction);
             }
-
             SAMLAssertion assertion = new SAMLAssertion(config.issuerName, notBefore, notAfter,
                                                         conditions, null, statements);
 
@@ -270,18 +268,9 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
         }
     }
 
-    public void setAudienceRestrictionCondition(String uri) throws TrustException {
-        String audienceRestrictionXmlString = "<saml1:AudienceRestrictionCondition xmlns:saml1=\"urn:oasis:names:tc:SAML:1.0:assertion\"><saml1:Audience>" +
-                                              uri + "</saml1:Audience></saml1:AudienceRestrictionCondition>";
+    public void setAudienceRestrictionCondition(String audienceRestriction) throws TrustException {
+            this.audienceRestriction = audienceRestriction;
 
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document =
-                    builder.parse(new InputSource(new StringReader(audienceRestrictionXmlString)));
-            this.audienceRestriction = document.getDocumentElement();
-        } catch (Exception e) {
-            throw new TrustException("samlAssertionCreationError");
-        }
     }
 
 }
