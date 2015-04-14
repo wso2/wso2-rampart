@@ -196,7 +196,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Axis2Module>${project.artifactId}-${project.version}</Axis2Module>
+                        <Axis2Module>${project.artifactId}-${rampart.version}</Axis2Module>
                         <Bundle-Activator>org.wso2.carbon.rampart.internal.RampartActivator
                         </Bundle-Activator>
                         <Private-Package>org.wso2.carbon.rampart.internal</Private-Package>

@@ -374,29 +374,29 @@
             <dependency>
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart</artifactId>
-                <version>${project.version}</version>
+                <version>${rampart.version}</version>
                 <type>mar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rahas</artifactId>
-                <version>${project.version}</version>
+                <version>${rampart.version}</version>
                 <type>mar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-core</artifactId>
-                <version>${project.version}</version>
+                <version>${rampart.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-policy</artifactId>
-                <version>${project.version}</version>
+                <version>${rampart.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-trust</artifactId>
-                <version>${project.version}</version>
+                <version>${rampart.version}</version>
             </dependency>
             <dependency>
                 <groupId>bouncycastle</groupId>
@@ -530,10 +530,10 @@
 
     <properties>
 
-        <rampart.version>1.6.1-wso2v14</rampart.version>
+        <rampart.version>1.6.1-wso2v15-SNAPSHOT</rampart.version>
         <exp.pkg.version.rampart>1.6.1-wso2v14</exp.pkg.version.rampart>
-        <rampart.mar.version>${project.version}</rampart.mar.version>
-        <rahas.mar.version>${project.version}</rahas.mar.version>
+        <rampart.mar.version>${rampart.version}</rampart.mar.version>
+        <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
         <axis2.version>1.6.1-wso2v11</axis2.version>
         <axiom.version>1.2.11-wso2v5</axiom.version>
@@ -549,7 +549,7 @@
         <log4j.version>1.2.15</log4j.version>
 
         <!-- distribution properties -->
-        <dist.dir>rampart-${project.version}</dist.dir>
+        <dist.dir>rampart-${rampart.version}</dist.dir>
         <failIfNoTests>false</failIfNoTests>
         <imp.pkg.version.axis2>[1.6.1.wso2v11, 1.7.0)</imp.pkg.version.axis2>
         <imp.pkg.version.axis2>[1.6.1.wso2v11, 1.7.0)</imp.pkg.version.axis2>
