@@ -557,16 +557,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 attrs = new SAMLAttribute[]{attribute};
             }
 
-            SAMLAttribute[] encodedAttrs = new SAMLAttribute[attrs.length];
-            for (int i=0; i < attrs.length; i++) {
-                ArrayList<String> valueArray = new ArrayList<String>();
-                Iterator<String> iterator = attrs[i].getValues();
-                while (iterator.hasNext()) {
-                    valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
-                }
-                attrs[i].setValues(valueArray);
-                encodedAttrs[i] = attrs[i];
-            }
+            SAMLAttribute[] encodedAttrs = encodeSAMLAttributes(attrs);
             List attributeList = Arrays.asList(encodedAttrs);
 
             // If ActAs element is present in the RST
@@ -767,16 +758,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 attrs = new SAMLAttribute[]{attribute};
             }
 
-            SAMLAttribute[] encodedAttrs = new SAMLAttribute[attrs.length];
-            for (int i=0; i < attrs.length; i++) {
-                ArrayList<String> valueArray = new ArrayList<String>();
-                Iterator<String> iterator = attrs[i].getValues();
-                while (iterator.hasNext()) {
-                    valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
-                }
-                attrs[i].setValues(valueArray);
-                encodedAttrs[i] = attrs[i];
-            }
+            SAMLAttribute[] encodedAttrs = encodeSAMLAttributes(attrs);
 
             SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(
                     subject, Arrays.asList(encodedAttrs));
@@ -784,6 +766,31 @@ public class SAMLTokenIssuer implements TokenIssuer {
         } catch (SAMLException e) {
             throw new TrustException(e.getMessage(), e);
         }
+    }
+
+    /**
+     * 
+     * @param samlAttributes
+     * @return HTML encoded SAMLAttribute[]
+     * @throws SAMLException
+     */
+    private SAMLAttribute[] encodeSAMLAttributes(SAMLAttribute[] samlAttributes) throws SAMLException {
+        if(samlAttributes == null) {
+            return null;
+        }
+
+        SAMLAttribute[] encodedAttrs = new SAMLAttribute[samlAttributes.length];
+        for (int i=0; i < samlAttributes.length; i++) {
+            ArrayList<String> valueArray = new ArrayList<String>();
+            Iterator<String> iterator = samlAttributes[i].getValues();
+            while (iterator.hasNext()) {
+                valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
+            }
+            samlAttributes[i].setValues(valueArray);
+            encodedAttrs[i] = samlAttributes[i];
+        }
+
+        return encodedAttrs;
     }
 
 }
