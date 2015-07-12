@@ -16,17 +16,6 @@
 
 package org.apache.rahas.impl;
 
-import java.security.Principal;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNode;
@@ -34,6 +23,7 @@ import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
 import org.apache.rahas.Token;
@@ -70,6 +60,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
+
+import javax.xml.namespace.QName;
+import java.security.Principal;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Issuer to issue SAMl tokens
@@ -555,7 +556,18 @@ public class SAMLTokenIssuer implements TokenIssuer {
                                 .asList(new String[] { "Colombo/Rahas" }));
                 attrs = new SAMLAttribute[]{attribute};
             }
-            List attributeList = Arrays.asList(attrs );
+
+            SAMLAttribute[] encodedAttrs = new SAMLAttribute[attrs.length];
+            for (int i=0; i < attrs.length; i++) {
+                ArrayList<String> valueArray = new ArrayList<String>();
+                Iterator<String> iterator = attrs[i].getValues();
+                while (iterator.hasNext()) {
+                    valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
+                }
+                attrs[i].setValues(valueArray);
+                encodedAttrs[i] = attrs[i];
+            }
+            List attributeList = Arrays.asList(encodedAttrs);
 
             // If ActAs element is present in the RST
             if(data.getActAs() != null){
@@ -755,8 +767,19 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 attrs = new SAMLAttribute[]{attribute};
             }
 
+            SAMLAttribute[] encodedAttrs = new SAMLAttribute[attrs.length];
+            for (int i=0; i < attrs.length; i++) {
+                ArrayList<String> valueArray = new ArrayList<String>();
+                Iterator<String> iterator = attrs[i].getValues();
+                while (iterator.hasNext()) {
+                    valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
+                }
+                attrs[i].setValues(valueArray);
+                encodedAttrs[i] = attrs[i];
+            }
+
             SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(
-                    subject, Arrays.asList(attrs));
+                    subject, Arrays.asList(encodedAttrs));
             return attrStmt;
         } catch (SAMLException e) {
             throw new TrustException(e.getMessage(), e);
