@@ -23,7 +23,6 @@ import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
 import org.apache.rahas.Token;
@@ -69,7 +68,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -557,8 +555,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 attrs = new SAMLAttribute[]{attribute};
             }
 
-            SAMLAttribute[] encodedAttrs = encodeSAMLAttributes(attrs);
-            List attributeList = Arrays.asList(encodedAttrs);
+            List attributeList = Arrays.asList(attrs);
 
             // If ActAs element is present in the RST
             if(data.getActAs() != null){
@@ -758,39 +755,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 attrs = new SAMLAttribute[]{attribute};
             }
 
-            SAMLAttribute[] encodedAttrs = encodeSAMLAttributes(attrs);
-
             SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(
-                    subject, Arrays.asList(encodedAttrs));
+                    subject, Arrays.asList(attrs));
             return attrStmt;
         } catch (SAMLException e) {
             throw new TrustException(e.getMessage(), e);
         }
-    }
-
-    /**
-     * 
-     * @param samlAttributes
-     * @return HTML encoded SAMLAttribute[]
-     * @throws SAMLException
-     */
-    private SAMLAttribute[] encodeSAMLAttributes(SAMLAttribute[] samlAttributes) throws SAMLException {
-        if(samlAttributes == null) {
-            return null;
-        }
-
-        SAMLAttribute[] encodedAttrs = new SAMLAttribute[samlAttributes.length];
-        for (int i=0; i < samlAttributes.length; i++) {
-            ArrayList<String> valueArray = new ArrayList<String>();
-            Iterator<String> iterator = samlAttributes[i].getValues();
-            while (iterator.hasNext()) {
-                valueArray.add(StringEscapeUtils.escapeHtml(iterator.next()));
-            }
-            samlAttributes[i].setValues(valueArray);
-            encodedAttrs[i] = samlAttributes[i];
-        }
-
-        return encodedAttrs;
     }
 
 }
