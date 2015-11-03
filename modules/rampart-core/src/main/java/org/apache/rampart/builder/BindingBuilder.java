@@ -944,78 +944,78 @@ public abstract class BindingBuilder {
 
         return krb;
     }
-    
-	protected void initializeTokens(RampartMessageData rmd) throws RampartException {
-		RampartPolicyData rpd = rmd.getPolicyData();
-		MessageContext msgContext = rmd.getMsgContext();
-		if (!msgContext.isServerSide()) {
-			if (log.isDebugEnabled())
-				log.debug("Processing symmetric binding: Setting up encryption token and signature token");
-			Token sigTok = null;
-			Token encrTok = null;
-			if (rpd.isAsymmetricBinding()) {
-				sigTok = rpd.getInitiatorToken();
-				encrTok = rpd.getRecipientToken();
-			} else {
-				sigTok = rpd.getSignatureToken();
-				encrTok = rpd.getEncryptionToken();
-			}
-			if (sigTok instanceof IssuedToken) {
-				log.debug("SignatureToken is an IssuedToken");
-				if (rmd.getIssuedSignatureTokenId() == null) {
-					log.debug("No Issuedtoken found, requesting a new token");
-					IssuedToken issuedToken = (IssuedToken) sigTok;
-					String id = RampartUtil.getIssuedToken(rmd, issuedToken);
-					rmd.setIssuedSignatureTokenId(id);
-				}
-			} else if (sigTok instanceof SecureConversationToken) {
-				log.debug("SignatureToken is a SecureConversationToken");
-				String secConvTokenId = rmd.getSecConvTokenId();
-				String action = msgContext.getOptions().getAction();
-				boolean cancelReqResp = action
-						.equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RSTR/SCT/Cancel")
-						|| action
-								.equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RSTR/SCT/Cancel")
-						|| action
-								.equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel")
-						|| action
-								.equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel");
-				if (secConvTokenId != null && cancelReqResp)
-					try {
-						rmd.getTokenStorage().getToken(secConvTokenId).setState(3);
-						msgContext.setProperty("sctID", secConvTokenId);
-						String contextIdentifierKey = RampartUtil
-								.getContextIdentifierKey(msgContext);
-						RampartUtil.getContextMap(msgContext).remove(contextIdentifierKey);
-					} catch (TrustException e) {
-						throw new RampartException("errorExtractingToken");
-					}
-				if (secConvTokenId == null || secConvTokenId != null
-						&& !RampartUtil.isTokenValid(rmd, secConvTokenId) && !cancelReqResp) {
-					log.debug("No SecureConversationToken found, requesting a new token");
-					SecureConversationToken secConvTok = (SecureConversationToken) sigTok;
-					try {
-						String id = RampartUtil.getSecConvToken(rmd, secConvTok);
-						rmd.setSecConvTokenId(id);
-					} catch (TrustException e) {
-						throw new RampartException("errorInObtainingSct", e);
-					}
-				}
-			}
-            if (sigTok instanceof IssuedToken && sigTok.equals(encrTok) ) {
-				log.debug("Symmetric binding uses a ProtectionToken, both SignatureToken and EncryptionToken are the same");
-				rmd.setIssuedEncryptionTokenId(rmd.getIssuedEncryptionTokenId());
-			} else {
-				log.debug("Obtaining the Encryption Token");
-				if (rmd.getIssuedEncryptionTokenId() != null) {
-					log.debug("EncrytionToken not alredy set");
-					IssuedToken issuedToken = (IssuedToken) encrTok;
-					String id = RampartUtil.getIssuedToken(rmd, issuedToken);
-					rmd.setIssuedEncryptionTokenId(id);
-				}
-			}
-		}
-	}
+
+    protected void initializeTokens(RampartMessageData rmd) throws RampartException {
+        RampartPolicyData rpd = rmd.getPolicyData();
+        MessageContext msgContext = rmd.getMsgContext();
+        if (!msgContext.isServerSide()) {
+            if (log.isDebugEnabled())
+                log.debug("Processing symmetric binding: Setting up encryption token and signature token");
+            Token sigTok = null;
+            Token encrTok = null;
+            if (rpd.isAsymmetricBinding()) {
+                sigTok = rpd.getInitiatorToken();
+                encrTok = rpd.getRecipientToken();
+            } else {
+                sigTok = rpd.getSignatureToken();
+                encrTok = rpd.getEncryptionToken();
+            }
+            if (sigTok instanceof IssuedToken) {
+                log.debug("SignatureToken is an IssuedToken");
+                if (rmd.getIssuedSignatureTokenId() == null) {
+                    log.debug("No Issuedtoken found, requesting a new token");
+                    IssuedToken issuedToken = (IssuedToken) sigTok;
+                    String id = RampartUtil.getIssuedToken(rmd, issuedToken);
+                    rmd.setIssuedSignatureTokenId(id);
+                }
+            } else if (sigTok instanceof SecureConversationToken) {
+                log.debug("SignatureToken is a SecureConversationToken");
+                String secConvTokenId = rmd.getSecConvTokenId();
+                String action = msgContext.getOptions().getAction();
+                boolean cancelReqResp = action
+                        .equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RSTR/SCT/Cancel")
+                        || action
+                            .equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RSTR/SCT/Cancel")
+                        || action
+                            .equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel")
+                        || action
+                            .equals("http://schemas.xmlsoap.org/ws/2005/02/trust/RST/SCT/Cancel");
+                if (secConvTokenId != null && cancelReqResp)
+                    try {
+                        rmd.getTokenStorage().getToken(secConvTokenId).setState(3);
+                        msgContext.setProperty("sctID", secConvTokenId);
+                        String contextIdentifierKey = RampartUtil
+                                .getContextIdentifierKey(msgContext);
+                        RampartUtil.getContextMap(msgContext).remove(contextIdentifierKey);
+                    } catch (TrustException e) {
+                        throw new RampartException("errorExtractingToken");
+                    }
+                if (secConvTokenId == null || secConvTokenId != null
+                        && !RampartUtil.isTokenValid(rmd, secConvTokenId) && !cancelReqResp) {
+                    log.debug("No SecureConversationToken found, requesting a new token");
+                    SecureConversationToken secConvTok = (SecureConversationToken) sigTok;
+                    try {
+                        String id = RampartUtil.getSecConvToken(rmd, secConvTok);
+                        rmd.setSecConvTokenId(id);
+                    } catch (TrustException e) {
+                        throw new RampartException("errorInObtainingSct", e);
+                    }
+                }
+            }
+            if (sigTok instanceof IssuedToken && sigTok.equals(encrTok)) {
+                log.debug("Symmetric binding uses a ProtectionToken, both SignatureToken and EncryptionToken are the same");
+                rmd.setIssuedEncryptionTokenId(rmd.getIssuedEncryptionTokenId());
+            } else {
+                log.debug("Obtaining the Encryption Token");
+                if (rmd.getIssuedEncryptionTokenId() != null) {
+                    log.debug("EncrytionToken not alredy set");
+                    IssuedToken issuedToken = (IssuedToken) encrTok;
+                    String id = RampartUtil.getIssuedToken(rmd, issuedToken);
+                    rmd.setIssuedEncryptionTokenId(id);
+                }
+            }
+        }
+    }
 
     /**
      * 
