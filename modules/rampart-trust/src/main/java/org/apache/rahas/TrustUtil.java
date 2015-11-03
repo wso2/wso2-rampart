@@ -72,6 +72,27 @@ public class TrustUtil {
         return str.getElement();
     }
 
+    public static Element createSecurityTokenReferenceWithTokenType(Document doc, String refUri, String refValueType,
+                                                                    String tokenType) {
+
+        Reference ref = new Reference(doc);
+        ref.setURI("#" + refUri);
+        if (refValueType != null) {
+            ref.setValueType(refValueType);
+        }
+
+        SecurityTokenReference str = new SecurityTokenReference(doc);
+        str.setReference(ref);
+
+        Element securityTokenReference = str.getElement();
+        securityTokenReference.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:wsse11",
+                "http://docs.oasis-open.org/wss/oasis-wsswssecurity-secext-1.1.xsd");
+        securityTokenReference.setAttributeNS("http://docs.oasis-open" +
+                ".org/wss/oasis-wsswssecurity-secext-1.1.xsd", "wsse11:TokenType", tokenType);
+
+        return securityTokenReference;
+    }
+
     public static OMElement
             createRequestSecurityTokenResponseElement(int version,
                                                       OMElement parent) throws TrustException {

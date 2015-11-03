@@ -397,11 +397,13 @@ public abstract class BindingBuilder {
                         this.encryptedTokensIdList.add(endSuppTok.getId());
                     }
 
-                     //Create a SecurityTokenReference and add the token
-                    Element strElem = TrustUtil.createSecurityTokenReference(rmd.getSecHeader().getSecurityHeader().getOwnerDocument(),
-                                                                             id,
-                                                                             RampartConstants.SAML_ASSERTION_ID);
+                    //Create a SecurityTokenReference and add the token
+                    Element strElem = TrustUtil.createSecurityTokenReferenceWithTokenType(rmd.getSecHeader()
+                            .getSecurityHeader().getOwnerDocument(), id, "http://docs.oasis-open" +
+                            ".org/wss/oasis-wss-saml-token-profile-1.1#SAMLID", "http://docs.oasis-open" +
+                            ".org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0");
                     Element strElemInserted = RampartUtil.insertSiblingAfter(rmd, siblingElem, strElem);
+
                     this.setInsertionLocation(strElemInserted);
                     String elementID = RampartUtil.addWsuIdToElement((OMElement)strElemInserted);
 
@@ -1000,7 +1002,7 @@ public abstract class BindingBuilder {
 					}
 				}
 			}
-			if (sigTok.equals(encrTok) && (sigTok instanceof IssuedToken)) {
+            if (sigTok instanceof IssuedToken && sigTok.equals(encrTok) ) {
 				log.debug("Symmetric binding uses a ProtectionToken, both SignatureToken and EncryptionToken are the same");
 				rmd.setIssuedEncryptionTokenId(rmd.getIssuedEncryptionTokenId());
 			} else {
