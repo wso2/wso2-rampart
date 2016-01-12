@@ -42,7 +42,7 @@ public class RampartActivator implements BundleActivator {
             String carbonHome = System.getProperty("carbon.home");
             // jaas.conf location.
             System.setProperty("java.security.auth.login.config", carbonHome + File.separator + "repository"+
-                    File.separator + "conf" + File.separator + "security" + File.separator + "jaas.conf");
+                    File.separator + "conf" + File.separator + "identity" + File.separator + "jaas.conf");
             
             //Registering rampart policy builders
             for (String buildeName : builders) {
