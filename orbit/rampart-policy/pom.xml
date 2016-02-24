@@ -84,7 +84,7 @@
             <version>${orbit.version.wss4j}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.neethi.wso2</groupId>
+            <groupId>org.wso2.orbit.org.apache.neethi</groupId>
             <artifactId>neethi</artifactId>
             <version>${orbit.version.neethi}</version>
             <optional>true</optional>
