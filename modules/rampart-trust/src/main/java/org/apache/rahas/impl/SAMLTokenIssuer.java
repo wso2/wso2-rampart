@@ -23,6 +23,7 @@ import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
 import org.apache.rahas.Token;
@@ -55,6 +56,10 @@ import org.opensaml.SAMLException;
 import org.opensaml.SAMLNameIdentifier;
 import org.opensaml.SAMLStatement;
 import org.opensaml.SAMLSubject;
+import org.opensaml.saml2.core.Audience;
+import org.opensaml.saml2.core.AudienceRestriction;
+import org.opensaml.saml2.core.impl.AudienceBuilder;
+import org.opensaml.saml2.core.impl.AudienceRestrictionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -141,6 +146,14 @@ public class SAMLTokenIssuer implements TokenIssuer {
                         inMsgCtx.getAxisService().getClassLoader());
             }
 
+
+            if (StringUtils.isBlank(data.getAppliesToAddress())) {
+                audienceRestriction = "defaultAudienceRestriction";
+            }
+
+            audienceRestriction = data.getAppliesToAddress();
+
+
             // Creation and expiration times
             Date creationTime = new Date();
             Date expirationTime = new Date();
@@ -167,9 +180,15 @@ public class SAMLTokenIssuer implements TokenIssuer {
 
             String keyType = data.getKeyType();
             SAMLAssertion assertion;
-            if (keyType == null) {
-                throw new TrustException(TrustException.INVALID_REQUEST,
-                        new String[] { "Requested KeyType is missing" });
+            if (StringUtils.isBlank(keyType)) {
+                //According to ws-trust-1.3; <keytype> is an optional URI element.
+                if (StringUtils.isNotBlank(data.getAppliesToAddress())) {
+                    keyType = "http://schemas.xmlsoap.org/ws/2005/05/identity/SymmetricKey";
+
+                } else {
+                    throw new TrustException(TrustException.INVALID_REQUEST,
+                            new String[]{"Requested KeyType is missing"});
+                }
             }
 
             if (keyType.endsWith(RahasConstants.KEY_TYPE_SYMM_KEY)
@@ -180,7 +199,8 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 assertion = createBearerAssertion(config, doc, crypto,
                         creationTime, expirationTime, data);
             } else {
-                throw new TrustException("unsupportedKeyType");
+                assertion = createBearerAssertion(config, doc, crypto,
+                        creationTime, expirationTime, data);
             }
 
             OMElement rstrElem;
@@ -329,32 +349,33 @@ public class SAMLTokenIssuer implements TokenIssuer {
     }
 
     protected SAMLAssertion createBearerAssertion(SAMLTokenIssuerConfig config,
-            Document doc, Crypto crypto, Date creationTime,
-            Date expirationTime, RahasData data) throws TrustException {
+                                                  Document doc, Crypto crypto, Date creationTime,
+                                                  Date expirationTime, RahasData data) throws TrustException {
         try {
             Principal principal = data.getPrincipal();
             SAMLAssertion assertion;
             // In the case where the principal is a UT
-			if (principal instanceof WSUsernameTokenPrincipal
-					|| principal instanceof KerberosTokenPrincipal) {
-				SAMLNameIdentifier nameId = null;
-            	if(config.getCallbackHandler() != null){
-            		SAMLNameIdentifierCallback cb = new SAMLNameIdentifierCallback(data);
-            		cb.setUserId(principal.getName());
-            		SAMLCallbackHandler callbackHandler = config.getCallbackHandler();
-            		callbackHandler.handle(cb);
-            		nameId = cb.getNameId();
-            	}else{
-              		nameId = new SAMLNameIdentifier(
-            		principal.getName(), null, SAMLNameIdentifier.FORMAT_EMAIL);
-            	}
-            	
+            if (principal instanceof WSUsernameTokenPrincipal
+                    || principal instanceof KerberosTokenPrincipal) {
+                SAMLNameIdentifier nameId = null;
+                if (config.getCallbackHandler() != null) {
+                    SAMLNameIdentifierCallback cb = new SAMLNameIdentifierCallback(data);
+                    cb.setUserId(principal.getName());
+                    SAMLCallbackHandler callbackHandler = config.getCallbackHandler();
+                    callbackHandler.handle(cb);
+                    nameId = cb.getNameId();
+                } else {
+                    nameId = new SAMLNameIdentifier(
+                            principal.getName(), null, SAMLNameIdentifier.FORMAT_EMAIL);
+
+                }
+
                 return createAuthAssertion(doc, SAMLSubject.CONF_BEARER,
                         nameId, null, config, crypto, creationTime,
                         expirationTime, data);
             } else {
                 throw new TrustException("samlUnsupportedPrincipal",
-                        new String[] { principal.getClass().getName() });
+                        new String[]{principal.getClass().getName()});
             }
         } catch (SAMLException e) {
             throw new TrustException("samlAssertionCreationError", e);
@@ -365,7 +386,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             Document doc, Crypto crypto, Date creationTime,
             Date expirationTime, RahasData data) throws TrustException {
 
-        if (data.getKeyType().endsWith(RahasConstants.KEY_TYPE_SYMM_KEY)) {
+        String keyType = data.getKeyType();
+        if (StringUtils.isBlank(keyType)) {
+            keyType = "http://schemas.xmlsoap.org/ws/2005/05/identity/SymmetricKey";
+        }
+
+        if (keyType.endsWith(RahasConstants.KEY_TYPE_SYMM_KEY)) {
             Element encryptedKeyElem;
             SAMLNameIdentifier nameId = null;
             X509Certificate serviceCert = null;
@@ -519,58 +545,66 @@ public class SAMLTokenIssuer implements TokenIssuer {
             SAMLSubject subject = new SAMLSubject(subjectNameId, Arrays
                     .asList(confirmationMethods), null, keyInfoElem);
 
-           
+
             SAMLAttribute[] attrs = null;
-            if(config.getCallbackHandler() != null){
-            	SAMLAttributeCallback cb = new SAMLAttributeCallback(data);
-            	SAMLCallbackHandler handler = config.getCallbackHandler();
-            	handler.handle(cb);
-            	attrs = cb.getAttributes();
+            if (config.getCallbackHandler() != null) {
+                SAMLAttributeCallback cb = new SAMLAttributeCallback(data);
+                SAMLCallbackHandler handler = config.getCallbackHandler();
+                handler.handle(cb);
+                attrs = cb.getAttributes();
             } else if (config.getCallbackHandlerName() != null
-					&& config.getCallbackHandlerName().trim().length() > 0) {
-				SAMLAttributeCallback cb = new SAMLAttributeCallback(data);
-				SAMLCallbackHandler handler = null;
-				MessageContext msgContext = data.getInMessageContext();
-				ClassLoader classLoader = msgContext.getAxisService().getClassLoader();
-				Class cbClass = null;
-				try {
-					cbClass = Loader.loadClass(classLoader, config.getCallbackHandlerName());
-				} catch (ClassNotFoundException e) {
-					throw new TrustException("cannotLoadPWCBClass", new String[]{config
-							.getCallbackHandlerName()}, e);
-				}
-				try {
-					handler = (SAMLCallbackHandler) cbClass.newInstance();
-				} catch (java.lang.Exception e) {
-					throw new TrustException("cannotCreatePWCBInstance", new String[]{config
-							.getCallbackHandlerName()}, e);
-				}
-				handler.handle(cb);
-				attrs = cb.getAttributes();
-            }else{
-            	//TODO Remove this after discussing
+                    && config.getCallbackHandlerName().trim().length() > 0) {
+                SAMLAttributeCallback cb = new SAMLAttributeCallback(data);
+                SAMLCallbackHandler handler = null;
+                MessageContext msgContext = data.getInMessageContext();
+                ClassLoader classLoader = msgContext.getAxisService().getClassLoader();
+                Class cbClass = null;
+                try {
+                    cbClass = Loader.loadClass(classLoader, config.getCallbackHandlerName());
+                } catch (ClassNotFoundException e) {
+                    throw new TrustException("cannotLoadPWCBClass", new String[]{config
+                            .getCallbackHandlerName()}, e);
+                }
+                try {
+                    handler = (SAMLCallbackHandler) cbClass.newInstance();
+                } catch (java.lang.Exception e) {
+                    throw new TrustException("cannotCreatePWCBInstance", new String[]{config
+                            .getCallbackHandlerName()}, e);
+                }
+                handler.handle(cb);
+                attrs = cb.getAttributes();
+            } else {
+                //TODO Remove this after discussing
                 SAMLAttribute attribute = new SAMLAttribute("Name",
                         "https://rahas.apache.org/saml/attrns", null, -1, Arrays
-                                .asList(new String[] { "Colombo/Rahas" }));
+                        .asList(new String[]{"Colombo/Rahas"}));
                 attrs = new SAMLAttribute[]{attribute};
             }
 
             List attributeList = Arrays.asList(attrs);
 
             // If ActAs element is present in the RST
-            if(data.getActAs() != null){
-               SAMLAttribute actAsAttribute = new SAMLAttribute("ActAs",
+            if (data.getActAs() != null) {
+                SAMLAttribute actAsAttribute = new SAMLAttribute("ActAs",
                         "https://rahas.apache.org/saml/attrns", null, -1, Arrays
-                                .asList(new String[] { data.getActAs() }));
+                        .asList(new String[]{data.getActAs()}));
                 attributeList.add(actAsAttribute);
             }
             SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(
-            subject, attributeList);
+                    subject, attributeList);
 
-            SAMLStatement[] statements = { attrStmt };
+            SAMLStatement[] statements = {attrStmt};
+
+            List<SAMLCondition> conditions = null;
+            if (this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0) {
+                SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
+                audienceRestriction.addAudience(this.audienceRestriction);
+                conditions = new ArrayList<SAMLCondition>();
+                conditions.add(audienceRestriction);
+            }
 
             SAMLAssertion assertion = new SAMLAssertion(config.issuerName,
-                    notBefore, notAfter, null, null, Arrays.asList(statements));
+                    notBefore, notAfter, conditions, null, Arrays.asList(statements));
 
             // sign the assertion
             X509Certificate[] issuerCerts = crypto
@@ -631,15 +665,16 @@ public class SAMLTokenIssuer implements TokenIssuer {
                     notBefore, null, null, null);
 
             List<SAMLStatement> statements = new ArrayList<SAMLStatement>();
-            if (data.getClaimDialect() != null && data.getClaimElem() != null) {
-                SAMLStatement attrStatement = createSAMLAttributeStatement((SAMLSubject)subject.clone(), data, config);
-                statements.add(attrStatement);
-            }
+
+            // According to ws-trust-1.3; <wst:claims> is an optional element requests a specific set of claims.
+            // This will be handled by the AttributeCallbackHandler class.
+            SAMLStatement attrStatement = createSAMLAttributeStatement((SAMLSubject) subject.clone(), data, config);
+            statements.add(attrStatement);
             statements.add(authStmt);
-            
+
             List<SAMLCondition> conditions = null;
-            if(this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0){
-                SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition() ;
+            if (this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0) {
+                SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
                 conditions = new ArrayList<SAMLCondition>();
                 conditions.add(audienceRestriction);
