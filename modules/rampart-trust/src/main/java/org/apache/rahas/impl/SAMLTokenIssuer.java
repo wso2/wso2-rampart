@@ -183,7 +183,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if (StringUtils.isBlank(keyType)) {
                 //According to ws-trust-1.3; <keytype> is an optional URI element.
                 if (StringUtils.isNotBlank(data.getAppliesToAddress())) {
-                    keyType = "http://schemas.xmlsoap.org/ws/2005/05/identity/SymmetricKey";
+                    keyType = data.getRstElement().getNamespace().getNamespaceURI() + RahasConstants.KEY_TYPE_SYMM_KEY;
 
                 } else {
                     throw new TrustException(TrustException.INVALID_REQUEST,
@@ -388,7 +388,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
 
         String keyType = data.getKeyType();
         if (StringUtils.isBlank(keyType)) {
-            keyType = "http://schemas.xmlsoap.org/ws/2005/05/identity/SymmetricKey";
+            keyType = data.getRstElement().getNamespace().getNamespaceURI() + RahasConstants.KEY_TYPE_SYMM_KEY;
         }
 
         if (keyType.endsWith(RahasConstants.KEY_TYPE_SYMM_KEY)) {
