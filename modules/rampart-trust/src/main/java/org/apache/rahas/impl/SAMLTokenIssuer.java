@@ -596,7 +596,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
             SAMLStatement[] statements = {attrStmt};
 
             List<SAMLCondition> conditions = null;
-            if (this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0) {
+            if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
                 conditions = new ArrayList<SAMLCondition>();
@@ -673,7 +673,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
             statements.add(authStmt);
 
             List<SAMLCondition> conditions = null;
-            if (this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0) {
+            if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
                 conditions = new ArrayList<SAMLCondition>();
