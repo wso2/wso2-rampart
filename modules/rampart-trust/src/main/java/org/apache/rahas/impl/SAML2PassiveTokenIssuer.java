@@ -1,7 +1,22 @@
+/*
+ * Copyright 2004,2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.rahas.impl;
 
 import java.io.ByteArrayOutputStream;
-import java.security.Principal;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -9,7 +24,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
@@ -18,26 +32,10 @@ import org.apache.rahas.RahasData;
 import org.apache.rahas.Token;
 import org.apache.rahas.TrustException;
 import org.apache.rahas.TrustUtil;
-import org.apache.rahas.impl.util.SAMLCallbackHandler;
-import org.apache.rahas.impl.util.SAMLNameIdentifierCallback;
-import org.apache.ws.security.KerberosTokenPrincipal;
-import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.components.crypto.CryptoFactory;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
-import org.opensaml.Configuration;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLException;
-import org.opensaml.SAMLNameIdentifier;
-import org.opensaml.SAMLSubject;
-import org.opensaml.common.SAMLObjectBuilder;
-import org.opensaml.saml1.core.NameIdentifier;
 import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.NameID;
-import org.opensaml.saml2.core.Subject;
-import org.opensaml.saml2.core.SubjectConfirmation;
-import org.opensaml.saml2.core.impl.NameIDBuilder;
-import org.opensaml.xml.XMLObjectBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,8 +55,6 @@ public class SAML2PassiveTokenIssuer extends SAML2TokenIssuer {
     
     public OMElement issuePassiveRSTR(RahasData data) throws TrustException {
 
-//        DocumentBuilderFactoryImpl.setDOOMRequired(true);
-        
         MessageContext inMsgCtx = data.getInMessageContext();
         this.data = data;
 
