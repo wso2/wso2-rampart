@@ -20,7 +20,8 @@
   -->
 
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2</groupId>
@@ -32,12 +33,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>rampart-project</artifactId>
     <packaging>pom</packaging>
-    <description> WS-Security, WS-Trust and WS-SecureConversation implementaion for Apache Axis2 </description>
+    <description>WS-Security, WS-Trust and WS-SecureConversation implementation for Apache Axis2</description>
     <version>1.6.1-wso2v20-SNAPSHOT</version>
     <name>Apache Rampart</name>
     <url>http://axis.apache.org/axis2/java/rampart</url>
 
-   <scm>
+    <scm>
         <url>https://github.com/wso2/wso2-rampart.git</url>
         <developerConnection>scm:git:https://github.com/wso2/wso2-rampart.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/wso2-rampart.git</connection>
@@ -60,7 +61,7 @@
         <system>JIRA</system>
         <url>http://issues.apache.org/jira/browse/RAMPART</url>
     </issueManagement>
-    
+
     <mailingLists>
         <mailingList>
             <name>Rampart Developers</name>
@@ -105,7 +106,7 @@
             <name>Nandana Mihindukulasooriya</name>
             <id>nandana</id>
             <email>nandana AT apache.org</email>
-            <organization />
+            <organization/>
         </developer>
         <developer>
             <name>Thilina Buddhika</name>
@@ -116,7 +117,7 @@
     </developers>
 
     <repositories>
-       <repository>
+        <repository>
             <id>wso2-nexus</id>
             <name>WSO2 internal Repository</name>
             <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
@@ -184,35 +185,35 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-    
+
     <build>
-	<extensions>
-      	    <extension>
-        	<groupId>org.apache.maven.wagon</groupId>
-        	<artifactId>wagon-ssh</artifactId>
-        	<version>2.1</version>
-      	    </extension>
-    	</extensions>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.1</version>
+            </extension>
+        </extensions>
         <plugins>
-	    <plugin> 
-		<groupId>org.jvnet.maven.incrementalbuild</groupId> 
-		<artifactId>incremental-build-plugin</artifactId>
-		<version>1.3</version>
-		<executions> 
-		    <execution> 
-		        <goals> 
-			    <goal>incremental-build</goal>
-			</goals>
-		    </execution> 
-		</executions> 
-	    </plugin>
+            <plugin>
+                <groupId>org.jvnet.maven.incrementalbuild</groupId>
+                <artifactId>incremental-build-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>incremental-build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -235,128 +236,6 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <!-- Axis2 and Axiom Dependencies -->
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2-kernel</artifactId>
-            <version>${axis2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>mex</artifactId>
-            <version>${axis2.version}</version>
-            <classifier>impl</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2-mtompolicy</artifactId>
-            <version>${axis2.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>addressing</artifactId>
-            <type>mar</type>
-            <version>${axis2.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-dom</artifactId>
-            <version>${axiom.version}</version>
-        </dependency>
-
-        <!-- Other Rampart Dependencies -->
-        <dependency>
-            <groupId>org.apache.ws.security</groupId>
-            <artifactId>wss4j</artifactId>
-            <version>${wss4j.version}</version>
-            <exclusions>
-                <!-- We exclude xalan:xalan as a transitive dependency, but include
-                     org.apache.xalan:xalan as a direct dependency. This avoids
-                     conflicts with the dependencies of org.opensaml:opensaml
-                     (which uses org.apache.xalan:xalan). -->
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>2.7.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.santuario</groupId>
-            <artifactId>xmlsec</artifactId>
-            <version>${xmlsec.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml1</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jms</groupId>
-                    <artifactId>jms</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jdmk</groupId>
-                    <artifactId>jmxtools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jmx</groupId>
-                    <artifactId>jmxri</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>oro</groupId>
-                    <artifactId>oro</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Junit Dependency -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <!-- Since Rampart depends on DOOM, but axiom-dom is not a transitive
@@ -367,21 +246,9 @@
                 <version>${axiom.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.ws.commons.axiom</groupId>
-                <artifactId>axiom-impl</artifactId>
-                <version>${axiom.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rampart</artifactId>
-                <version>${rampart.version}</version>
-                <type>mar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rahas</artifactId>
-                <version>${rampart.version}</version>
-                <type>mar</type>
+                <groupId>org.wso2.orbit.org.apache.neethi</groupId>
+                <artifactId>neethi</artifactId>
+                <version>${neethi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart</groupId>
@@ -397,16 +264,6 @@
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-trust</artifactId>
                 <version>${rampart.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>bouncycastle</groupId>
-                <artifactId>bcprov-jdk14</artifactId>
-                <version>${bcprov.jdk14.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>bouncycastle</groupId>
-                <artifactId>bcprov-jdk15</artifactId>
-                <version>${bcprov.jdk15.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.axis2</groupId>
@@ -438,38 +295,57 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-mtompolicy</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>mex</artifactId>
+                <version>${axis2.version}</version>
+                <classifier>impl</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>addressing</artifactId>
+                <type>mar</type>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-dom</artifactId>
+                <version>${axiom.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml</artifactId>
+                <version>${opensaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml1</artifactId>
+                <version>${opensaml1.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.security</groupId>
+                <artifactId>wss4j</artifactId>
+                <version>${wss4j.version}</version>
+                <exclusions>
+                    <!-- We exclude xalan:xalan as a transitive dependency, but include
+                         org.apache.xalan:xalan as a direct dependency. This avoids
+                         conflicts with the dependencies of org.opensaml:opensaml
+                         (which uses org.apache.xalan:xalan). -->
+                    <exclusion>
+                        <artifactId>xalan</artifactId>
+                        <groupId>xalan</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <profiles>
-        <profile>
-            <id>jdk14</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>1.4</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>bouncycastle</groupId>
-                    <artifactId>bcprov-jdk14</artifactId>
-                    <version>${bcprov.jdk14.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>jdk15</id>
-            <activation>
-                <jdk>1.5</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>bouncycastle</groupId>
-                    <artifactId>bcprov-jdk15</artifactId>
-                    <version>${bcprov.jdk15.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
 
         <profile>
             <id>apache-release</id>
@@ -505,7 +381,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
         <profile>
             <!-- Profile that includes all modules. This is handy when using maven-release-plugin
                  for anything else than doing a release. -->
@@ -531,7 +407,7 @@
     <properties>
 
         <rampart.version>1.6.1-wso2v20-SNAPSHOT</rampart.version>
-        <exp.pkg.version.rampart>1.6.1.wso2v19</exp.pkg.version.rampart>
+        <exp.pkg.version.rampart>${rampart.version}</exp.pkg.version.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
@@ -541,6 +417,9 @@
         <wss4j.version>1.5.11-wso2v11</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <opensaml.version>1.1</opensaml.version>
+        <neethi.version>2.0.4.wso2v5</neethi.version>
+        <opensaml.version>2.2.3</opensaml.version>
+        <opensaml1.version>1.1</opensaml1.version>
 
         <bcprov.jdk14.version>140</bcprov.jdk14.version>
         <bcprov.jdk15.version>140</bcprov.jdk15.version>
