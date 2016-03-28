@@ -49,8 +49,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -60,7 +60,26 @@
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>${rampart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ws.security</groupId>
+            <artifactId>wss4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml1</artifactId>
         </dependency>
     </dependencies>
 

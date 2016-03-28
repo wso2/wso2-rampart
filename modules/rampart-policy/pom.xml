@@ -34,34 +34,14 @@
     <packaging>jar</packaging>
     <name>Rampart - Policy</name>
 
-    <!--dependencies>
+    <dependencies>
         <dependency>
-            <groupId>org.apache.ws.security</groupId>
-            <artifactId>wss4j</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.wso2.orbit.org.apache.neethi</groupId>
+            <artifactId>neethi</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.xalan</groupId>
-            <artifactId>xalan</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2-kernel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>mex</artifactId>
-            <classifier>impl</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.axis2</groupId>
-            <artifactId>axis2-mtompolicy</artifactId>
-            <scope>compile</scope>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.axis2</groupId>
@@ -69,20 +49,7 @@
             <type>mar</type>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-dom</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ws.commons.axiom</groupId>
-            <artifactId>axiom-impl</artifactId>
-        </dependency>
-
-    </dependencies-->
+    </dependencies>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -99,8 +66,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>
