@@ -355,6 +355,11 @@
                 <version>${commons-logging.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-kernel</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.apache.felix.framework</artifactId>
                 <version>${felix-framework.version}</version>
