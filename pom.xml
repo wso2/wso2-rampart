@@ -187,6 +187,34 @@
     </pluginRepositories>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jvnet.maven.incrementalbuild</groupId>
+                    <artifactId>incremental-build-plugin</artifactId>
+                    <version>1.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.0</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>1.4.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
@@ -198,7 +226,6 @@
             <plugin>
                 <groupId>org.jvnet.maven.incrementalbuild</groupId>
                 <artifactId>incremental-build-plugin</artifactId>
-                <version>1.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -210,24 +237,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>2.0-beta-5</version>
-                <inherited>false</inherited>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <preparationGoals>clean install</preparationGoals>
-                    <autoVersionSubmodules>false</autoVersionSubmodules>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -328,6 +345,31 @@
                 <version>${opensaml1.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.ws.security.wso2</groupId>
+                <artifactId>wss4j</artifactId>
+                <version>${orbit.version.wss4j}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.framework</artifactId>
+                <version>1.0.3</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>org.osgi.core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.ws.security</groupId>
                 <artifactId>wss4j</artifactId>
                 <version>${wss4j.version}</version>
@@ -408,6 +450,7 @@
 
         <rampart.version>1.6.1-wso2v20-SNAPSHOT</rampart.version>
         <exp.pkg.version.rampart>${rampart.version}</exp.pkg.version.rampart>
+        <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
@@ -437,7 +480,9 @@
         <orbit.version.neethi>2.0.4.wso2v5</orbit.version.neethi>
         <orbit.version.wss4j>1.5.11.wso2v11</orbit.version.wss4j>
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
-        <imp.pkg.version.commons.logging>1.0.4</imp.pkg.version.commons.logging>
+        <imp.pkg.version.range.commons.logging>[1.0.4,2.0.0)</imp.pkg.version.range.commons.logging>
+        <imp.pkg.version.range.xml.stream>[1.0.1,2.0.0)</imp.pkg.version.range.xml.stream>
+        <imp.pkg.version.xmlsec>[1.4.2,2)</imp.pkg.version.xmlsec>
         <project.scm.id>my-scm-server</project.scm.id>
 
     </properties>
