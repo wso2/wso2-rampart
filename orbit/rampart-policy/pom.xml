@@ -15,7 +15,8 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
     <parent>
@@ -32,61 +33,21 @@
     <description>A custom wso2 products or solution</description>
     <url>http://www.wso2.com</url>
 
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.snapshots</id>
-            <name>WSO2 Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-
     <dependencies>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.ws.security.wso2</groupId>
             <artifactId>wss4j</artifactId>
-            <version>${orbit.version.wss4j}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.orbit.org.apache.neethi</groupId>
             <artifactId>neethi</artifactId>
-            <version>${orbit.version.neethi}</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -99,7 +60,6 @@
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>${rampart.version}</version>
             <optional>true</optional>
             <exclusions>
                 <exclusion>
@@ -159,14 +119,12 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-	    <version>1.1.1</version>
             <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
-            <version>1.0.3</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -186,16 +144,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -206,10 +158,10 @@
                         <Private-Package>org.wso2.carbon.policy.internal,
                         </Private-Package>
                         <Export-Package>
-                            org.apache.ws.secpolicy,
-                            org.apache.ws.secpolicy.model,
-                            org.apache.ws.secpolicy11.builders,
-                            org.apache.ws.secpolicy12.builders,
+                            org.apache.ws.secpolicy;version="${exp.pkg.version.rampart}",
+                            org.apache.ws.secpolicy.model;version="${exp.pkg.version.rampart}",
+                            org.apache.ws.secpolicy11.builders;version="${exp.pkg.version.rampart}",
+                            org.apache.ws.secpolicy12.builders;version="${exp.pkg.version.rampart}",
                         </Export-Package>
                         <Import-Package>
                             org.apache.axis2.*; version="${imp.pkg.version.axis2}",
@@ -221,7 +173,8 @@
                             !org.apache.ws.secpolicy11.builders,
                             !org.apache.ws.secpolicy12.builders,
                             org.osgi.framework,
-                            *;resolution:=optional
+                            javax.xml.namespace,
+                            org.apache.commons.logging; version="${imp.pkg.version.range.commons.logging}"
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>

@@ -31,56 +31,17 @@
     <description>org.apache.rampart</description>
     <url>http://www.wso2.com</url>
 
-    <repositories>
-        <repository>
-            <id>wso2-nexus</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>wso2.releases</id>
-            <name>WSO2 internal Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>wso2.snapshots</id>
-            <name>WSO2 Snapshot Repository</name>
-            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-
     <dependencies>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-trust</artifactId>
-            <version>${rampart.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.axis2</groupId>
@@ -144,7 +105,6 @@
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.framework</artifactId>
-            <version>1.0.3</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -164,11 +124,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -192,9 +147,37 @@
                             org.apache.axiom.*; version="${imp.pkg.version.axiom}",
                             org.apache.neethi.*; version="${imp.pkg.version.neethi}",
                             org.apache.ws.security.*; version="${imp.pkg.version.wss4j}",
-                            javax.xml.stream.*; version="1.0.1",
+                            javax.xml.stream.*; version="${imp.pkg.version.range.xml.stream}",
                             org.osgi.framework,
-                            *;resolution:=optional
+                            javax.crypto,
+                            javax.security.auth.callback,
+                            javax.xml.namespace,
+                            javax.xml.parsers,
+                            org.apache.commons.lang,
+                            org.apache.commons.logging,
+                            org.apache.ws.secpolicy.model,
+                            org.apache.xml.security; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.exceptions; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.keys; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.keys.content; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.keys.content.x509; version="${imp.pkg.version.xmlsec}",
+                            org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
+                            org.joda.time,
+                            org.opensaml,
+                            org.opensaml.common,
+                            org.opensaml.saml2.core,
+                            org.opensaml.saml2.core.impl,
+                            org.opensaml.xml,
+                            org.opensaml.xml.io,
+                            org.opensaml.xml.schema,
+                            org.opensaml.xml.schema.impl,
+                            org.opensaml.xml.security.credential,
+                            org.opensaml.xml.security.x509,
+                            org.opensaml.xml.signature,
+                            org.w3c.dom,
+                            org.w3c.dom.bootstrap,
+                            org.w3c.dom.ls,
+                            org.xml.sax
                         </Import-Package>
                         <Private-Package>
                             !org.wso2.carbon
