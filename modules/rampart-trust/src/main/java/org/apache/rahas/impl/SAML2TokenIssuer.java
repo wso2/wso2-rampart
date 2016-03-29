@@ -31,6 +31,7 @@ import org.apache.rahas.Token;
 import org.apache.rahas.TokenIssuer;
 import org.apache.rahas.TrustException;
 import org.apache.rahas.TrustUtil;
+import org.apache.rahas.impl.util.SAML2Utils;
 import org.apache.rahas.impl.util.SAMLAttributeCallback;
 import org.apache.rahas.impl.util.SAMLCallbackHandler;
 import org.apache.rahas.impl.util.SignKeyHolder;
@@ -855,7 +856,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
         assertion.setVersion(SAMLVersion.VERSION_20);
 
         // Set an UUID as the ID of an assertion
-        assertion.setID(UUIDGenerator.getUUID());
+        assertion.setID(SAML2Utils.createID());
         
         Subject subject = createSubjectWithBearerSC(data);
         AttributeStatement attributeStmt;
