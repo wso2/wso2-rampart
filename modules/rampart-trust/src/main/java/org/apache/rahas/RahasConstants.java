@@ -170,4 +170,5 @@ public class RahasConstants {
     public final static String PASSIVE_STS_RST = "passiveSTSRST";
     public static final String SAML20_SUBJECT_CONFIRMATION_BEARER = "urn:oasis:names:tc:SAML:2.0:cm:bearer";
     public static final String SAML20_SUBJECT_CONFIRMATION_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:2.0:cm:sender-vouches";
+    public static final String SAML20_NAME_ID_POLICY_ENTITY = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
 }

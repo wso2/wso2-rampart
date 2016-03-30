@@ -876,6 +876,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
         IssuerBuilder issuerBuilder = new IssuerBuilder();
         Issuer issuer = issuerBuilder.buildObject();
         issuer.setValue(config.issuerName);
+        issuer.setFormat(RahasConstants.SAML20_NAME_ID_POLICY_ENTITY);
         assertion.setIssuer(issuer);			
         
         if(log.isDebugEnabled()) {
