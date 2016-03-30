@@ -340,6 +340,11 @@
                 <version>${opensaml.version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.opensaml</groupId>
                 <artifactId>opensaml1</artifactId>
                 <version>${opensaml1.version}</version>
@@ -488,6 +493,7 @@
         <imp.pkg.version.range.xml.stream>[1.0.1,2.0.0)</imp.pkg.version.range.xml.stream>
         <imp.pkg.version.xmlsec>[1.4.2, 2.0.0)</imp.pkg.version.xmlsec>
         <commons-logging.version>1.1.1</commons-logging.version>
+        <commons-lang.version>2.3</commons-lang.version>
         <felix-framework.version>1.0.3</felix-framework.version>
 
         <!--plugin versions-->
