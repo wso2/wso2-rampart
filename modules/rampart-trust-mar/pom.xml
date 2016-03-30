@@ -20,7 +20,8 @@
   -->
 
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.apache.rampart</groupId>
@@ -28,20 +29,11 @@
         <version>1.6.1-wso2v20-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.rampart</groupId>
     <artifactId>rahas</artifactId>
     <packaging>mar</packaging>
     <name>Rampart - Trust-Mar</name>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/axis/axis2/java/rampart/branches/1_6</connection>
-        <developerConnection>
-            scm:svn:https://svn.apache.org/repos/asf/axis/axis2/java/rampart/branches/1_6</developerConnection>
-        <url>http://svn.apache.org/viewvc/axis/axis2/java/rampart/branches/1_6</url>
-      <tag>HEAD</tag>
-  </scm>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -54,73 +46,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-mar-maven-plugin</artifactId>
+                <extensions>true</extensions>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <includeDependencies>false</includeDependencies>
+                    <moduleXmlFile>module.xml</moduleXmlFile>
                 </configuration>
             </plugin>
-	    <plugin>
-        	<groupId>org.apache.axis2</groupId>
-        	<artifactId>axis2-mar-maven-plugin</artifactId>
-        	<version>1.2</version>
-        	<extensions>true</extensions>
-        	<configuration>
-       	  		<includeDependencies>false</includeDependencies>
-			<moduleXmlFile>module.xml</moduleXmlFile>
-        	</configuration>
-      	     </plugin> 
-           </plugins>
+        </plugins>
     </build>
-    
+
     <dependencies>
-    	<dependency>
+        <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>${rampart.version}</version>
         </dependency>
-    	<dependency>
+        <dependency>
             <groupId>org.apache.rampart</groupId>
             <artifactId>rampart-trust</artifactId>
-            <version>${rampart.version}</version>
         </dependency>
     </dependencies>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>apache-m2</id>
-            <name>Apache M2 Repository</name>
-            <url>http://people.apache.org/repo/m2-ibiblio-rsync-repository</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-        <pluginRepository>
-            <id>apache-snapshots</id>
-            <name>Apache Snapshots Repository</name>
-            <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
-	<distributionManagement>
-        <snapshotRepository>
-            <id>apache.snapshots.https</id>
-            <name>${distMgmtSnapshotsName}</name>
-            <url>${distMgmtSnapshotsUrl}</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
