@@ -57,8 +57,13 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class SAML2Utils {
+
+    private static Random random = new Random();
+    private static final char[] charMapping = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+            'k', 'l', 'm', 'n', 'o', 'p' };
 
     private static final Log log = LogFactory.getLog(SAML2Utils.class);
 
@@ -333,6 +338,23 @@ public class SAML2Utils {
                         "Failed marshalling the SAML Assertion", null, e);
             }
         }
+    }
+
+    public static String createID() {
+
+        byte[] bytes = new byte[20]; // 160 bits
+        random.nextBytes(bytes);
+
+        char[] chars = new char[40];
+
+        for (int i = 0; i < bytes.length; i++) {
+            int left = (bytes[i] >> 4) & 0x0f;
+            int right = bytes[i] & 0x0f;
+            chars[i * 2] = charMapping[left];
+            chars[i * 2 + 1] = charMapping[right];
+        }
+
+        return String.valueOf(chars);
     }
 
 }
