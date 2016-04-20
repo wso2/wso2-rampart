@@ -23,7 +23,10 @@ import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
 import org.apache.rahas.Token;
@@ -88,7 +91,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
 
     protected String audienceRestriction = null;
 
-    //TODO: move this to a constant file
+    private static Log log = LogFactory.getLog(SAMLTokenIssuer.class);
 
     public SOAPEnvelope issue(RahasData data) throws TrustException {
 
@@ -659,18 +662,21 @@ public class SAMLTokenIssuer implements TokenIssuer {
             SAMLSubject subject = new SAMLSubject(subjectNameId, Arrays
                     .asList(confirmationMethods), null, keyInfoElem);
 
+            List<SAMLStatement> statements = new ArrayList<SAMLStatement>();
+
             SAMLAuthenticationStatement authStmt = new SAMLAuthenticationStatement(
                     subject,
                     SAMLAuthenticationStatement.AuthenticationMethod_Password,
                     notBefore, null, null, null);
-
-            List<SAMLStatement> statements = new ArrayList<SAMLStatement>();
-
-            // According to ws-trust-1.3; <wst:claims> is an optional element requests a specific set of claims.
-            // This will be handled by the AttributeCallbackHandler class.
-            SAMLStatement attrStatement = createSAMLAttributeStatement((SAMLSubject) subject.clone(), data, config);
-            statements.add(attrStatement);
             statements.add(authStmt);
+
+            // According to ws-trust specification <wst:claims> is an optional element, which requests a specific set
+            // of claims.
+            // These claims are retrieved by the AttributeCallbackHandler class.
+            SAMLStatement attrStatement = createSAMLAttributeStatement((SAMLSubject) subject.clone(), data, config);
+            if (attrStatement != null) {
+                statements.add(attrStatement);
+            }
 
             List<SAMLCondition> conditions = null;
             if (StringUtils.isNotBlank(this.audienceRestriction)) {
@@ -781,18 +787,23 @@ public class SAMLTokenIssuer implements TokenIssuer {
                 }
                 handler.handle(cb);
                 attrs = cb.getAttributes();
-            } else {
-                //TODO Remove this after discussing
-                SAMLAttribute attribute = new SAMLAttribute("Name",
-                                                            "https://rahas.apache.org/saml/attrns",
-                                                            null, -1,
-                                                            Arrays.asList(new String[]{"Colombo/Rahas"}));
-                attrs = new SAMLAttribute[]{attribute};
             }
 
-            SAMLAttributeStatement attrStmt = new SAMLAttributeStatement(
-                    subject, Arrays.asList(attrs));
-            return attrStmt;
+            //add attributes to the attribute statement
+            SAMLAttributeStatement attributeStatement = null;
+            if (!ArrayUtils.isEmpty(attrs)) {
+                attributeStatement = new SAMLAttributeStatement(subject, Arrays.asList(attrs));
+
+                if (log.isDebugEnabled()) {
+                    log.debug("SAML 1.1 attribute statement is constructed successfully.");
+                }
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("No requested attributes found for SAML 1.1 attribute statement");
+                }
+            }
+
+            return attributeStatement;
         } catch (SAMLException e) {
             throw new TrustException(e.getMessage(), e);
         }
