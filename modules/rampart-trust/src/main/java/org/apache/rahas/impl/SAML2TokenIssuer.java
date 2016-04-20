@@ -23,6 +23,7 @@ import org.apache.axiom.om.util.UUIDGenerator;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.RahasConstants;
@@ -259,16 +260,15 @@ public class SAML2TokenIssuer implements TokenIssuer {
             // Set the subject
             assertion.setSubject(subject);
 
-            // If a SymmetricKey is used build an attr stmt, if a public key is build an authn stmt. 
-            if (isSymmetricKeyBasedHoK) {
-                AttributeStatement attrStmt = createAttributeStatement(data, config);
+            AttributeStatement attrStmt = createAttributeStatement(data, config);
+            if (attrStmt != null) {
                 assertion.getAttributeStatements().add(attrStmt);
-            } else {
+            }
+
+            // If not SymmetricKey is used build an authn stmt.
+            if (!isSymmetricKeyBasedHoK) {
                 AuthnStatement authStmt = createAuthnStatement(data);
                 assertion.getAuthnStatements().add(authStmt);
-                if (data.getClaimDialect() != null && data.getClaimElem() != null) {
-                    assertion.getAttributeStatements().add(createAttributeStatement(data, config));
-                }
             }
 
 			if (data.getOverridenSubjectValue() != null
@@ -730,8 +730,6 @@ public class SAML2TokenIssuer implements TokenIssuer {
         SAMLObjectBuilder<Attribute> attrBuilder =
                     (SAMLObjectBuilder<Attribute>) builderFactory.getBuilder(Attribute.DEFAULT_ELEMENT_NAME);
 
-        AttributeStatement attrstmt = attrStmtBuilder.buildObject();
-
         Attribute[] attributes = null;
 
         //Call the attribute callback handlers to get any attributes if exists
@@ -765,28 +763,22 @@ public class SAML2TokenIssuer implements TokenIssuer {
             // else add the attribute with a default value
         } 
 
-        //else add the attribute with a default value
-        else {
-            Attribute attribute = attrBuilder.buildObject();
-            attribute.setName("Name");
-            attribute.setNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-
-            XSStringBuilder attributeValueBuilder = (XSStringBuilder) builderFactory
-                    .getBuilder(XSString.TYPE_NAME);
-
-            XSString stringValue = attributeValueBuilder.buildObject(
-                    AttributeValue.DEFAULT_ELEMENT_NAME, XSString.TYPE_NAME);
-            stringValue.setValue("Colombo/Rahas");
-            attribute.getAttributeValues().add(stringValue);
-            attributes = new Attribute[1];
-            attributes[0] = attribute;
-        }
         //add attributes to the attribute statement
-        attrstmt.getAttributes().addAll(Arrays.asList(attributes));
+        AttributeStatement attributeStatement = null;
+        if (!ArrayUtils.isEmpty(attributes)) {
+            attributeStatement = attrStmtBuilder.buildObject();
+            attributeStatement.getAttributes().addAll(Arrays.asList(attributes));
 
-        log.debug("SAML2.0 attribute statement is constructed successfully.");
+            if (log.isDebugEnabled()) {
+                log.debug("SAML 2.0 attribute statement is constructed successfully.");
+            }
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("No requested attributes found for SAML 2.0 attribute statement");
+            }
+        }
 
-        return attrstmt;
+        return attributeStatement;
     }
 
     /**
@@ -857,17 +849,19 @@ public class SAML2TokenIssuer implements TokenIssuer {
 
         // Set an UUID as the ID of an assertion
         assertion.setID(SAML2Utils.createID());
-        
+
         Subject subject = createSubjectWithBearerSC(data);
         AttributeStatement attributeStmt;
 
-        if (data.getClaimElem() != null) {
-            try {
-                attributeStmt = createAttributeStatement(data, config);
+        // Set attributes
+        try {
+            attributeStmt = createAttributeStatement(data, config);
+            if (attributeStmt != null) {
                 assertion.getAttributeStatements().add(attributeStmt);
-            } catch (SAMLException se) {
-                throw new TrustException("errorCreatingSAMLToken", new String[] { assertion.getID() }, se);
             }
+        } catch (SAMLException se) {
+            throw new TrustException("Error while creating SAML 2.0 attribute statement",
+                                     new String[] { assertion.getID() }, se);
         }
         
         AuthnStatement authnStmt = createAuthnStatement(data);
