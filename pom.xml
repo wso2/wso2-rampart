@@ -532,7 +532,7 @@
         <axis2.version>1.6.1-wso2v17</axis2.version>
         <axiom.version>1.2.11-wso2v10</axiom.version>
 
-        <wss4j.version>1.5.11-wso2v11</wss4j.version>
+        <wss4j.version>1.5.11-wso2v12</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
         <opensaml.version>2.2.3</opensaml.version>
@@ -547,9 +547,9 @@
         <imp.pkg.version.axis2>[1.6.1, 2.0.0)</imp.pkg.version.axis2>
         <imp.pkg.version.axiom>(1.2.11, 2.0.0)</imp.pkg.version.axiom>
         <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
-        <imp.pkg.version.wss4j>[1.5.11.wso2v11, 2.0.0)</imp.pkg.version.wss4j>
+        <imp.pkg.version.wss4j>[1.5.11, 2.0.0)</imp.pkg.version.wss4j>
         <orbit.version.neethi>2.0.4.wso2v5</orbit.version.neethi>
-        <orbit.version.wss4j>1.5.11.wso2v11</orbit.version.wss4j>
+        <orbit.version.wss4j>1.5.11.wso2v12</orbit.version.wss4j>
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
         <imp.pkg.version.range.commons.logging>[1.0.4,2.0.0)</imp.pkg.version.range.commons.logging>
         <imp.pkg.version.range.xml.stream>[1.0.1,2.0.0)</imp.pkg.version.range.xml.stream>
