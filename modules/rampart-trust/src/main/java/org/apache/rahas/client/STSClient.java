@@ -777,7 +777,7 @@ public class STSClient {
                 log.debug("Using RSTTemplate: " + this.rstTemplate.toString());
             }
 
-            Iterator templateChildren = rstTemplate.getChildElements();
+            Iterator templateChildren = rstTemplate.cloneOMElement().getChildElements();
             while (templateChildren.hasNext()) {
                 OMNode child = (OMNode) templateChildren.next();
                 rst.addChild(child);
