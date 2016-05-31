@@ -44,7 +44,7 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
     private SAMLTokenIssuerConfig config = null;
     private RahasData data = null;
 
-    private static final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private static final DocumentBuilderFactory factory = TrustUtil.getSecuredDocumentBuilder();
 
     public void setConfig(SAMLTokenIssuerConfig config) {
         this.config = config;

@@ -22,6 +22,7 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.neethi.Policy;
 import org.apache.rampart.handler.config.InflowConfiguration;
 import org.apache.rampart.handler.config.OutflowConfiguration;
+import org.apache.rampart.util.Axis2Util;
 import org.apache.ws.secpolicy.SP11Constants;
 import org.opensaml.Configuration;
 import org.opensaml.saml2.core.Assertion;
@@ -155,7 +156,7 @@ public class RahasSAML2TokenUTForBearerTest extends TestClient {
     private Assertion getAssertionObjectFromOMElement(OMElement omElement){
         Assertion assertion = null;
         try {
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory documentBuilderFactory = Axis2Util.getSecuredDocumentBuilder();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(omElement.toString().getBytes()));

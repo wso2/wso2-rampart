@@ -82,7 +82,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
             DocumentBuilderFactoryImpl.setDOOMRequired(false);
         }
         String s = assertionOMElement.toString();
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilder();
         documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder docBuilder = null;
 

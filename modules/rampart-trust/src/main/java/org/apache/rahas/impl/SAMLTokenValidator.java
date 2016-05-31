@@ -260,7 +260,7 @@ public class SAMLTokenValidator implements TokenValidator {
         Assertion samlAssertion;
         try {
             // Unmarshall and build the assertion from the DOM element.
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilder();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(elem.trim().getBytes()));

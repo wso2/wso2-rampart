@@ -19,6 +19,7 @@ package org.apache.rampart;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.rahas.TrustUtil;
+import org.apache.rampart.util.Axis2Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,7 +32,7 @@ public class SecurityTokenReferenceTest extends TestCase {
     public void testSecurityTokenReference() {
 
         try {
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            Document doc = Axis2Util.getSecuredDocumentBuilder().newDocumentBuilder().newDocument();
             Element strElem = TrustUtil.createSecurityTokenReferenceWithTokenType(doc, UUID.randomUUID().toString(),
                     "http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLID", "http://docs.oasis-open" +
                             ".org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0");

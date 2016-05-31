@@ -531,7 +531,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
 
         // Unmarshall the keyInfo DOM element into an XMLObject
         String keyInfoElementString = keyInfoElem.toString();
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilder();
         documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));

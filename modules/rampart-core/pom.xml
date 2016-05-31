@@ -71,6 +71,10 @@
             <artifactId>mex</artifactId>
             <classifier>impl</classifier>
         </dependency>
+        <dependency>
+            <groupId>xerces.wso2</groupId>
+            <artifactId>xercesImpl</artifactId>
+        </dependency>
     </dependencies>
 
     <reporting>
