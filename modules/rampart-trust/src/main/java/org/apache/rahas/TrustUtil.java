@@ -730,11 +730,11 @@ public class TrustUtil {
     }
 
     /**
-     * Create DocumentBuilderFactory with the XXE prevention measurements
+     * Create DocumentBuilderFactory with the XXE and XEE prevention measurements
      *
      * @return DocumentBuilderFactory instance
      */
-    public static DocumentBuilderFactory getSecuredDocumentBuilder() {
+    public static DocumentBuilderFactory getSecuredDocumentBuilderFactory() {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -748,7 +748,8 @@ public class TrustUtil {
         } catch (ParserConfigurationException e) {
             logger.error(
                     "Failed to load XML Processor Feature " + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE + " or " +
-                            Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE);
+                    Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE +
+                    "or secure-processing.");
         }
 
         SecurityManager securityManager = new SecurityManager();

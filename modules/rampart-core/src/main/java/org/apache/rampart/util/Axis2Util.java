@@ -51,7 +51,7 @@ public class Axis2Util {
     private static ThreadLocal doomTacker = new ThreadLocal();
     private static final int ENTITY_EXPANSION_LIMIT = 0;
     private static Log logger = LogFactory.getLog(Axis2Util.class);
-    
+
     public static boolean isUseDOOM() {
         Object value = doomTacker.get();
         return (value != null);
@@ -148,8 +148,7 @@ public class Axis2Util {
                 env.serialize(baos);
                 ByteArrayInputStream bais = new ByteArrayInputStream(baos
                         .toByteArray());
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
+                DocumentBuilderFactory factory = getSecuredDocumentBuilderFactory();
                 factory.setNamespaceAware(true);
                 return factory.newDocumentBuilder().parse(bais);
             }
@@ -302,7 +301,7 @@ public class Axis2Util {
      *
      * @return DocumentBuilderFactory instance
      */
-    public static DocumentBuilderFactory getSecuredDocumentBuilder() {
+    public static DocumentBuilderFactory getSecuredDocumentBuilderFactory() {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -325,5 +324,5 @@ public class Axis2Util {
 
         return dbf;
     }
-    
+
 }

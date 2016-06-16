@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
@@ -43,8 +41,6 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
 
     private SAMLTokenIssuerConfig config = null;
     private RahasData data = null;
-
-    private static final DocumentBuilderFactory factory = TrustUtil.getSecuredDocumentBuilder();
 
     public void setConfig(SAMLTokenIssuerConfig config) {
         this.config = config;

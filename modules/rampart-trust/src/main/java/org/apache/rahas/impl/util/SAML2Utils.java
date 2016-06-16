@@ -100,7 +100,7 @@ public class SAML2Utils {
 
             DocumentBuilderFactoryImpl.setDOOMRequired(true);
 
-            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilder();
+            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(elementString.trim().getBytes()));
@@ -132,7 +132,7 @@ public class SAML2Utils {
             DefaultBootstrap.bootstrap();
 
             String keyInfoElementString = elem.toString();
-            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilder();
+            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
