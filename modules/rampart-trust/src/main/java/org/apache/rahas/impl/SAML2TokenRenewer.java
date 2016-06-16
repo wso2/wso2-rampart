@@ -5,12 +5,10 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
-import org.apache.axis2.description.Parameter;
 import org.apache.rahas.*;
 import org.apache.rahas.impl.util.SignKeyHolder;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
-import org.apache.ws.security.components.crypto.CryptoFactory;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
@@ -82,7 +80,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
             DocumentBuilderFactoryImpl.setDOOMRequired(false);
         }
         String s = assertionOMElement.toString();
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
         documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder docBuilder = null;
 

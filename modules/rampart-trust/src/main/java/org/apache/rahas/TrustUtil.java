@@ -16,6 +16,7 @@
 
 package org.apache.rahas;
 
+import com.sun.org.apache.xerces.internal.impl.Constants;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -26,7 +27,10 @@ import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.addressing.AddressingConstants;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.impl.AbstractIssuerConfig;
+import org.apache.xerces.util.SecurityManager;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.message.token.Reference;
 import org.apache.ws.security.message.token.SecurityTokenReference;
@@ -38,7 +42,10 @@ import org.opensaml.saml2.core.SubjectConfirmation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.util.Date;
@@ -49,6 +56,8 @@ import java.util.Properties;
 public class TrustUtil {
 
     private static final QName NAME = new QName("name");
+    private static final int ENTITY_EXPANSION_LIMIT = 0;
+    private static Log logger = LogFactory.getLog(TrustUtil.class);
 
     /**
      * Create a wsse:Reference element with the given URI and the value type
@@ -718,6 +727,36 @@ public class TrustUtil {
             throw new TrustException("The child element of the ActAs element should not be null");
         }
         return actAsElem;
+    }
+
+    /**
+     * Create DocumentBuilderFactory with the XXE and XEE prevention measurements
+     *
+     * @return DocumentBuilderFactory instance
+     */
+    public static DocumentBuilderFactory getSecuredDocumentBuilderFactory() {
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
+        try {
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            logger.error(
+                    "Failed to load XML Processor Feature " + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE + " or " +
+                    Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE +
+                    "or secure-processing.");
+        }
+
+        SecurityManager securityManager = new SecurityManager();
+        securityManager.setEntityExpansionLimit(ENTITY_EXPANSION_LIMIT);
+        dbf.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+
+        return dbf;
     }
     
 }

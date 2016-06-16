@@ -57,7 +57,6 @@ import org.opensaml.saml1.core.NameIdentifier;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
 import org.opensaml.saml2.core.AttributeStatement;
-import org.opensaml.saml2.core.AttributeValue;
 import org.opensaml.saml2.core.Audience;
 import org.opensaml.saml2.core.AudienceRestriction;
 import org.opensaml.saml2.core.AuthnContext;
@@ -86,8 +85,6 @@ import org.opensaml.xml.io.MarshallingException;
 import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallerFactory;
 import org.opensaml.xml.io.UnmarshallingException;
-import org.opensaml.xml.schema.XSString;
-import org.opensaml.xml.schema.impl.XSStringBuilder;
 import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureException;
@@ -531,7 +528,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
 
         // Unmarshall the keyInfo DOM element into an XMLObject
         String keyInfoElementString = keyInfoElem.toString();
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
         documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));

@@ -16,19 +16,25 @@
 
 package org.apache.rampart.util;
 
+import com.sun.org.apache.xerces.internal.impl.Constants;
 import org.apache.axiom.om.*;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axiom.om.impl.dom.DOOMAbstractFactory;
 import org.apache.axiom.soap.*;
 import org.apache.axiom.soap.impl.builder.StAXSOAPModelBuilder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rampart.handler.WSSHandlerConstants;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.xml.security.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import org.apache.xerces.util.SecurityManager;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -43,7 +49,9 @@ import java.util.Iterator;
 public class Axis2Util {
     
     private static ThreadLocal doomTacker = new ThreadLocal();
-    
+    private static final int ENTITY_EXPANSION_LIMIT = 0;
+    private static Log logger = LogFactory.getLog(Axis2Util.class);
+
     public static boolean isUseDOOM() {
         Object value = doomTacker.get();
         return (value != null);
@@ -140,8 +148,7 @@ public class Axis2Util {
                 env.serialize(baos);
                 ByteArrayInputStream bais = new ByteArrayInputStream(baos
                         .toByteArray());
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
+                DocumentBuilderFactory factory = getSecuredDocumentBuilderFactory();
                 factory.setNamespaceAware(true);
                 return factory.newDocumentBuilder().parse(bais);
             }
@@ -288,5 +295,34 @@ public class Axis2Util {
         elem.build();
         return elem;
     }
-    
+
+    /**
+     * Create DocumentBuilderFactory with the XXE prevention measurements
+     *
+     * @return DocumentBuilderFactory instance
+     */
+    public static DocumentBuilderFactory getSecuredDocumentBuilderFactory() {
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
+        try {
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            logger.error(
+                    "Failed to load XML Processor Feature " + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE + " or " +
+                            Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE);
+        }
+
+        SecurityManager securityManager = new SecurityManager();
+        securityManager.setEntityExpansionLimit(ENTITY_EXPANSION_LIMIT);
+        dbf.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+
+        return dbf;
+    }
+
 }
