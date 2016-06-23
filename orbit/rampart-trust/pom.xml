@@ -168,7 +168,7 @@
                             javax.crypto,
                             javax.security.auth.callback,
                             javax.xml.namespace,
-                            javax.xml.parsers,
+                            javax.xml.parsers; version="${imp.pkg.version.javax.xml.parsers}",
                             org.apache.commons.lang,
                             org.apache.commons.logging,
                             org.apache.ws.secpolicy.model,
