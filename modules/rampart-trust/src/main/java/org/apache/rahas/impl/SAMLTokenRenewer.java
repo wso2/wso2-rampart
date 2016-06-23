@@ -38,8 +38,10 @@ public class SAMLTokenRenewer implements TokenRenewer {
         SAMLTokenIssuerConfig config = setConfig(inMsgCtx);
 
         try {
-            // Set the DOM impl to DOOM
-            DocumentBuilderFactoryImpl.setDOOMRequired(true);
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                // Set the DOM impl to DOOM
+                DocumentBuilderFactoryImpl.setDOOMRequired(true);
+            }
             // Create envelope
             SOAPEnvelope env = TrustUtil.createSOAPEnvelope(inMsgCtx
                     .getEnvelope().getNamespace().getNamespaceURI());
@@ -82,7 +84,9 @@ public class SAMLTokenRenewer implements TokenRenewer {
             }
             return env;
         } finally {
-            DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            }
         }
     }
 

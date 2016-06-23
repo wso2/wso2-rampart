@@ -163,7 +163,7 @@ public class RampartEngine {
                 .getAxisService().getClassLoader());
 
         TokenCallbackHandler tokenCallbackHandler = null;
-        
+
         if (rpd != null) {
             tokenCallbackHandler = new TokenCallbackHandler(rmd.getTokenStorage(),
                     RampartUtil.getPasswordCB(rmd), rpd.getRampartConfig());
@@ -180,19 +180,21 @@ public class RampartEngine {
 			if (rpd.getSignatureToken() instanceof IssuedToken) {
 				String tokenType = ((IssuedToken) rpd.getInitiatorToken()).getRstTokenType();
 				if ("http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1"
-						.equals(tokenType.trim()))
-					DocumentBuilderFactoryImpl.setDOOMRequired(true);
+						.equals(tokenType.trim()) && !TrustUtil.isDoomParserPoolUsed()) {
+                        DocumentBuilderFactoryImpl.setDOOMRequired(true);
+                }
 			}
-            
+
             results = engine.processSecurityHeader(rmd.getDocument(), actorValue,
                     tokenCallbackHandler, signatureCrypto, RampartUtil.getEncryptionCrypto(
                             rpd.getRampartConfig(), msgCtx.getAxisService().getClassLoader()));
-            
+
 			if (rpd.getSignatureToken() instanceof IssuedToken) {
 				String tokenType = ((IssuedToken) rpd.getInitiatorToken()).getRstTokenType();
 				if ("http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1"
-						.equals(tokenType.trim()))
-					DocumentBuilderFactoryImpl.setDOOMRequired(false);
+						.equals(tokenType.trim()) && !TrustUtil.isDoomParserPoolUsed()){
+                        DocumentBuilderFactoryImpl.setDOOMRequired(false);
+                }
 			}
 
             // Remove encryption tokens if this is the initiator and if initiator is receiving a
@@ -208,8 +210,9 @@ public class RampartEngine {
 			if (rpd.getInitiatorToken() instanceof IssuedToken) {
 				String tokenType = ((IssuedToken) rpd.getInitiatorToken()).getRstTokenType();
 				if ("http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1"
-						.equals(tokenType.trim()))
-					DocumentBuilderFactoryImpl.setDOOMRequired(true);
+						.equals(tokenType.trim()) && !TrustUtil.isDoomParserPoolUsed()) {
+                    	DocumentBuilderFactoryImpl.setDOOMRequired(true);
+                }
 			}
             results = engine.processSecurityHeader(rmd.getDocument(), actorValue,
                     tokenCallbackHandler, signatureCrypto, RampartUtil.getEncryptionCrypto(
@@ -218,8 +221,9 @@ public class RampartEngine {
 			if (rpd.getInitiatorToken() instanceof IssuedToken) {
 				String tokenType = ((IssuedToken) rpd.getInitiatorToken()).getRstTokenType();
 				if ("http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV1.1"
-						.equals(tokenType.trim()))
-					DocumentBuilderFactoryImpl.setDOOMRequired(false);
+						.equals(tokenType.trim()) && !TrustUtil.isDoomParserPoolUsed()) {
+                    	DocumentBuilderFactoryImpl.setDOOMRequired(false);
+                }
 			}
         }
 
@@ -248,7 +252,7 @@ public class RampartEngine {
                     if (subject != null && subject.getNameID() != null) {
                         msgCtx.setProperty(RampartConstants.SAML_SUBJECT_ID, subject.getNameID().getValue());
                     }
-                    
+
                     // if the subject confirmation method is Bearer, do not try to get the KeyInfo
                    if (TrustUtil.getSAML2SubjectConfirmationMethod(assertion).equals(
                             RahasConstants.SAML20_SUBJECT_CONFIRMATION_BEARER) ||
@@ -316,7 +320,7 @@ public class RampartEngine {
                                                samlSubject.getNameIdentifier().getName());
                         }
                     }
-                    
+
                     // if the subject confirmation method is Bearer, do not try to get the KeyInfo
                     if (RahasConstants.SAML11_SUBJECT_CONFIRMATION_BEARER.equals(TrustUtil
                                          .getSAML11SubjectConfirmationMethod(assertion)) ||

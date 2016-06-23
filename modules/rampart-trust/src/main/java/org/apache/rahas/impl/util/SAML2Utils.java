@@ -98,15 +98,17 @@ public class SAML2Utils {
             writer.write(element, output);
             String elementString = byteArrayOutputStrm.toString();
 
-            DocumentBuilderFactoryImpl.setDOOMRequired(true);
-
-            DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
+           if (!TrustUtil.isDoomParserPoolUsed()) {
+               DocumentBuilderFactoryImpl.setDOOMRequired(true);
+           }
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(elementString.trim().getBytes()));
             Element assertionElement = document.getDocumentElement();
-            DocumentBuilderFactoryImpl.setDOOMRequired(false);
-
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                     DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            }
             log.debug("DOM element is created successfully from the OpenSAML2 XMLObject");
             return assertionElement;
 
