@@ -187,7 +187,7 @@
                             javax.security.auth.callback,
                             javax.servlet.http,
                             javax.xml.namespace,
-                            javax.xml.parsers,
+                            javax.xml.parsers; version="${imp.pkg.version.javax.xml.parsers}",
                             org.apache.commons.httpclient.protocol,
                             org.apache.rahas; version="${imp.pkg.version.range.rampart}",
                             org.apache.rahas.client; version="${imp.pkg.version.range.rampart}",
