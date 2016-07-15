@@ -52,9 +52,10 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
             MessageContext inMsgCtx = data.getInMessageContext();
             this.data = data;
 
-            // Set the DOM impl to DOOM
-            DocumentBuilderFactoryImpl.setDOOMRequired(true);
-
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                // Set the DOM impl to DOOM
+                DocumentBuilderFactoryImpl.setDOOMRequired(true);
+            }
             SOAPEnvelope env = TrustUtil.createSOAPEnvelope(inMsgCtx.getEnvelope().getNamespace()
                                                                     .getNamespaceURI());
 
@@ -158,8 +159,10 @@ public class SAMLPassiveTokenIssuer extends SAMLTokenIssuer {
 
             return rstrElem;
         } finally {
-            // Unset the DOM impl to default
-            DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                // Unset the DOM impl to default
+                DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            }
         }
 
     }

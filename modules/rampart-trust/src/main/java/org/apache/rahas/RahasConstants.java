@@ -171,4 +171,8 @@ public class RahasConstants {
     public static final String SAML20_SUBJECT_CONFIRMATION_BEARER = "urn:oasis:names:tc:SAML:2.0:cm:bearer";
     public static final String SAML20_SUBJECT_CONFIRMATION_SENDER_VOUCHES = "urn:oasis:names:tc:SAML:2.0:cm:sender-vouches";
     public static final String SAML20_NAME_ID_POLICY_ENTITY = "urn:oasis:names:tc:SAML:2.0:nameid-format:entity";
+ 
+// property to decide whether we need to set custom axiom parser pool to opensaml library
+    public static final String AXIOM_PARSE_POOL_ENABLED_PROPERTY = "rampart.axiom.parser.pool";
+
 }

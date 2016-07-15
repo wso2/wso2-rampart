@@ -130,9 +130,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if(TokenIssuerUtil.isPersisterConfigured(config)){
                 TokenIssuerUtil.manageTokenPersistenceSettings(config, inMsgCtx);
             }
-            
-            // Set the DOM impl to DOOM
-            DocumentBuilderFactoryImpl.setDOOMRequired(true);
+
+            // if we are adding a doom document builder factory parser pool we don't need to explicitly do this
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                // Set the DOM impl to DOOM
+                DocumentBuilderFactoryImpl.setDOOMRequired(true);
+            }
 
             SOAPEnvelope env = TrustUtil.createSOAPEnvelope(inMsgCtx
                     .getEnvelope().getNamespace().getNamespaceURI());
@@ -292,8 +295,10 @@ public class SAMLTokenIssuer implements TokenIssuer {
 
             return env;
         } finally {
-            // Unset the DOM impl to default
-            DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            if (!TrustUtil.isDoomParserPoolUsed()) {
+                // Unset the DOM impl to default
+                DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            }
         }
 
     }

@@ -75,9 +75,11 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
         Token tk = tkStorage.getToken(data.getTokenId());
         OMElement assertionOMElement = tk.getToken();
 
-        // Change to DOM implementation if DOOM was switched on
-        if (DocumentBuilderFactoryImpl.isDOOMRequired()) {
-            DocumentBuilderFactoryImpl.setDOOMRequired(false);
+        if (!TrustUtil.isDoomParserPoolUsed()) {
+            // Change to DOM implementation if DOOM was switched on
+            if (DocumentBuilderFactoryImpl.isDOOMRequired()) {
+                DocumentBuilderFactoryImpl.setDOOMRequired(false);
+            }
         }
         String s = assertionOMElement.toString();
         DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();

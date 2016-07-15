@@ -27,6 +27,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.addressing.AddressingConstants;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.impl.AbstractIssuerConfig;
@@ -757,6 +758,25 @@ public class TrustUtil {
         dbf.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
 
         return dbf;
+    }
+
+
+    /**
+     *  Check whether we need to set a DOOMBuilderFactory based parser pool for the OpenSAML library
+     *  DOOMBuilderFactory based parser pool was required to overcome the concurrency issue between STS ans SAML
+     *  when used in the same JVM. We are enabling this fix by default.
+     *
+     * @return
+     */
+    public static boolean isDoomParserPoolUsed() {
+        String doomParserPoolSwitch = System.getProperty(RahasConstants.AXIOM_PARSE_POOL_ENABLED_PROPERTY);
+        boolean doomParserPoolEnabled = true; // we are enabling this fix by default
+
+        if (StringUtils.isNotBlank(doomParserPoolSwitch) && !Boolean.parseBoolean(doomParserPoolSwitch)) {
+            doomParserPoolEnabled = false;
+        }
+
+        return doomParserPoolEnabled;
     }
     
 }
