@@ -123,8 +123,7 @@ public class RahasConstants {
 
     //RSTRC actions
     public static final String RSTRC_ACTION_ISSUE_FINAL = "/RSTRC" + REQ_TYPE_ISSUE_FINAL;
-
-
+    
     //RSTR actions
     public static final String RSTR_ACTION_ISSUE = "/RSTR" + REQ_TYPE_ISSUE;
     public static final String RSTR_ACTION_VALIDATE = "/RSTR" + REQ_TYPE_VALIDATE;
