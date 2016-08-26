@@ -948,7 +948,8 @@ public class SAML2TokenIssuer implements TokenIssuer {
     }
 
     public String getResponseAction(RahasData data) throws TrustException {
-        return null;
+        return TrustUtil.getActionValue(data.getVersion(),
+                RahasConstants.RSTRC_ACTION_ISSUE_FINAL);
     }
 
     public void setConfigurationFile(String configFile) {

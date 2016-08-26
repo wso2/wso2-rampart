@@ -441,7 +441,8 @@ public class TrustUtil {
             RahasConstants.RSTR_ACTION_CANCEL.equals(action) ||
             RahasConstants.RSTR_ACTION_RENEW.equals(action) ||
             RahasConstants.RSTR_ACTION_VALIDATE.equals(action) ||
-            RahasConstants.RSTR_ACTION_SCT.equals(action)) {
+            RahasConstants.RSTR_ACTION_SCT.equals(action) ||
+            RahasConstants.RSTRC_ACTION_ISSUE_FINAL.equals(action)) {
 
             return getWSTNamespaceForRSTRequestTye(version) + action;
         }
