@@ -108,6 +108,7 @@ public class RahasConstants {
 
     //  RequestTypes
     public static final String REQ_TYPE_ISSUE = "/Issue";
+    public static final String REQ_TYPE_ISSUE_FINAL = "/IssueFinal";
     public static final String REQ_TYPE_VALIDATE = "/Validate";
     public static final String REQ_TYPE_RENEW = "/Renew";
     public static final String REQ_TYPE_CANCEL = "/Cancel";
@@ -120,6 +121,9 @@ public class RahasConstants {
     public static final String RST_ACTION_SCT = "/RST/SCT";
     public static final String RST_ACTION_CANCEL_SCT = "/RST/SCT" + REQ_TYPE_CANCEL;
 
+    //RSTRC actions
+    public static final String RSTRC_ACTION_ISSUE_FINAL = "/RSTRC" + REQ_TYPE_ISSUE_FINAL;
+    
     //RSTR actions
     public static final String RSTR_ACTION_ISSUE = "/RSTR" + REQ_TYPE_ISSUE;
     public static final String RSTR_ACTION_VALIDATE = "/RSTR" + REQ_TYPE_VALIDATE;
