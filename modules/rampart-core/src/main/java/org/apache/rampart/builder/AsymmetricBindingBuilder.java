@@ -668,6 +668,7 @@ public class AsymmetricBindingBuilder extends BindingBuilder {
         }
 
         try {
+            supportingSig.setDigestAlgo(rmd.getPolicyData().getAlgorithmSuite().getDigest());
             supportingSig.addReferencesToSign(supportingSigParts, rmd.getSecHeader());
             supportingSig.computeSignature();
 

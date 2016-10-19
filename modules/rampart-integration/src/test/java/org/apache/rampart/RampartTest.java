@@ -76,7 +76,7 @@ public class RampartTest extends TestCase {
             ServiceClient serviceClient = getServiceClientInstance();
 
             //TODO : figure this out !!
-            boolean basic256Supported = true;
+            boolean basic256Supported = false;
             
             if(basic256Supported) {
                 System.out.println("\nWARNING: We are using key sizes from JCE " +
