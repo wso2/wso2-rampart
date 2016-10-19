@@ -20,6 +20,13 @@ import javax.xml.namespace.QName;
 
 public class SPConstants {
 
+    public final static String RSA_SHA256 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
+
+    public final static String RSA_SHA384 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384";
+
+    public final static String RSA_SHA512 = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512";
+
+
 	public static final String P_NS = "http://schemas.xmlsoap.org/ws/2004/09/policy";
 
 	public static final String P_PREFIX = "wsp";
@@ -240,7 +247,9 @@ public class SPConstants {
 
 	public final static String SHA256 = "http://www.w3.org/2001/04/xmlenc#sha256";
 
-	public final static String SHA512 = "http://www.w3.org/2001/04/xmlenc#sha512";
+    public final static String SHA384 = "http://www.w3.org/2001/04/xmlenc#sha384";
+
+    public final static String SHA512 = "http://www.w3.org/2001/04/xmlenc#sha512";
 
 	public final static String AES128 = "http://www.w3.org/2001/04/xmlenc#aes128-cbc";
 

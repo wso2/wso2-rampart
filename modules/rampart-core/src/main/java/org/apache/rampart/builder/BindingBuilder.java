@@ -40,6 +40,7 @@ import org.apache.ws.secpolicy.model.SupportingToken;
 import org.apache.ws.secpolicy.model.Token;
 import org.apache.ws.secpolicy.model.UsernameToken;
 import org.apache.ws.secpolicy.model.X509Token;
+import org.apache.ws.secpolicy.model.AlgorithmSuite;
 import org.apache.ws.security.KerberosTokenPrincipal;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSEncryptionPart;
@@ -341,8 +342,10 @@ public abstract class BindingBuilder {
         }
 
         sig.setUserInfo(user, password);
-        sig.setSignatureAlgorithm(rpd.getAlgorithmSuite().getAsymmetricSignature());
-        sig.setSigCanonicalization(rpd.getAlgorithmSuite().getInclusiveC14n());
+        AlgorithmSuite algorithmSuite = rpd.getAlgorithmSuite();
+        sig.setSignatureAlgorithm(algorithmSuite.getAsymmetricSignature());
+        sig.setSigCanonicalization(algorithmSuite.getInclusiveC14n());
+        sig.setDigestAlgo(algorithmSuite.getDigest());
 
         try {
             sig.prepare(
@@ -567,6 +570,7 @@ public abstract class BindingBuilder {
 
         RampartPolicyData rpd = rmd.getPolicyData();
 
+        AlgorithmSuite algorithmSuite = rpd.getAlgorithmSuite();
         if (policyToken.isDerivedKeys()) {
             try {
                 WSSecDKSign dkSign = new WSSecDKSign();
@@ -615,8 +619,9 @@ public abstract class BindingBuilder {
                 }
 
                 // Set the algo info
-                dkSign.setSignatureAlgorithm(rpd.getAlgorithmSuite().getSymmetricSignature());
-                dkSign.setDerivedKeyLength(rpd.getAlgorithmSuite().getSignatureDerivedKeyLength() / 8);
+                dkSign.setSignatureAlgorithm(algorithmSuite.getSymmetricSignature());
+                dkSign.setDerivedKeyLength(algorithmSuite.getSignatureDerivedKeyLength() / 8);
+                //dkSign.setDigestAlgorithm(algorithmSuite.getDigest()); //uncomment when wss4j version is updated
                 if (tok instanceof EncryptedKeyToken) {
                     // Set the value type of the reference
                     dkSign.setCustomValueType(WSConstants.SOAPMESSAGE_NS11 + "#"
@@ -732,9 +737,9 @@ public abstract class BindingBuilder {
 									.getProp()
 									.getProperty(
 											"org.wso2.carbon.security.crypto.private.key.password"));
-					sig.setSignatureAlgorithm(rpd.getAlgorithmSuite().getAsymmetricSignature());
+                    sig.setSignatureAlgorithm(algorithmSuite.getAsymmetricSignature());
 				} else {
-					sig.setSignatureAlgorithm(rpd.getAlgorithmSuite().getSymmetricSignature());
+                    sig.setSignatureAlgorithm(algorithmSuite.getSymmetricSignature());
 				}
                 
                 sig.prepare(

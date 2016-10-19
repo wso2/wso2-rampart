@@ -289,6 +289,14 @@ public class AlgorithmSuite extends AbstractConfigurableSecurityAssertion {
      * @return Returns the asymmetricSignature.
      */
     public String getAsymmetricSignature() {
+
+        if (this.digest == SPConstants.SHA256) {
+            return SPConstants.RSA_SHA256;
+        } else if (this.digest == SPConstants.SHA512) {
+            return SPConstants.RSA_SHA512;
+        } else if (this.digest == SPConstants.SHA384) {
+            return SPConstants.RSA_SHA384;
+        }
         return asymmetricSignature;
     }
 
