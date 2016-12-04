@@ -528,7 +528,7 @@
     <properties>
 
         <rampart.version>1.6.1-wso2v23-SNAPSHOT</rampart.version>
-        <exp.pkg.version.rampart>1.6.1.wso2v22</exp.pkg.version.rampart>
+        <exp.pkg.version.rampart>1.6.1.wso2v23</exp.pkg.version.rampart>
         <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
