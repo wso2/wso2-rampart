@@ -52,6 +52,7 @@ import javax.xml.namespace.QName;
  */
 public class RampartReceiver implements Handler {
 
+    public static final String INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE = "includeFullWSSecurityExceptionMessage";
     private static Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
 
     private static HandlerDescription EMPTY_HANDLER_METADATA =
@@ -177,13 +178,41 @@ public class RampartReceiver implements Handler {
 
         if (soapVersionURI.equals(SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI) ) {
 
-            throw new AxisFault(faultCode,e.getMessage(),e);
+            String standardMsg = e.getMessage();
+            Parameter parameter = msgContext.getAxisMessage().getAxisConfiguration()
+                    .getParameter(INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
+            if (parameter == null
+                    || (parameter != null
+                        && parameter.getValue() instanceof String
+                        && !Boolean.parseBoolean((String)parameter.getValue()))) {
+                if (e instanceof WSSecurityException) {
+                    //As WSSecurityException extends RemoteException, get getMessage will return nested exception and
+                    // its error message, which should not be sent to the client. Sending the nested exception causes
+                    // an unwanted information disclosure
+                    standardMsg = standardMsg.split("; nested exception is:")[0];
+                }
+            }
+            throw new AxisFault(faultCode,standardMsg,e);
 
         } else if (soapVersionURI.equals(SOAP12Constants.SOAP_ENVELOPE_NAMESPACE_URI)) {
 
             List subfaultCodes = new ArrayList();
             subfaultCodes.add(faultCode);
-            throw new AxisFault(Constants.FAULT_SOAP12_SENDER,subfaultCodes,e.getMessage(),e);
+            String standardMsg = e.getMessage();
+            Parameter parameter = msgContext.getAxisMessage().getAxisConfiguration()
+                    .getParameter(INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
+            if (parameter == null
+                    || (parameter != null
+                    && parameter.getValue() instanceof String
+                    && !Boolean.parseBoolean((String)parameter.getValue()))) {
+                if (e instanceof WSSecurityException) {
+                    //As WSSecurityException extends RemoteException, get getMessage will return nested exception and
+                    // its error message, which should not be sent to the client. Sending the nested exception causes
+                    // an unwanted information disclosure
+                    standardMsg = standardMsg.split("; nested exception is:")[0];
+                }
+            }
+            throw new AxisFault(Constants.FAULT_SOAP12_SENDER,subfaultCodes,standardMsg,e);
 
         }
 

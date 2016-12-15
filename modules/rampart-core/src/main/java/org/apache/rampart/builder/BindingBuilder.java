@@ -811,18 +811,20 @@ public abstract class BindingBuilder {
          * signatureActions vector
          */
 		Vector signatureActions = new Vector();
-		for (int i = 0; i < results.size(); i++) {
-			WSHandlerResult wshResult = (WSHandlerResult) results.get(i);
+        if (results != null) {
+            for (int i = 0; i < results.size(); i++) {
+                WSHandlerResult wshResult = (WSHandlerResult) results.get(i);
 
-			WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.SIGN,
-					signatureActions);
-			WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.ST_SIGNED,
-					signatureActions);
-			WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.UT_SIGN,
-					signatureActions);
-			WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.KERBEROS_SIGN,
-					signatureActions);
-		}
+                WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.SIGN,
+                        signatureActions);
+                WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.ST_SIGNED,
+                        signatureActions);
+                WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.UT_SIGN,
+                        signatureActions);
+                WSSecurityUtil.fetchAllActionResults(wshResult.getResults(), WSConstants.KERBEROS_SIGN,
+                        signatureActions);
+            }
+        }
 
         // prepare a SignatureConfirmation token
         WSSecSignatureConfirmation wsc = new WSSecSignatureConfirmation();
