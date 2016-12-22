@@ -33,7 +33,7 @@
     <artifactId>rampart-project</artifactId>
     <packaging>pom</packaging>
     <description>WS-Security, WS-Trust and WS-SecureConversation implementation for Apache Axis2</description>
-    <version>1.6.1-wso2v24-SNAPSHOT</version>
+    <version>1.6.1-wso2v25-SNAPSHOT</version>
     <name>Apache Rampart</name>
     <url>http://axis.apache.org/axis2/java/rampart</url>
 
@@ -527,8 +527,8 @@
 
     <properties>
 
-        <rampart.version>1.6.1-wso2v24-SNAPSHOT</rampart.version>
-        <exp.pkg.version.rampart>1.6.1.wso2v23</exp.pkg.version.rampart>
+        <rampart.version>1.6.1-wso2v25-SNAPSHOT</rampart.version>
+        <exp.pkg.version.rampart>1.6.1.wso2v24</exp.pkg.version.rampart>
         <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
@@ -536,7 +536,7 @@
         <axis2.version>1.6.1-wso2v17</axis2.version>
         <axiom.version>1.2.11-wso2v10</axiom.version>
 
-        <wss4j.version>1.5.11-wso2v15</wss4j.version>
+        <wss4j.version>1.5.11-wso2v16</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
@@ -554,7 +554,7 @@
         <imp.pkg.version.neethi>[2.0.4.wso2v4, 3.0.0)</imp.pkg.version.neethi>
         <imp.pkg.version.wss4j>[1.5.11, 2.0.0)</imp.pkg.version.wss4j>
         <orbit.version.neethi>2.0.4.wso2v5</orbit.version.neethi>
-        <orbit.version.wss4j>1.5.11.wso2v15</orbit.version.wss4j>
+        <orbit.version.wss4j>1.5.11.wso2v16</orbit.version.wss4j>
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
         <imp.pkg.version.range.commons.logging>[1.0.4,2.0.0)</imp.pkg.version.range.commons.logging>
         <imp.pkg.version.range.xml.stream>[1.0.1,2.0.0)</imp.pkg.version.range.xml.stream>
