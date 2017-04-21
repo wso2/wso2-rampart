@@ -25,6 +25,7 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.HandlerDescription;
 import org.apache.axis2.description.Parameter;
+import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.engine.Handler;
 import org.apache.axis2.namespace.Constants;
 import org.apache.commons.logging.Log;
@@ -42,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import javax.xml.namespace.QName;
 
 /**
@@ -179,8 +179,7 @@ public class RampartReceiver implements Handler {
         if (soapVersionURI.equals(SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI) ) {
 
             String standardMsg = e.getMessage();
-            Parameter parameter = msgContext.getAxisMessage().getAxisConfiguration()
-                    .getParameter(INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
+            Parameter parameter = getParameter(msgContext, INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
             if (parameter == null
                     || (parameter != null
                         && parameter.getValue() instanceof String
@@ -199,8 +198,7 @@ public class RampartReceiver implements Handler {
             List subfaultCodes = new ArrayList();
             subfaultCodes.add(faultCode);
             String standardMsg = e.getMessage();
-            Parameter parameter = msgContext.getAxisMessage().getAxisConfiguration()
-                    .getParameter(INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
+            Parameter parameter = getParameter(msgContext, INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE);
             if (parameter == null
                     || (parameter != null
                     && parameter.getValue() instanceof String
@@ -218,4 +216,24 @@ public class RampartReceiver implements Handler {
 
     }
 
+    /**
+     * Returns the Parameter value for the given parameter name from available scope.
+     *
+     * @param msgContext The message context.
+     * @param paramName  The name of the parameter
+     * @return looked up parameter if it is available in the axis configuration. null if not found.
+     */
+    private Parameter getParameter(MessageContext msgContext, String paramName) {
+        AxisConfiguration axisConfiguration = null;
+        if (msgContext.getAxisMessage() != null) {
+            axisConfiguration = msgContext.getAxisMessage().getAxisConfiguration();
+        }
+        if (axisConfiguration == null && msgContext.getConfigurationContext() != null) {
+            axisConfiguration = msgContext.getConfigurationContext().getAxisConfiguration();
+        }
+        if (axisConfiguration != null) {
+            return axisConfiguration.getParameter(paramName);
+        }
+        return null;
+    }
 }
