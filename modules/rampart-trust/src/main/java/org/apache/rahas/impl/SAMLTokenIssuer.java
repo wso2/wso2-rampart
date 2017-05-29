@@ -718,7 +718,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
      */
     public String getResponseAction(RahasData data) throws TrustException {
         return TrustUtil.getActionValue(data.getVersion(),
-                RahasConstants.RSTR_ACTION_ISSUE);
+                RahasConstants.RSTRC_ACTION_ISSUE_FINAL);
     }
 
     /**
