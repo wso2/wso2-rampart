@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.rampart</groupId>
         <artifactId>rampart-project</artifactId>
-        <version>1.6.1-wso2v25-SNAPSHOT</version>
+        <version>1.6.1-wso2v25</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
