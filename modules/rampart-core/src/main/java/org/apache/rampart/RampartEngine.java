@@ -128,6 +128,10 @@ public class RampartEngine {
             throw new RampartException("missingSOAPHeader");
         }
 
+        if ((rpd.isSignBody() || rpd.isEntireHeadersAndBodySignatures()) && !isValidHeaderForSignedBody(header)) {
+            throw new RampartException("Duplicate Body element within the header");
+        }
+
         ArrayList headerBlocks = header.getHeaderBlocksWithNSURI(WSConstants.WSSE_NS);
         SOAPHeaderBlock secHeader = null;
         // Issue is axiom - a returned collection must not be null
@@ -482,6 +486,32 @@ public class RampartEngine {
 
         log.debug("Return process(MessageContext msgCtx)");
         return results;
+    }
+
+    /**
+     * This method is used to verify SOAP Header element to avoid XML Signature Wrapping attack. This method checks
+     * whether there is a Body element inside the Header element when the body content is signed.
+     *
+     * @param element SOAP element to be verified
+     * @return Whether the header element is contained with a Body element
+     */
+    private boolean isValidHeaderForSignedBody(OMElement element) {
+        if (null != element && element.getLocalName().equals(WSConstants.ELEM_BODY)) {
+            return false;
+
+        } else if (null != element) {
+            Iterator children = element.getChildren();
+            if (null != children) {
+                while (children.hasNext()) {
+                    Object child = children.next();
+                    if (child instanceof OMElement && !((OMElement) child).getLocalName().equals(WSConstants.WSSE_LN)
+                            && !isValidHeaderForSignedBody((OMElement) child)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     // Check whether this a soap fault because of failure in processing the security header
