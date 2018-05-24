@@ -180,12 +180,6 @@ public class RampartConfigBuilder implements AssertionBuilder {
         }
 
         childElement = element.getFirstChildWithName(new QName(
-                RampartConfig.NS, RampartConfig.TS_ENABLE_TTL_CHECK_LN));
-        if (childElement != null) {
-            rampartConfig.setEnableTTLCheck(childElement.getText().trim());
-        }
-
-        childElement = element.getFirstChildWithName(new QName(
                 RampartConfig.NS, RampartConfig.OPTIMIZE_MSG_PROCESSING_TRANSPORT_BINDING));
         if (childElement != null) {
             rampartConfig.setOptimizeMessageProcessingForTransportBinding(
