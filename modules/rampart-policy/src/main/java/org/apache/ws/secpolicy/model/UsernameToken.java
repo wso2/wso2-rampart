@@ -34,6 +34,10 @@ public class UsernameToken extends Token {
     private boolean noPassword;
     
     private boolean hashPassword;
+
+    private boolean nonce;
+
+    private boolean created;
     
     public UsernameToken(int version){
         setVersion(version);
@@ -84,6 +88,22 @@ public class UsernameToken extends Token {
         } else {
             return SP11Constants.USERNAME_TOKEN;
         }
+    }
+
+    public boolean isNonce() {
+        return nonce;
+    }
+
+    public void setNonce(boolean nonce) {
+        this.nonce = nonce;
+    }
+
+    public boolean isCreated() {
+        return created;
+    }
+
+    public void setCreated(boolean created) {
+        this.created = created;
     }
 
     public PolicyComponent normalize() {

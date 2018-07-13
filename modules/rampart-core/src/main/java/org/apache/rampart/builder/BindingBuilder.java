@@ -198,6 +198,12 @@ public abstract class BindingBuilder {
                     utBuilder.setPasswordType(WSConstants.PASSWORD_DIGEST);
                 } else {
                     utBuilder.setPasswordType(WSConstants.PASSWORD_TEXT);
+                    if (token.isNonce()) {
+                        utBuilder.addNonce();
+                    }
+                    if (token.isCreated()) {
+                        utBuilder.addCreated();
+                    }
                 }
 
                 utBuilder.setUserInfo(user, password);

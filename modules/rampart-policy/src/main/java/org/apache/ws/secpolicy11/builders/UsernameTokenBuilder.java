@@ -53,10 +53,17 @@ public class UsernameTokenBuilder implements AssertionBuilder {
         
         OMElement policyElement = element.getFirstElement();
         
-        if (policyElement != null && !policyElement.getQName().equals(org.apache.neethi.Constants.Q_ELEM_POLICY)) {
+        if (policyElement != null && org.apache.neethi.Constants.Q_ELEM_POLICY.equals(policyElement.getQName())) {
         
             Policy policy = PolicyEngine.getPolicy(element.getFirstElement());
             policy = (Policy) policy.normalize(false);
+
+            if (policyElement.getChildrenWithName(org.apache.ws.secpolicy.Constants.CREATED).hasNext()) {
+                usernameToken.setCreated(true);
+            }
+            if (policyElement.getChildrenWithName(org.apache.ws.secpolicy.Constants.NONCE).hasNext()) {
+                usernameToken.setNonce(true);
+            }
             
             for (Iterator iterator = policy.getAlternatives(); iterator.hasNext();) {
                 processAlternative((List) iterator.next(), usernameToken);

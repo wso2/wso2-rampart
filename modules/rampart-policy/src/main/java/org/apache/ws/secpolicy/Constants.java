@@ -28,7 +28,11 @@ public class Constants {
 
     public final static String SP_NS = "http://schemas.xmlsoap.org/ws/2005/07/securitypolicy";
 
+    public final static String SP13_NS = "http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200802";
+
     public final static String SP_PREFIX = "sp";
+
+    public final static String SP13_PREFIX = "sp13";
 
     public final static String ATTR_INCLUDE_TOKEN = "IncludeToken";
 
@@ -435,4 +439,8 @@ public class Constants {
 
     public final static QName XPATH_ = new QName(Constants.SP_NS, "XPath",
             Constants.SP_PREFIX);
+
+    public final static QName CREATED = new QName(Constants.SP13_NS, "Created", Constants.SP13_PREFIX);
+
+    public final static QName NONCE = new QName(Constants.SP13_NS, "Nonce", Constants.SP13_PREFIX);
 }
