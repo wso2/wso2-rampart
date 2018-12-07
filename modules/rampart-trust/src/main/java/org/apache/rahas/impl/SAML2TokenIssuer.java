@@ -24,6 +24,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.RahasConstants;
@@ -32,6 +33,7 @@ import org.apache.rahas.Token;
 import org.apache.rahas.TokenIssuer;
 import org.apache.rahas.TrustException;
 import org.apache.rahas.TrustUtil;
+import org.apache.rahas.impl.util.SAMLUtils;
 import org.apache.rahas.impl.util.SAML2Utils;
 import org.apache.rahas.impl.util.SAMLAttributeCallback;
 import org.apache.rahas.impl.util.SAMLCallbackHandler;
@@ -53,6 +55,7 @@ import org.opensaml.DefaultBootstrap;
 import org.opensaml.SAMLException;
 import org.opensaml.common.SAMLObjectBuilder;
 import org.opensaml.common.SAMLVersion;
+import org.opensaml.common.impl.SAMLObjectContentReference;
 import org.opensaml.saml1.core.NameIdentifier;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
@@ -636,6 +639,15 @@ public class SAML2TokenIssuer implements TokenIssuer {
             keyInfo.getX509Datas().add(data);
             signature.setKeyInfo(keyInfo);
             assertion.setSignature(signature);
+            String digestAlgorithm = cred.getDigestAlgorithm();
+            if (StringUtils.isNotBlank(digestAlgorithm) && signature.getContentReferences() != null &&
+            !signature.getContentReferences().isEmpty()) {
+                ((SAMLObjectContentReference)signature.getContentReferences().get(0))
+                        .setDigestAlgorithm(digestAlgorithm);
+                if (log.isDebugEnabled()) {
+                    log.debug("Selected '" + digestAlgorithm + "' as the digest algorithm.");
+                }
+            }
             signatureList.add(signature);
 
             //Marshall and Sign
@@ -690,17 +702,15 @@ public class SAML2TokenIssuer implements TokenIssuer {
             X509Certificate[] issuerCerts = crypto
                     .getCertificates(config.issuerKeyAlias);
 
-            String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-            String pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
-            if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-                sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-            }
+            String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
+            String digestAlgorithm = SAMLUtils.getDigestAlgorithm(config);
             java.security.Key issuerPK = crypto.getPrivateKey(
                     config.issuerKeyAlias, config.issuerKeyPassword);
 
             signKeyHolder.setIssuerCerts(issuerCerts);
             signKeyHolder.setIssuerPK((PrivateKey) issuerPK);
             signKeyHolder.setSignatureAlgorithm(sigAlgo);
+            signKeyHolder.setDigestAlgorithm(digestAlgorithm);
 
         } catch (Exception e) {
             throw new TrustException("Error creating issuer signature");

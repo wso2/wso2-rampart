@@ -179,4 +179,6 @@ public class RahasConstants {
 // property to decide whether we need to set custom axiom parser pool to opensaml library
     public static final String AXIOM_PARSE_POOL_ENABLED_PROPERTY = "rampart.axiom.parser.pool";
 
+    public static final String DEFAULT_DIGEST_ALGORITHM = "http://www.w3.org/2000/09/xmldsig#sha1";
+
 }

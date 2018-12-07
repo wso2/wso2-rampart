@@ -36,6 +36,7 @@ import org.apache.rahas.TrustUtil;
 import org.apache.rahas.impl.util.SAMLAttributeCallback;
 import org.apache.rahas.impl.util.SAMLCallbackHandler;
 import org.apache.rahas.impl.util.SAMLNameIdentifierCallback;
+import org.apache.rahas.impl.util.SAMLUtils;
 import org.apache.ws.security.KerberosTokenPrincipal;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSSecurityException;
@@ -618,11 +619,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
             X509Certificate[] issuerCerts = crypto
                     .getCertificates(config.issuerKeyAlias);
 
-            String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-            String pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
-            if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-                sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-            }
+            String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
             java.security.Key issuerPK = crypto.getPrivateKey(
                     config.issuerKeyAlias, config.issuerKeyPassword);
             assertion.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));
@@ -698,11 +695,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
             X509Certificate[] issuerCerts = crypto
                     .getCertificates(config.issuerKeyAlias);
 
-            String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-            String pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
-            if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-                sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-            }
+            String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
             java.security.Key issuerPK = crypto.getPrivateKey(
                     config.issuerKeyAlias, config.issuerKeyPassword);
             assertion.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));

@@ -90,6 +90,10 @@ public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
     public final static QName ISSUER_NAME = new QName("issuerName");
     
     public final static QName SAML_CALLBACK_CLASS = new QName("dataCallbackHandlerClass");
+
+    public final static QName SIGNATURE_ALGORITHM = new QName("signatureAlgorithm");
+
+    public final static QName DIGEST_ALGORITHM = new QName("digestAlgorithm");
         
     protected String issuerKeyAlias;
     protected String issuerKeyPassword;
@@ -102,6 +106,8 @@ public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
     protected String persisterClassName = null;
     protected Map<String, String> persisterPropertyMap = null;
     protected boolean tokenStoreDisabled = false;
+    protected String signatureAlgorithm;
+    protected String digestAlgorithm;
   
     /**
      * Create a new configuration with issuer name and crypto information
@@ -151,6 +157,16 @@ public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
         OMElement callbackNameElem = elem.getFirstChildWithName(ATTR_CALLBACK_HANDLER_NAME);
         if (callbackNameElem != null) {
             this.callbackHandlerName = callbackNameElem.getText().trim();
+        }
+
+        OMElement signatureAlgorithmElem = elem.getFirstChildWithName(SIGNATURE_ALGORITHM);
+        if (signatureAlgorithmElem != null) {
+            this.signatureAlgorithm = signatureAlgorithmElem.getText().trim();
+        }
+
+        OMElement digestAlgorithmElem = elem.getFirstChildWithName(DIGEST_ALGORITHM);
+        if (digestAlgorithmElem != null) {
+            this.digestAlgorithm = digestAlgorithmElem.getText().trim();
         }
         
         //The alias of the private key
@@ -331,6 +347,12 @@ public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
         
         OMElement callbackHandlerName = fac.createOMElement(ATTR_CALLBACK_HANDLER_NAME, configElem);
         callbackHandlerName.setText(this.callbackHandlerName);
+
+        OMElement signatureAlgorithmElem = fac.createOMElement(SIGNATURE_ALGORITHM, configElem);
+        signatureAlgorithmElem.setText(this.signatureAlgorithm);
+
+        OMElement digestAlgorithmElem = fac.createOMElement(DIGEST_ALGORITHM, configElem);
+        digestAlgorithmElem.setText(this.digestAlgorithm);
         
         OMElement timeToLive = fac.createOMElement(TTL, configElem);
         timeToLive.setText(String.valueOf(this.ttl));
@@ -537,5 +559,20 @@ public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
     public void setTokenStoreDisabled(boolean tokenStoreDisabled) {
         this.tokenStoreDisabled = tokenStoreDisabled;
     }
-    
+
+    public String getSignatureAlgorithm() {
+        return signatureAlgorithm;
+    }
+
+    public void setSignatureAlgorithm(String signatureAlgorithm) {
+        this.signatureAlgorithm = signatureAlgorithm;
+    }
+
+    public String getDigestAlgorithm() {
+        return digestAlgorithm;
+    }
+
+    public void setDigestAlgorithm(String digestAlgorithm) {
+        this.digestAlgorithm = digestAlgorithm;
+    }
 }
