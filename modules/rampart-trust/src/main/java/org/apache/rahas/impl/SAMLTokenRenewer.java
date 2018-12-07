@@ -7,6 +7,7 @@ import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
 import org.apache.rahas.*;
+import org.apache.rahas.impl.util.SAMLUtils;
 import org.apache.ws.security.components.crypto.Crypto;
 import org.apache.ws.security.components.crypto.CryptoFactory;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
@@ -101,11 +102,7 @@ public class SAMLTokenRenewer implements TokenRenewer {
     protected SAMLAssertion signAssertion(Crypto crypto, SAMLAssertion samlAssertion, SAMLTokenIssuerConfig config ) throws Exception {
         X509Certificate[] issuerCerts = crypto
                 .getCertificates(config.issuerKeyAlias);
-        String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-        String pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
-        if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-            sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-        }
+        String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
         java.security.Key issuerPK = crypto.getPrivateKey(
                 config.issuerKeyAlias, config.issuerKeyPassword);
         samlAssertion.sign(sigAlgo, issuerPK, Arrays.asList(issuerCerts));

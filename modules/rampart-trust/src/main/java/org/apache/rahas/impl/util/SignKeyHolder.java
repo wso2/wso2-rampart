@@ -41,6 +41,7 @@ public class SignKeyHolder implements X509Credential {
 
 	private PrivateKey issuerPK = null;
 
+	private String digestAlgorithm = null;
 
     public String getSignatureAlgorithm() {
         return signatureAlgorithm;
@@ -114,5 +115,13 @@ public class SignKeyHolder implements X509Credential {
 
     public Class<? extends Credential> getCredentialType() {
         return null;
+    }
+
+    public String getDigestAlgorithm() {
+        return digestAlgorithm;
+    }
+
+    public void setDigestAlgorithm(String digestAlgorithm) {
+        this.digestAlgorithm = digestAlgorithm;
     }
 }

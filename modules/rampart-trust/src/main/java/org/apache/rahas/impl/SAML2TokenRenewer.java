@@ -5,16 +5,22 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.*;
+import org.apache.rahas.impl.util.SAMLUtils;
 import org.apache.rahas.impl.util.SignKeyHolder;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
+import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
 import org.opensaml.DefaultBootstrap;
+import org.opensaml.common.impl.SAMLObjectContentReference;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Conditions;
 import org.opensaml.saml2.core.impl.ConditionsBuilder;
@@ -47,6 +53,8 @@ import java.util.List;
 public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer {
 
     protected List<Signature> signatureList = new ArrayList<Signature>();
+
+    private static Log log = LogFactory.getLog(SAML2TokenRenewer.class);
 
     public SOAPEnvelope renew(RahasData data) throws TrustException {
 
@@ -140,17 +148,15 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
         try {
             X509Certificate[] issuerCerts = crypto
                     .getCertificates(config.issuerKeyAlias);
-            String sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_RSA;
-            String pubKeyAlgo = issuerCerts[0].getPublicKey().getAlgorithm();
-            if (pubKeyAlgo.equalsIgnoreCase("DSA")) {
-                sigAlgo = XMLSignature.ALGO_ID_SIGNATURE_DSA;
-            }
+            String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
+            String digestAlgorithm = SAMLUtils.getDigestAlgorithm(config);
             java.security.Key issuerPK = crypto.getPrivateKey(
                     config.issuerKeyAlias, config.issuerKeyPassword);
 
             signKeyHolder.setIssuerCerts(issuerCerts);
             signKeyHolder.setIssuerPK((PrivateKey) issuerPK);
             signKeyHolder.setSignatureAlgorithm(sigAlgo);
+            signKeyHolder.setDigestAlgorithm(digestAlgorithm);
 
         } catch (WSSecurityException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
@@ -187,6 +193,15 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
             keyInfo.getX509Datas().add(data);
             signature.setKeyInfo(keyInfo);
             assertion.setSignature(signature);
+            String digestAlgorithm = cred.getDigestAlgorithm();
+            if (StringUtils.isNotBlank(digestAlgorithm) && signature.getContentReferences() != null &&
+                    !signature.getContentReferences().isEmpty()) {
+                ((SAMLObjectContentReference)signature.getContentReferences().get(0))
+                        .setDigestAlgorithm(digestAlgorithm);
+                if (log.isDebugEnabled()) {
+                    log.debug("Selected '" + digestAlgorithm + "' as the digest algorithm.");
+                }
+            }
             signatureList.add(signature);
             MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
             Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
