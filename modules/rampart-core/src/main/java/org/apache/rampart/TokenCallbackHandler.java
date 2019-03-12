@@ -16,6 +16,8 @@
 
 package org.apache.rampart;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.EncryptedKeyToken;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.Token;
@@ -38,6 +40,7 @@ public class TokenCallbackHandler implements CallbackHandler {
     private CallbackHandler handler;
     private String tokenIdentifier;
     private RampartConfig config;
+    private static final Log log = LogFactory.getLog(TokenCallbackHandler.class);
 
     public TokenCallbackHandler(TokenStorage store, CallbackHandler handler) {
         this.store = store;
@@ -71,7 +74,6 @@ public class TokenCallbackHandler implements CallbackHandler {
                             pc.setCustomToken((Element) tok.getToken());
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                         throw new IOException(e.getMessage());
                     }
                 } else if (pc.getUsage() == WSPasswordCallback.ENCRYPTED_KEY_TOKEN) {
@@ -107,7 +109,7 @@ public class TokenCallbackHandler implements CallbackHandler {
                         }
 
                     } catch (TrustException e) {
-                        e.printStackTrace();
+                        log.error("Error occurred while handling token callback.", e);
                         throw new IOException(e.getMessage());
                     }
                 } else {

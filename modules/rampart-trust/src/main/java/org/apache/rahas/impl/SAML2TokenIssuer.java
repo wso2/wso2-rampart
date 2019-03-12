@@ -378,7 +378,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
             return env;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error occurred while issuing SAML2 token.", e);
         }
 
         return null;

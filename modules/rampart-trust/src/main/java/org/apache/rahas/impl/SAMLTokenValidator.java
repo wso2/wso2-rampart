@@ -246,7 +246,7 @@ public class SAMLTokenValidator implements TokenValidator {
         try {
             issuerPBKey = crypto.getCertificates(config.issuerKeyAlias)[0].getPublicKey();
         } catch (WSSecurityException e) {
-            e.printStackTrace();
+            log.error("Error occurred while retrieving issuer public key.", e);
         }
 
         return issuerPBKey;

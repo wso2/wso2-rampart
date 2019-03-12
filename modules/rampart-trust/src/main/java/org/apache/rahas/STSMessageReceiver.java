@@ -52,17 +52,14 @@ public class STSMessageReceiver extends AbstractInOutMessageReceiver {
                         (OMElement) inMessage
                                 .getProperty(TokenRequestDispatcherConfig.CONFIG_PARAM_KEY));
             }
-            
-            if(dispatcher != null) {
-                SOAPEnvelope responseEnv = dispatcher.handle(inMessage, outMessage);
-                outMessage.setEnvelope(responseEnv);
-            } else {
-                throw new TrustException("missingDispatcherConfiguration");
-            }
+
+            SOAPEnvelope responseEnv = dispatcher.handle(inMessage, outMessage);
+            outMessage.setEnvelope(responseEnv);
         } catch (TrustException e) {
-            e.printStackTrace();
             //Log the exception
-            log.error(e);
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            }
             throw new AxisFault(e.getFaultString(), e.getFaultCode());
         }
     }

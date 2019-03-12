@@ -129,7 +129,7 @@ public class MessageBuilder {
                 }
                 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error occurred while building the message.", e);
                 throw new RampartException("errorInTokenCancellation");
             }
         }
