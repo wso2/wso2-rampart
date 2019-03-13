@@ -30,6 +30,9 @@ import org.apache.axis2.description.AxisServiceGroup;
 import org.apache.axis2.description.TransportInDescription;
 import org.apache.axis2.engine.ListenerManager;
 import org.apache.axis2.transport.http.SimpleHTTPServer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.rampart.TokenCallbackHandler;
 
 import javax.xml.namespace.QName;
 import java.io.File;
@@ -44,6 +47,7 @@ public class UtilServer {
 
     public static final String FAILURE_MESSAGE = "Intentional Failure";
 
+    private static final Log log = LogFactory.getLog(UtilServer.class);
 
     public static synchronized void deployService(AxisService service)
             throws AxisFault {
@@ -85,10 +89,9 @@ public class UtilServer {
                     listenerManager.init(er);
                 }
                 listenerManager.addListener(trsIn, true);
-                System.out.print("Server started on port "
-                        + TESTING_PORT + ".....");
+                log.info("Server started on port " + TESTING_PORT + ".....");
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error occurred while starting repository", e);
             }
         }
 
@@ -110,8 +113,7 @@ public class UtilServer {
 
             try {
                 receiver.start();
-                System.out.print("Server started on port "
-                        + TESTING_PORT + ".....");
+                log.info("Server started on port " + TESTING_PORT + ".....");
             } catch (Exception e) {
                 throw new AxisFault(e.getMessage(), e);
             }
@@ -160,7 +162,7 @@ public class UtilServer {
             }
             count = 0;
 // tp.doStop();
-            System.out.print("Server stopped .....");
+            log.info("Server stopped .....");
         } else {
             count--;
         }

@@ -210,10 +210,39 @@ public class RampartReceiver implements Handler {
                     standardMsg = standardMsg.split("; nested exception is:")[0];
                 }
             }
-            throw new AxisFault(Constants.FAULT_SOAP12_SENDER,subfaultCodes,standardMsg,e);
-
+            AxisFault fault = new AxisFault(Constants.FAULT_SOAP12_SENDER, subfaultCodes, standardMsg, e);
+            if (isApplicationError(e)) {
+                fault.setFaultType(org.apache.axis2.Constants.APPLICATION_FAULT);
+            }
+            throw fault;
         }
+    }
 
+    /**
+     * Return true if the passed Exception is an WSSecurityException and the error is an application error.
+     *
+     * @param e WSSecurity Exception that needs to be checked for application error.
+     * @return True if the error code is > 0 and <= 10.
+     */
+    private boolean isApplicationError(Exception e) {
+
+        if (e instanceof WSSecurityException) {
+            int errorCode = ((WSSecurityException) e).getErrorCode();
+            switch (errorCode) {
+                case WSSecurityException.UNSUPPORTED_SECURITY_TOKEN:
+                case WSSecurityException.UNSUPPORTED_ALGORITHM:
+                case WSSecurityException.INVALID_SECURITY:
+                case WSSecurityException.INVALID_SECURITY_TOKEN:
+                case WSSecurityException.FAILED_AUTHENTICATION:
+                case WSSecurityException.FAILED_CHECK:
+                case WSSecurityException.SECURITY_TOKEN_UNAVAILABLE:
+                case WSSecurityException.MESSAGE_EXPIRED:
+                case WSSecurityException.FAILED_ENCRYPTION:
+                case WSSecurityException.FAILED_SIGNATURE:
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
