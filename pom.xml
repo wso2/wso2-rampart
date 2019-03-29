@@ -534,7 +534,7 @@
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
         <axis2.version>1.6.1-wso2v17</axis2.version>
-        <axiom.version>1.2.11-wso2v10</axiom.version>
+        <axiom.version>1.2.22</axiom.version>
 
         <wss4j.version>1.5.11-wso2v17</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
