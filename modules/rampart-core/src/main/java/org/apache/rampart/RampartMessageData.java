@@ -123,6 +123,8 @@ public class RampartMessageData {
     private int timeToLive = 300;
     
     private int timestampMaxSkew = 0;
+
+    private boolean incomingTTLCheck = false;
     
     private String timestampId;
     
@@ -303,6 +305,11 @@ public class RampartMessageData {
                     String maxSkewString = policyDataRampartConfig.getTimestampMaxSkew();
                     if (maxSkewString != null && !maxSkewString.equals("")) {
                         this.setTimestampMaxSkew(Integer.parseInt(maxSkewString));
+                    }
+
+                    String enableTTL = policyDataRampartConfig.getEnableTTLCheck();
+                    if (enableTTL != null && !enableTTL.equals("")) {
+                        this.setIncomingTTLCheck(Boolean.parseBoolean(enableTTL));
                     }
                 }
                 
@@ -515,6 +522,14 @@ public class RampartMessageData {
      */
     public void setTimeToLive(int timeToLive) {
         this.timeToLive = timeToLive;
+    }
+
+    public boolean isIncomingTTLCheck() {
+        return incomingTTLCheck;
+    }
+
+    public void setIncomingTTLCheck(boolean incomingTTLCheck) {
+        this.incomingTTLCheck = incomingTTLCheck;
     }
 
     /**

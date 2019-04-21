@@ -218,9 +218,16 @@ public class RampartEngine {
                     	DocumentBuilderFactoryImpl.setDOOMRequired(true);
                 }
 			}
-            results = engine.processSecurityHeader(rmd.getDocument(), actorValue,
-                    tokenCallbackHandler, signatureCrypto, RampartUtil.getEncryptionCrypto(
-							rpd.getRampartConfig(), msgCtx.getAxisService().getClassLoader()));
+
+            if (rmd.isIncomingTTLCheck()) {
+                results = engine.processSecurityHeader(rmd.getDocument(), actorValue,
+                        tokenCallbackHandler, signatureCrypto, RampartUtil.getEncryptionCrypto(
+                                rpd.getRampartConfig(), msgCtx.getAxisService().getClassLoader()), rmd.getTimeToLive());
+            } else {
+                results = engine.processSecurityHeader(rmd.getDocument(), actorValue,
+                        tokenCallbackHandler, signatureCrypto, RampartUtil.getEncryptionCrypto(
+                                rpd.getRampartConfig(), msgCtx.getAxisService().getClassLoader()));
+            }
 
 			if (rpd.getInitiatorToken() instanceof IssuedToken) {
 				String tokenType = ((IssuedToken) rpd.getInitiatorToken()).getRstTokenType();
