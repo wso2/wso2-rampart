@@ -38,6 +38,7 @@ import java.util.Map;
  *  &lt;ramp:policyValidatorCbClass&gt;org.apache.axis2.security.ramp:PolicyValidatorCallbackHandler&lt;/ramp:policyValidatorCbClass&gt;
  *  &lt;ramp:timestampPrecisionInMilliseconds&gt;true&lt;/timestampPrecisionInMilliseconds&gt;
  *  &lt;ramp:timestampTTL&gt;300&lt;/ramp:timestampTTL&gt;
+ *  &lt;ramp:enableTTLCheck&gt;true&lt;/ramp:enableTTLCheck&gt;
  *  &lt;ramp:timestampMaxSkew&gt;0&lt;/ramp:timestampMaxSkew&gt;
  *  &lt;ramp:tokenStoreClass&gt;org.apache.rahas.StorageImpl&lt;/ramp:tokenStoreClass&gt;
  *  &lt;ramp:nonceLifeTime&gt;org.apache.rahas.StorageImpl&lt;/ramp:nonceLifeTime&gt;
@@ -71,6 +72,8 @@ public class RampartConfig implements Assertion {
 
     public static final int DEFAULT_NONCE_LIFE_TIME = 60 * 5; // Default life time of a nonce is 5
                                                               // minutes
+
+    public static final boolean DEFAULT_ENABLE_TTL_CHECK = false;
 
     public final static String NS = "http://ws.apache.org/rampart/policy";
 
@@ -113,6 +116,8 @@ public class RampartConfig implements Assertion {
     public final static String TOKEN_STORE_CLASS_LN = "tokenStoreClass";
 
     public final static String TIMESTAMP_STRICT_LN = "timestampStrict";
+
+    public final static String TS_ENABLE_TTL_CHECK_LN = "enableTTLCheck";
 
     public final static String NONCE_LIFE_TIME = "nonceLifeTime";
 
@@ -171,6 +176,9 @@ public class RampartConfig implements Assertion {
 
         /*To set timeStampStrict in WSSConfig through rampartConfig*/
     private String timeStampStrict = Boolean.toString(TIMESTAMP_STRICT);
+
+    // By default TTL check will be disabled
+    private String enableTTLCheck = Boolean.toString(DEFAULT_ENABLE_TTL_CHECK);
 
     private KerberosConfig kerberosConfig;
 
@@ -423,6 +431,12 @@ public class RampartConfig implements Assertion {
             writer.writeEndElement();
         }
 
+        if (getEnableTTLCheck() != null) {
+            writer.writeStartElement(NS, TS_ENABLE_TTL_CHECK_LN);
+            writer.writeCharacters(getEnableTTLCheck());
+            writer.writeEndElement();
+        }
+
         if (getTokenStoreClass() != null) {
             writer.writeStartElement(NS, TOKEN_STORE_CLASS_LN);
             writer.writeCharacters(getTokenStoreClass());
@@ -562,4 +576,11 @@ public class RampartConfig implements Assertion {
         this.timeStampStrict = timeStampStrict;
     }
 
+    public String getEnableTTLCheck() {
+        return enableTTLCheck;
+    }
+
+    public void setEnableTTLCheck(String enableTTLCheck) {
+        this.enableTTLCheck = enableTTLCheck;
+    }
 }
