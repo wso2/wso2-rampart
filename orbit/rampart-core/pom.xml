@@ -194,7 +194,7 @@
                             org.apache.rahas.impl.util; version="${imp.pkg.version.range.rampart}",
                             org.apache.ws.secpolicy; version="${imp.pkg.version.range.rampart}",
                             org.apache.ws.secpolicy.model; version="${imp.pkg.version.range.rampart}",
-                            org.apache.xml.security.utils,
+                            org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
                             org.jaxen, org.joda.time,
                             org.opensaml,
                             org.opensaml.saml2.core,
