@@ -528,19 +528,19 @@
     <properties>
 
         <rampart.version>1.6.1-wso2v35-SNAPSHOT</rampart.version>
-        <exp.pkg.version.rampart>1.6.1.wso2v24</exp.pkg.version.rampart>
+        <exp.pkg.version.rampart>1.6.1.wso2v35</exp.pkg.version.rampart>
         <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
-        <axis2.version>1.6.1-wso2v17</axis2.version>
-        <axiom.version>1.2.11-wso2v10</axiom.version>
+        <axis2.version>1.6.1-wso2v37</axis2.version>
+        <axiom.version>1.2.11-wso2v16</axiom.version>
 
         <wss4j.version>1.5.11-wso2v18</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
-        <opensaml.version>2.6.4</opensaml.version>
+        <opensaml.version>2.6.6</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
 
         <junit.version>3.8.2</junit.version>
@@ -571,7 +571,7 @@
         <bundle.plugin.version>4.1.0</bundle.plugin.version>
         <antrun.plugin.version>1.8</antrun.plugin.version>
 
-        <incremental-build.plugin.version>1.3</incremental-build.plugin.version>
+        <incremental-build.plugin.version>1.3.1</incremental-build.plugin.version>
         
         <build-helper.plugin.version>3.0.0</build-helper.plugin.version>
         <mar.plugin.version>1.402</mar.plugin.version>
