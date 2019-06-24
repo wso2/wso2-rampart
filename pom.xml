@@ -543,7 +543,7 @@
         <opensaml.version>2.6.4</opensaml.version>
         <opensaml1.version>1.1</opensaml1.version>
 
-        <junit.version>3.8.2</junit.version>
+        <junit.version>4.12</junit.version>
         <log4j.version>1.2.15</log4j.version>
 
         <!-- distribution properties -->
