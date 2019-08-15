@@ -78,7 +78,7 @@ import java.util.Set;
 import java.util.Vector;
 
 public abstract class BindingBuilder {
-    private static Log log = LogFactory.getLog(BindingBuilder.class);
+    private static final Log log = LogFactory.getLog(BindingBuilder.class);
 
     private Element insertionLocation;
 

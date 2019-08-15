@@ -71,8 +71,8 @@ import java.util.Vector;
 
 public class RampartEngine {
 
-    private static Log log = LogFactory.getLog(RampartEngine.class);
-    private static Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);
+    private static final Log log = LogFactory.getLog(RampartEngine.class);
+    private static final Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);
     private static ServiceNonceCache serviceNonceCache = new ServiceNonceCache();
 
     public Vector process(MessageContext msgCtx) throws WSSPolicyException, RampartException,

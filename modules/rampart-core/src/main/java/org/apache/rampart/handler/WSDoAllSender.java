@@ -43,7 +43,7 @@ import java.util.Vector;
 public class WSDoAllSender extends WSDoAllHandler {
     
     private static final Log log = LogFactory.getLog(WSDoAllSender.class);
-    private static Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
+    private static final Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
     
     
     public WSDoAllSender() {

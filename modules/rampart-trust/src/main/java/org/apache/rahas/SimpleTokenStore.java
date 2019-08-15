@@ -42,7 +42,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class SimpleTokenStore implements TokenStorage, Serializable {
 
-    private static Log log = LogFactory.getLog(SimpleTokenStore.class);
+    private static final Log log = LogFactory.getLog(SimpleTokenStore.class);
 
     protected Map tokens = new Hashtable();
 

@@ -42,7 +42,7 @@ import java.util.*;
 
 public class PolicyBasedResultsValidator implements PolicyValidatorCallbackHandler {
 
-    private static Log log = LogFactory.getLog(PolicyBasedResultsValidator.class);
+    private static final Log log = LogFactory.getLog(PolicyBasedResultsValidator.class);
 
     /**
      * {@inheritDoc}

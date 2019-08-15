@@ -56,7 +56,7 @@ import java.util.Properties;
  */
 public class Token implements Externalizable {
 
-    private static Log log = LogFactory.getLog(Token.class);
+    private static final Log log = LogFactory.getLog(Token.class);
 
     public final static int ISSUED = 1;
 

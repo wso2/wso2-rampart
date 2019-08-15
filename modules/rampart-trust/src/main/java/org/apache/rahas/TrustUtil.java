@@ -58,7 +58,7 @@ public class TrustUtil {
 
     private static final QName NAME = new QName("name");
     private static final int ENTITY_EXPANSION_LIMIT = 0;
-    private static Log logger = LogFactory.getLog(TrustUtil.class);
+    private static final Log logger = LogFactory.getLog(TrustUtil.class);
 
     /**
      * Create a wsse:Reference element with the given URI and the value type

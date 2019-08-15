@@ -50,7 +50,7 @@ public class Axis2Util {
     
     private static ThreadLocal doomTacker = new ThreadLocal();
     private static final int ENTITY_EXPANSION_LIMIT = 0;
-    private static Log logger = LogFactory.getLog(Axis2Util.class);
+    private static final Log logger = LogFactory.getLog(Axis2Util.class);
 
     public static boolean isUseDOOM() {
         Object value = doomTacker.get();

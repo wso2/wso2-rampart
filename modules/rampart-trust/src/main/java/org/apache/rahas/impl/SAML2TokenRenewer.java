@@ -54,7 +54,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
 
     protected List<Signature> signatureList = new ArrayList<Signature>();
 
-    private static Log log = LogFactory.getLog(SAML2TokenRenewer.class);
+    private static final Log log = LogFactory.getLog(SAML2TokenRenewer.class);
 
     public SOAPEnvelope renew(RahasData data) throws TrustException {
 

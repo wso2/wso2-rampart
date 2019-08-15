@@ -96,7 +96,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RampartUtil {
 
     private static final String CRYPTO_PROVIDER = "org.apache.ws.security.crypto.provider";
-    private static Log log = LogFactory.getLog(RampartUtil.class);
+    private static final Log log = LogFactory.getLog(RampartUtil.class);
 
     private static Map<String, CachedCrypto> cryptoStore = new ConcurrentHashMap<String, CachedCrypto>();
 

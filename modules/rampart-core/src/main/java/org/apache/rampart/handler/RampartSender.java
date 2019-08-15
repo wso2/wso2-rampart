@@ -35,7 +35,7 @@ import org.apache.ws.security.WSSecurityException;
  */
 public class RampartSender implements Handler {
 	
-	private static Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
+	private static final Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
 
     private static HandlerDescription EMPTY_HANDLER_METADATA =
         new HandlerDescription("default Handler");

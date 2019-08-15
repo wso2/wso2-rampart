@@ -78,7 +78,7 @@ public class STSClient {
 
     private static final String RAMPART_POLICY = "rampartPolicy";
 
-    private static Log log = LogFactory.getLog(STSClient.class);
+    private static final Log log = LogFactory.getLog(STSClient.class);
 
     private String action;
 
