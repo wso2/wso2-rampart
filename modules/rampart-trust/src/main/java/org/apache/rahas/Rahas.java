@@ -32,7 +32,7 @@ import org.opensaml.xml.ConfigurationException;
 
 public class Rahas implements Module {
 
-    private static Log log = LogFactory.getLog(Rahas.class);
+    private static final Log log = LogFactory.getLog(Rahas.class);
 
     private static TokenPersister tokenPersister = null;
     private static TokenStorage tokenStore = null;

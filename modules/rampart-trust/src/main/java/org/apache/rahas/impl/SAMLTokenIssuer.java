@@ -92,7 +92,7 @@ public class SAMLTokenIssuer implements TokenIssuer {
 
     protected String audienceRestriction = null;
 
-    private static Log log = LogFactory.getLog(SAMLTokenIssuer.class);
+    private static final Log log = LogFactory.getLog(SAMLTokenIssuer.class);
 
     public SOAPEnvelope issue(RahasData data) throws TrustException {
 

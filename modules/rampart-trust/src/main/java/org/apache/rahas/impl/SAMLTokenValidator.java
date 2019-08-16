@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  */
 public class SAMLTokenValidator implements TokenValidator {
 
-    private static Log log = LogFactory.getLog(SAMLTokenValidator.class);
+    private static final Log log = LogFactory.getLog(SAMLTokenValidator.class);
 
     private String configFile;
     private OMElement configElement;

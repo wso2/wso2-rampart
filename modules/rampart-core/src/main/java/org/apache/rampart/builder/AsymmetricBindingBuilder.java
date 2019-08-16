@@ -54,8 +54,8 @@ import java.util.Vector;
 
 public class AsymmetricBindingBuilder extends BindingBuilder {
 
-    private static Log log = LogFactory.getLog(AsymmetricBindingBuilder.class);
-    private static Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);	
+    private static final Log log = LogFactory.getLog(AsymmetricBindingBuilder.class);
+    private static final Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);
 
     private Token sigToken;
 

@@ -56,8 +56,8 @@ import java.util.Vector;
 
 public class TransportBindingBuilder extends BindingBuilder {
 
-    private static Log log = LogFactory.getLog(TransportBindingBuilder.class);
-    private static Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);	
+    private static final Log log = LogFactory.getLog(TransportBindingBuilder.class);
+    private static final Log tlog = LogFactory.getLog(RampartConstants.TIME_LOG);
 
     public void build(RampartMessageData rmd) throws RampartException {
 

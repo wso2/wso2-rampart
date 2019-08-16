@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class FSBasedRetiredTokenPersister implements TokenPersister {
 
-    private static Log log = LogFactory.getLog(FSBasedRetiredTokenPersister.class);
+    private static final Log log = LogFactory.getLog(FSBasedRetiredTokenPersister.class);
 
     protected String securityTokenStorageFilePath = null;
 

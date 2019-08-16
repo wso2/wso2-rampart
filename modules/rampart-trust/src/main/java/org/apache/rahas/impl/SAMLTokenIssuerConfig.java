@@ -45,7 +45,7 @@ import java.util.Properties;
  */
 public class SAMLTokenIssuerConfig extends AbstractIssuerConfig {
     
-	Log log = LogFactory.getLog(SAMLTokenIssuerConfig.class);
+	static final Log log = LogFactory.getLog(SAMLTokenIssuerConfig.class);
 	
     /**
      * The QName of the configuration element of the SAMLTokenIssuer

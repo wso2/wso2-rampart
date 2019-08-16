@@ -53,7 +53,7 @@ import javax.xml.namespace.QName;
 public class RampartReceiver implements Handler {
 
     public static final String INCLUDE_FULL_WSSECURITYEXCEPTION_MESSAGE = "includeFullWSSecurityExceptionMessage";
-    private static Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
+    private static final Log mlog = LogFactory.getLog(RampartConstants.MESSAGE_LOG);
 
     private static HandlerDescription EMPTY_HANDLER_METADATA =
         new HandlerDescription("default Handler");

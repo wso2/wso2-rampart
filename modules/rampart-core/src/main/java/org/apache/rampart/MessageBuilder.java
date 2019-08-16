@@ -51,7 +51,7 @@ import javax.xml.namespace.QName;
 
 public class MessageBuilder {
     
-    private static Log log = LogFactory.getLog(MessageBuilder.class);
+    private static final Log log = LogFactory.getLog(MessageBuilder.class);
 
     public void build(MessageContext msgCtx) throws WSSPolicyException,
             RampartException, WSSecurityException, AxisFault {

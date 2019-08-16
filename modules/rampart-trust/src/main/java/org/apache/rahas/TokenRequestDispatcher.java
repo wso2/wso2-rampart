@@ -25,8 +25,8 @@ public class TokenRequestDispatcher {
 
     private TokenRequestDispatcherConfig config;
     
-    private static Log mlog = LogFactory.getLog("org.apache.rampart.messages");
-    private static Log log = LogFactory.getLog(TokenRequestDispatcher.class.getName());
+    private static final Log mlog = LogFactory.getLog("org.apache.rampart.messages");
+    private static final Log log = LogFactory.getLog(TokenRequestDispatcher.class.getName());
 
     public TokenRequestDispatcher(TokenRequestDispatcherConfig config) throws TrustException {
         this.config = config;

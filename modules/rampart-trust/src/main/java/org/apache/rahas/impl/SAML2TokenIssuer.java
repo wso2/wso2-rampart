@@ -133,7 +133,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
     
     protected String audienceRestriction;
     
-    private static Log log = LogFactory.getLog(SAML2TokenIssuer.class);
+    private static final Log log = LogFactory.getLog(SAML2TokenIssuer.class);
 
     static {
             try {

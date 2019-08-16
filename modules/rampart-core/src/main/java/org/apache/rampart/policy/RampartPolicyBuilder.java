@@ -48,7 +48,7 @@ import java.util.List;
 
 public class RampartPolicyBuilder {
     
-    private static Log log = LogFactory.getLog(RampartPolicyBuilder.class);
+    private static final Log log = LogFactory.getLog(RampartPolicyBuilder.class);
 
     /**
      * Compile the parsed security data into one Policy data block.
