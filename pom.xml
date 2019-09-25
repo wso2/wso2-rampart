@@ -33,7 +33,7 @@
     <artifactId>rampart-project</artifactId>
     <packaging>pom</packaging>
     <description>WS-Security, WS-Trust and WS-SecureConversation implementation for Apache Axis2</description>
-    <version>1.6.1-wso2v40-SNAPSHOT</version>
+    <version>1.6.1-wso2v40</version>
     <name>Apache Rampart</name>
     <url>http://axis.apache.org/axis2/java/rampart</url>
 
@@ -41,7 +41,7 @@
         <url>https://github.com/wso2/wso2-rampart.git</url>
         <developerConnection>scm:git:https://github.com/wso2/wso2-rampart.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/wso2-rampart.git</connection>
-        <tag>HEAD</tag>
+        <tag>v1.6.1-wso2v40</tag>
     </scm>
 
     <licenses>
@@ -527,7 +527,7 @@
 
     <properties>
 
-        <rampart.version>1.6.1-wso2v40-SNAPSHOT</rampart.version>
+        <rampart.version>1.6.1-wso2v40</rampart.version>
         <exp.pkg.version.rampart>1.6.1.wso2v35</exp.pkg.version.rampart>
         <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
