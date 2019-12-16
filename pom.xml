@@ -556,7 +556,7 @@
         <axis2.version>1.6.1-wso2v37</axis2.version>
         <axiom.version>1.2.11-wso2v16</axiom.version>
 
-        <wss4j.version>1.5.11-wso2v18</wss4j.version>
+        <wss4j.version>1.5.11-wso2v18-SNAPSHOT</wss4j.version>
         <xmlsec.version>1.4.2</xmlsec.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
