@@ -148,6 +148,18 @@
             <artifactId>opensaml</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>xmltooling</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>openws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.owasp.esapi</groupId>
+            <artifactId>esapi</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
@@ -196,12 +208,14 @@
                             org.apache.ws.secpolicy.model; version="${imp.pkg.version.range.rampart}",
                             org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
                             org.jaxen, org.joda.time,
-                            org.opensaml,
-                            org.opensaml.saml2.core,
-                            org.opensaml.xml,
                             org.w3c.dom
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
+                        <Embed-Dependency>
+                            opensaml;inline=false, opensaml1;inline=false, xmltooling;inline=false,
+                            openws;inline=false, esapi;inline=false
+                        </Embed-Dependency>
+                        <Embed-Transitive>true</Embed-Transitive>
                     </instructions>
                 </configuration>
             </plugin>
