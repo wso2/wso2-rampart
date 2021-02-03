@@ -19,8 +19,8 @@ package org.apache.rahas.impl;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.util.AXIOMUtil;
-import org.apache.axiom.om.util.UUIDGenerator;
 import org.apache.axiom.soap.SOAPEnvelope;
+import org.apache.axiom.util.UIDGenerator;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.Parameter;
 import org.apache.commons.lang.ArrayUtils;
@@ -47,7 +47,6 @@ import org.apache.ws.security.util.Base64;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
 import org.apache.xml.security.c14n.Canonicalizer;
-import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.EncryptionConstants;
 import org.joda.time.DateTime;
 import org.opensaml.Configuration;
@@ -119,18 +118,16 @@ import java.util.List;
 
 public class SAML2TokenIssuer implements TokenIssuer {
 
-    private Assertion SAMLAssertion;
-
     private String configParamName;
 
     private OMElement configElement;
 
     private String configFile;
 
-    protected List<Signature> signatureList = new ArrayList<Signature>();
+    protected final List<Signature> signatureList = new ArrayList<>();
 
     private boolean isSymmetricKeyBasedHoK = false;
-    
+
     protected String audienceRestriction;
     
     private static final Log log = LogFactory.getLog(SAML2TokenIssuer.class);
@@ -144,7 +141,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
             }
         }
     
-    public SOAPEnvelope issue(RahasData data) throws TrustException {
+    public SOAPEnvelope issue(RahasData data) {
         MessageContext inMsgCtx = data.getInMessageContext();
 
         try {
@@ -213,7 +210,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
             assertion.setVersion(SAMLVersion.VERSION_20);
             
             // Set an UUID as the ID of an assertion
-            assertion.setID(UUIDGenerator.getUUID());
+            assertion.setID(UIDGenerator.generateUID());
 
             //Set the issuer
             IssuerBuilder issuerBuilder = new IssuerBuilder();
@@ -359,7 +356,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
 
             // Store the token
             assertionToken = new Token(assertion.getID(),
-                    (OMElement) assertionElement, creationTime,
+                    assertionElement, creationTime,
                     expirationTime);
 
             // At this point we definitely have the secret
@@ -519,13 +516,10 @@ public class SAML2TokenIssuer implements TokenIssuer {
                         "ds:X509Data");
                 x509DataElem.appendChild(x509CertElem);
 
-
-                if (x509DataElem != null) {
-                    keyInfoElem = doc.createElementNS(WSConstants.SIG_NS, "ds:KeyInfo");
-                    ((OMElement) x509DataElem).declareNamespace(
-                            WSConstants.SIG_NS, WSConstants.SIG_PREFIX);
-                    keyInfoElem.appendChild(x509DataElem);
-                }
+                keyInfoElem = doc.createElementNS(WSConstants.SIG_NS, "ds:KeyInfo");
+                ((OMElement) x509DataElem).declareNamespace(
+                        WSConstants.SIG_NS, WSConstants.SIG_PREFIX);
+                keyInfoElem.appendChild(x509DataElem);
 
             } catch (Exception e) {
                 throw new TrustException("samlAssertionCreationError", e);
@@ -570,7 +564,8 @@ public class SAML2TokenIssuer implements TokenIssuer {
                 buildObject(SubjectConfirmationData.DEFAULT_ELEMENT_NAME, KeyInfoConfirmationDataType.TYPE_NAME);
 
         //Set the keyInfo element
-        scData.getKeyInfos().add(keyInfoElement);
+        if (keyInfoElement != null)
+            scData.getKeyInfos().add(keyInfoElement);
 
         // Set the validity period
         scData.setNotBefore(creationTime);
@@ -707,11 +702,11 @@ public class SAML2TokenIssuer implements TokenIssuer {
 
             String sigAlgo = SAMLUtils.getSignatureAlgorithm(config, issuerCerts);
             String digestAlgorithm = SAMLUtils.getDigestAlgorithm(config);
-            java.security.Key issuerPK = crypto.getPrivateKey(
+            PrivateKey issuerPK = crypto.getPrivateKey(
                     config.issuerKeyAlias, config.issuerKeyPassword);
 
             signKeyHolder.setIssuerCerts(issuerCerts);
-            signKeyHolder.setIssuerPK((PrivateKey) issuerPK);
+            signKeyHolder.setIssuerPK(issuerPK);
             signKeyHolder.setSignatureAlgorithm(sigAlgo);
             signKeyHolder.setDigestAlgorithm(digestAlgorithm);
 
@@ -737,9 +732,6 @@ public class SAML2TokenIssuer implements TokenIssuer {
         SAMLObjectBuilder<AttributeStatement> attrStmtBuilder =
                 (SAMLObjectBuilder<AttributeStatement>) builderFactory.getBuilder(AttributeStatement.DEFAULT_ELEMENT_NAME);
 
-        SAMLObjectBuilder<Attribute> attrBuilder =
-                    (SAMLObjectBuilder<Attribute>) builderFactory.getBuilder(Attribute.DEFAULT_ELEMENT_NAME);
-
         Attribute[] attributes = null;
 
         //Call the attribute callback handlers to get any attributes if exists
@@ -752,10 +744,10 @@ public class SAML2TokenIssuer implements TokenIssuer {
         else if (config.getCallbackHandlerName() != null
                 && config.getCallbackHandlerName().trim().length() > 0) {
             SAMLAttributeCallback cb = new SAMLAttributeCallback(data);
-            SAMLCallbackHandler handler = null;
+            SAMLCallbackHandler handler;
             MessageContext msgContext = data.getInMessageContext();
             ClassLoader classLoader = msgContext.getAxisService().getClassLoader();
-            Class cbClass = null;
+            Class cbClass;
             try {
                 cbClass = Loader.loadClass(classLoader, config.getCallbackHandlerName());
             } catch (ClassNotFoundException e) {
@@ -763,7 +755,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
                         .getCallbackHandlerName()}, e);
             }
             try {
-                handler = (SAMLCallbackHandler) cbClass.newInstance();
+                handler = (SAMLCallbackHandler) cbClass.getDeclaredConstructor().newInstance();
             } catch (java.lang.Exception e) {
                 throw new TrustException("cannotCreatePWCBInstance", new String[]{config
                         .getCallbackHandlerName()}, e);
