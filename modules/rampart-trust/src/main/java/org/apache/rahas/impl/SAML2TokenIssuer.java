@@ -232,16 +232,19 @@ public class SAML2TokenIssuer implements TokenIssuer {
             Conditions conditions = new ConditionsBuilder().buildObject();
 			conditions.setNotBefore(creationDate);
 			conditions.setNotOnOrAfter(expirationDate);
-
+            log.debug(">>>>>>> Processing audiences");
 			if (data.getAppliesToAddress() != null) {
 				AudienceRestriction audienceRestriction = new AudienceRestrictionBuilder()
 						.buildObject();
 				Audience issuerAudience = new AudienceBuilder().buildObject();
+				Audience additionalAudience = new AudienceBuilder().buildObject();
 				issuerAudience.setAudienceURI(data.getAppliesToAddress());
+                additionalAudience.setAudienceURI("https://test.aditional.audience.com/");
 				audienceRestriction.getAudiences().add(issuerAudience);
+                audienceRestriction.getAudiences().add(additionalAudience);
 				conditions.getAudienceRestrictions().add(audienceRestriction);
 			}
-			
+            log.debug(">>>>>>> Finished processing audiences");
 			assertion.setConditions(conditions);
 
 			// Set the issued time.
