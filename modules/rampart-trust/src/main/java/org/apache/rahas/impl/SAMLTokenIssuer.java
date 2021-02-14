@@ -48,7 +48,6 @@ import org.apache.ws.security.message.token.SecurityTokenReference;
 import org.apache.ws.security.util.Base64;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
-import org.apache.xml.security.signature.XMLSignature;
 import org.apache.xml.security.utils.EncryptionConstants;
 import org.opensaml.SAMLAssertion;
 import org.opensaml.SAMLAttribute;
@@ -60,10 +59,6 @@ import org.opensaml.SAMLException;
 import org.opensaml.SAMLNameIdentifier;
 import org.opensaml.SAMLStatement;
 import org.opensaml.SAMLSubject;
-import org.opensaml.saml2.core.Audience;
-import org.opensaml.saml2.core.AudienceRestriction;
-import org.opensaml.saml2.core.impl.AudienceBuilder;
-import org.opensaml.saml2.core.impl.AudienceRestrictionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -608,6 +603,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
+
+                List<String> additionalAudiences =
+                        TokenIssuerUtil.getAdditionalSAMLAudiencesFromAssociatedServiceProvider(this.audienceRestriction);
+                for (String additionalAudience : additionalAudiences)
+                    audienceRestriction.addAudience(additionalAudience);
+
                 conditions = new ArrayList<SAMLCondition>();
                 conditions.add(audienceRestriction);
             }
@@ -684,6 +685,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
+
+                List<String> additionalAudiences =
+                        TokenIssuerUtil.getAdditionalSAMLAudiencesFromAssociatedServiceProvider(this.audienceRestriction);
+                for (String additionalAudience : additionalAudiences)
+                    audienceRestriction.addAudience(additionalAudience);
+
                 conditions = new ArrayList<SAMLCondition>();
                 conditions.add(audienceRestriction);
             }

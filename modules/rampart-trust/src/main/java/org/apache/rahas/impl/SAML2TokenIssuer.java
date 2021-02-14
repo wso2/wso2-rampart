@@ -127,7 +127,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
     protected final List<Signature> signatureList = new ArrayList<>();
 
     private boolean isSymmetricKeyBasedHoK = false;
-
+    
     protected String audienceRestriction;
     
     private static final Log log = LogFactory.getLog(SAML2TokenIssuer.class);
@@ -229,19 +229,24 @@ public class SAML2TokenIssuer implements TokenIssuer {
             Conditions conditions = new ConditionsBuilder().buildObject();
 			conditions.setNotBefore(creationDate);
 			conditions.setNotOnOrAfter(expirationDate);
-            log.debug(">>>>>>> Processing audiences");
-			if (data.getAppliesToAddress() != null) {
-				AudienceRestriction audienceRestriction = new AudienceRestrictionBuilder()
-						.buildObject();
-				Audience issuerAudience = new AudienceBuilder().buildObject();
-				Audience additionalAudience = new AudienceBuilder().buildObject();
-				issuerAudience.setAudienceURI(data.getAppliesToAddress());
-                additionalAudience.setAudienceURI("https://test.aditional.audience.com/");
-				audienceRestriction.getAudiences().add(issuerAudience);
-                audienceRestriction.getAudiences().add(additionalAudience);
-				conditions.getAudienceRestrictions().add(audienceRestriction);
-			}
-            log.debug(">>>>>>> Finished processing audiences");
+
+            if (data.getAppliesToAddress() != null && !data.getAppliesToAddress().isEmpty()) {
+                AudienceRestriction audienceRestriction = new AudienceRestrictionBuilder()
+                        .buildObject();
+                Audience issuerAudience = new AudienceBuilder().buildObject();
+                issuerAudience.setAudienceURI(data.getAppliesToAddress());
+                audienceRestriction.getAudiences().add(issuerAudience);
+
+                List<String> additionalAudiences =
+                        TokenIssuerUtil.getAdditionalSAMLAudiencesFromAssociatedServiceProvider(data.getAppliesToAddress());
+                for (String additionalAudience : additionalAudiences) {
+                    Audience spAudience = new AudienceBuilder().buildObject();
+                    spAudience.setAudienceURI(additionalAudience);
+                    audienceRestriction.getAudiences().add(spAudience);
+                }
+                conditions.getAudienceRestrictions().add(audienceRestriction);
+            }
+
 			assertion.setConditions(conditions);
 
 			// Set the issued time.
@@ -887,18 +892,22 @@ public class SAML2TokenIssuer implements TokenIssuer {
 		conditions.setNotBefore(creationDate);
 		conditions.setNotOnOrAfter(expirationDate);
 
-		if (this.audienceRestriction != null && this.audienceRestriction.trim().length() > 0) {
-			AudienceRestriction audienceRestriction = new AudienceRestrictionBuilder()
-					.buildObject();
-			Audience issuerAudience = new AudienceBuilder().buildObject();
-			issuerAudience.setAudienceURI(this.audienceRestriction);
-			audienceRestriction.getAudiences().add(issuerAudience);
-			conditions.getAudienceRestrictions().add(audienceRestriction);
-			
-	        if(log.isDebugEnabled()) {
-	            log.debug("Setting assertion audience restriction to: " + this.audienceRestriction);
-	        }
-		}
+        if (data.getAppliesToAddress() != null && !data.getAppliesToAddress().isEmpty()) {
+            AudienceRestriction audienceRestriction = new AudienceRestrictionBuilder()
+                    .buildObject();
+            Audience issuerAudience = new AudienceBuilder().buildObject();
+            issuerAudience.setAudienceURI(data.getAppliesToAddress());
+            audienceRestriction.getAudiences().add(issuerAudience);
+
+            List<String> additionalAudiences =
+                    TokenIssuerUtil.getAdditionalSAMLAudiencesFromAssociatedServiceProvider(data.getAppliesToAddress());
+            for (String additionalAudience : additionalAudiences) {
+                Audience spAudience = new AudienceBuilder().buildObject();
+                spAudience.setAudienceURI(additionalAudience);
+                audienceRestriction.getAudiences().add(spAudience);
+            }
+            conditions.getAudienceRestrictions().add(audienceRestriction);
+        }
 		
 		assertion.setConditions(conditions);
 

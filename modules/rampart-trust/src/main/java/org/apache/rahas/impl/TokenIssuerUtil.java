@@ -19,6 +19,8 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.rahas.Rahas;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
@@ -39,13 +41,23 @@ import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.identity.application.common.IdentityApplicationManagementException;
+import org.wso2.carbon.identity.application.common.model.InboundAuthenticationRequestConfig;
+import org.wso2.carbon.identity.application.common.model.ServiceProvider;
+import org.wso2.carbon.identity.application.mgt.dao.ApplicationDAO;
+import org.wso2.carbon.identity.application.mgt.dao.impl.ApplicationDAOImpl;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
  */
 public class TokenIssuerUtil {
+
+    private static final Log log = LogFactory.getLog(TokenIssuerUtil.class);
 
     public final static String ENCRYPTED_KEY = "EncryptedKey";
     public final static String BINARY_SECRET = "BinarySecret";
@@ -265,4 +277,34 @@ public class TokenIssuerUtil {
             throw new TrustException("Error in initializing persister settings.", e);
         }
     }
+
+    public static List<String> getAdditionalSAMLAudiencesFromAssociatedServiceProvider(String issuerAddress) {
+
+        List<String> additionalAudiences = new ArrayList<String>(0);
+
+        if (issuerAddress != null && !issuerAddress.isEmpty()) {
+            try {
+                ApplicationDAO applicationDAO = new ApplicationDAOImpl();
+                String existingSPName = applicationDAO.getServiceProviderNameByClientId
+                        (issuerAddress,"wstrust", CarbonContext
+                                .getThreadLocalCarbonContext().getTenantDomain());
+                if (existingSPName != null && !existingSPName.isEmpty()) {
+                    ServiceProvider serviceProvider = applicationDAO.getApplication(existingSPName, CarbonContext
+                            .getThreadLocalCarbonContext().getTenantDomain());
+                    InboundAuthenticationRequestConfig[] inboundAuthReqConfigs = serviceProvider
+                            .getInboundAuthenticationConfig().getInboundAuthenticationRequestConfigs();
+                    for (InboundAuthenticationRequestConfig entry : inboundAuthReqConfigs)
+                        if ("wstrust".equalsIgnoreCase(entry.getInboundAuthType())
+                                && !issuerAddress.equalsIgnoreCase(entry.getInboundAuthKey()))
+                            additionalAudiences.add(entry.getInboundAuthKey());
+                }
+            } catch (IdentityApplicationManagementException e) {
+                if (log.isDebugEnabled())
+                    log.debug("Couldn't match trusted service: <wstrust:"+issuerAddress+"> to an active Service Provider");
+            }
+        }
+
+        return additionalAudiences;
+    }
+
 }
