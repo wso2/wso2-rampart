@@ -282,13 +282,13 @@ public class TokenIssuerUtil {
 
         List<String> additionalAudiences = new ArrayList<String>(0);
 
-        if (issuerAddress != null && !issuerAddress.isEmpty()) {
+        if (StringUtils.isNotBlank(issuerAddress)) {
             try {
                 ApplicationDAO applicationDAO = new ApplicationDAOImpl();
                 String existingSPName = applicationDAO.getServiceProviderNameByClientId
-                        (issuerAddress,"wstrust", CarbonContext
+                        (issuerAddress, "wstrust", CarbonContext
                                 .getThreadLocalCarbonContext().getTenantDomain());
-                if (existingSPName != null && !existingSPName.isEmpty()) {
+                if (StringUtils.isNotBlank(existingSPName)) {
                     ServiceProvider serviceProvider = applicationDAO.getApplication(existingSPName, CarbonContext
                             .getThreadLocalCarbonContext().getTenantDomain());
                     InboundAuthenticationRequestConfig[] inboundAuthReqConfigs = serviceProvider

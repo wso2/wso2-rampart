@@ -569,8 +569,9 @@ public class SAML2TokenIssuer implements TokenIssuer {
                 buildObject(SubjectConfirmationData.DEFAULT_ELEMENT_NAME, KeyInfoConfirmationDataType.TYPE_NAME);
 
         //Set the keyInfo element
-        if (keyInfoElement != null)
+        if (keyInfoElement != null) {
             scData.getKeyInfos().add(keyInfoElement);
+        }
 
         // Set the validity period
         scData.setNotBefore(creationTime);
