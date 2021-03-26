@@ -141,7 +141,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
             }
         }
     
-    public SOAPEnvelope issue(RahasData data) {
+    public SOAPEnvelope issue(RahasData data) throws TrustException {
         MessageContext inMsgCtx = data.getInMessageContext();
 
         try {
