@@ -89,6 +89,16 @@
             <groupId>xerces.wso2</groupId>
             <artifactId>xercesImpl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.framework</groupId>
+            <artifactId>org.wso2.carbon.identity.application.common</artifactId>
+            <version>${carbon.identity.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.framework</groupId>
+            <artifactId>org.wso2.carbon.identity.application.mgt</artifactId>
+            <version>${carbon.identity.framework.version}</version>
+        </dependency>
     </dependencies>
 
     <reporting>
@@ -102,5 +112,11 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <properties>
+
+        <carbon.identity.framework.version>5.20.28</carbon.identity.framework.version>
+
+    </properties>
 
 </project>
