@@ -473,6 +473,16 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.application.common</artifactId>
+                <version>${carbon.identity.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.application.mgt</artifactId>
+                <version>${carbon.identity.framework.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -542,6 +552,7 @@
         <imp.pkg.version.range.rampart>[1.6.1,2.0.0)</imp.pkg.version.range.rampart>
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
+        <carbon.identity.framework.version>5.20.28</carbon.identity.framework.version>
 
         <axis2.version>1.6.1-wso2v37</axis2.version>
         <axiom.version>1.2.11-wso2v16</axiom.version>
