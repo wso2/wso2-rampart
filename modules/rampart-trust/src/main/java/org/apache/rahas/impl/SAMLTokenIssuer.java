@@ -608,6 +608,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
+
+                List<String> additionalAudiences =
+                        TokenIssuerUtil.getAdditionalAudiences(this.audienceRestriction);
+                for (String additionalAudience : additionalAudiences)
+                    audienceRestriction.addAudience(additionalAudience);
+
                 conditions = new ArrayList<SAMLCondition>();
                 conditions.add(audienceRestriction);
             }
@@ -684,6 +690,12 @@ public class SAMLTokenIssuer implements TokenIssuer {
             if (StringUtils.isNotBlank(this.audienceRestriction)) {
                 SAMLAudienceRestrictionCondition audienceRestriction = new SAMLAudienceRestrictionCondition();
                 audienceRestriction.addAudience(this.audienceRestriction);
+
+                List<String> additionalAudiences =
+                        TokenIssuerUtil.getAdditionalAudiences(this.audienceRestriction);
+                for (String additionalAudience : additionalAudiences)
+                    audienceRestriction.addAudience(additionalAudience);
+
                 conditions = new ArrayList<SAMLCondition>();
                 conditions.add(audienceRestriction);
             }
