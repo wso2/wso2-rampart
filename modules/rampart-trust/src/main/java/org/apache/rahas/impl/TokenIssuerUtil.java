@@ -284,7 +284,7 @@ public class TokenIssuerUtil {
 
         if (StringUtils.isNotBlank(issuerAddress)) {
             // Retrieve the raw additional audience values from the system property.
-            String rawAdditionalAudiences = System.getProperty("sts.saml.additional.audiences");
+            String rawAdditionalAudiences = System.getProperty("additionalAudienceSTSSAML");
             // Proceed only if the rawAdditionalAudiences is not empty.
             if (StringUtils.isNotBlank(rawAdditionalAudiences)) {
                 // Breakdown the audience values (if there are multiple values).
