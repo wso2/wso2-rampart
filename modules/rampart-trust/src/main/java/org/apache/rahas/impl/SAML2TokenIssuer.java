@@ -278,8 +278,7 @@ public class SAML2TokenIssuer implements TokenIssuer {
                 assertion.getAuthnStatements().add(authStmt);
             }
 
-            if (data.getOverridenSubjectValue() != null
-                    && data.getOverridenSubjectValue().trim().length() > 0) {
+            if (StringUtils.isNotBlank(data.getOverridenSubjectValue())) {
                 subject.getNameID().setValue(data.getOverridenSubjectValue());
             }
 
