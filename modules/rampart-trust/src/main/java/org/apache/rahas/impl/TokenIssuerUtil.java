@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.rahas.impl;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.lang.StringUtils;
 import org.apache.rahas.Rahas;
 import org.apache.rahas.RahasConstants;
 import org.apache.rahas.RahasData;
@@ -41,9 +43,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * 
+ *
  */
 public class TokenIssuerUtil {
 
@@ -58,18 +63,18 @@ public class TokenIssuerUtil {
 
         try {
             if (reqEntrPresent &&
-                keyComputation != SAMLTokenIssuerConfig.KeyComputation.KEY_COMP_USE_OWN_KEY) {
+                    keyComputation != SAMLTokenIssuerConfig.KeyComputation.KEY_COMP_USE_OWN_KEY) {
                 //If there is requester entropy and if the issuer is not
                 //configured to use its own key
 
                 if (keyComputation ==
-                    SAMLTokenIssuerConfig.KeyComputation.KEY_COMP_PROVIDE_ENT) {
+                        SAMLTokenIssuerConfig.KeyComputation.KEY_COMP_PROVIDE_ENT) {
                     data.setResponseEntropy(WSSecurityUtil.generateNonce(keySize / 8));
                     P_SHA1 p_sha1 = new P_SHA1();
                     return p_sha1.createKey(data.getRequestEntropy(),
-                                            data.getResponseEntropy(),
-                                            0,
-                                            keySize / 8);
+                            data.getResponseEntropy(),
+                            0,
+                            keySize / 8);
                 } else {
                     //If we reach this its expected to use the requestor's
                     //entropy
@@ -78,9 +83,7 @@ public class TokenIssuerUtil {
             } else { // need to use a generated key
                 return generateEphemeralKey(keySize);
             }
-        } catch (WSSecurityException e) {
-            throw new TrustException("errorCreatingSymmKey", e);
-        } catch (ConversationException e) {
+        } catch (WSSecurityException | ConversationException e) {
             throw new TrustException("errorCreatingSymmKey", e);
         }
     }
@@ -91,11 +94,12 @@ public class TokenIssuerUtil {
                                                  OMElement rstrElem,
                                                  Token token,
                                                  Document doc) throws TrustException {
+
         OMElement reqProofTokElem =
                 TrustUtil.createRequestedProofTokenElement(wstVersion, rstrElem);
 
         if (config.keyComputation == AbstractIssuerConfig.KeyComputation.KEY_COMP_PROVIDE_ENT
-            && data.getRequestEntropy() != null) {
+                && data.getRequestEntropy() != null) {
             //If we there's requester entropy and its configured to provide
             //entropy then we have to set the entropy value and
             //set the RPT to include a ComputedKey element
@@ -103,8 +107,8 @@ public class TokenIssuerUtil {
             OMElement respEntrElem = TrustUtil.createEntropyElement(wstVersion, rstrElem);
             String entr = Base64.encode(data.getResponseEntropy());
             OMElement binSecElem = TrustUtil.createBinarySecretElement(wstVersion,
-                                                            respEntrElem,
-                                                            RahasConstants.BIN_SEC_TYPE_NONCE);
+                    respEntrElem,
+                    RahasConstants.BIN_SEC_TYPE_NONCE);
             binSecElem.setText(entr);
 
             OMElement compKeyElem =
@@ -116,12 +120,12 @@ public class TokenIssuerUtil {
                 Crypto crypto;
                 if (config.cryptoElement != null) { // crypto props defined as elements
                     crypto = CryptoFactory.getInstance(TrustUtil.toProperties(config.cryptoElement),
-                                                       data.getInMessageContext().
-                                                               getAxisService().getClassLoader());
+                            data.getInMessageContext().
+                                    getAxisService().getClassLoader());
                 } else { // crypto props defined in a properties file
                     crypto = CryptoFactory.getInstance(config.cryptoPropertiesFile,
-                                                       data.getInMessageContext().
-                                                               getAxisService().getClassLoader());
+                            data.getInMessageContext().
+                                    getAxisService().getClassLoader());
                 }
 
                 encrKeyBuilder.setKeyIdentifierType(WSConstants.THUMBPRINT_IDENTIFIER);
@@ -130,8 +134,8 @@ public class TokenIssuerUtil {
                     encrKeyBuilder.prepare(doc, crypto);
                 } catch (WSSecurityException e) {
                     throw new TrustException("errorInBuildingTheEncryptedKeyForPrincipal",
-                                             new String[]{data.
-                                                     getClientCert().getSubjectDN().getName()});
+                            new String[]{data.
+                                    getClientCert().getSubjectDN().getName()});
                 }
                 Element encryptedKeyElem = encrKeyBuilder.getEncryptedKeyElement();
                 Element bstElem = encrKeyBuilder.getBinarySecurityTokenElement();
@@ -144,11 +148,11 @@ public class TokenIssuerUtil {
                 token.setSecret(encrKeyBuilder.getEphemeralKey());
             } else if (TokenIssuerUtil.BINARY_SECRET.equals(config.proofKeyType)) {
                 byte[] secret = TokenIssuerUtil.getSharedSecret(data,
-                                                                config.keyComputation,
-                                                                config.keySize);
+                        config.keyComputation,
+                        config.keySize);
                 OMElement binSecElem = TrustUtil.createBinarySecretElement(wstVersion,
-                                                                           reqProofTokElem,
-                                                                           null);
+                        reqProofTokElem,
+                        null);
 
                 binSecElem.setText(Base64.encode(token.getSecret()));
             } else {
@@ -158,6 +162,7 @@ public class TokenIssuerUtil {
     }
 
     private static byte[] generateEphemeralKey(int keySize) throws TrustException {
+
         try {
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             byte[] temp = new byte[keySize / 8];
@@ -169,23 +174,27 @@ public class TokenIssuerUtil {
     }
 
     /**
-     * Util method that checks whether a persister is configured. 
+     * Util method that checks whether a persister is configured.
+     *
      * @param samlIssuerConfig
      * @return
      */
     public static boolean isPersisterConfigured(AbstractIssuerConfig samlIssuerConfig) {
+
         return ((SAMLTokenIssuerConfig) samlIssuerConfig).getPersisterClassName() != null;
     }
 
     /**
      * Set the issuer config in config ctx to be referenced in a later stage of the flow.
+     *
      * @param samlIssuerConfig
      * @param msgCxt
      */
     public static void setIssuerConfigInConfigCtx(AbstractIssuerConfig samlIssuerConfig,
                                                   MessageContext msgCxt) {
+
         msgCxt.getConfigurationContext().setProperty(STSConstants.KEY_ISSUER_CONFIG,
-                                                     samlIssuerConfig);
+                samlIssuerConfig);
     }
 
     /**
@@ -209,10 +218,7 @@ public class TokenIssuerUtil {
             } catch (ClassNotFoundException e) {
                 String errorMsg = "Can not load the class" + persisterClassName;
                 throw new TrustException(errorMsg, e);
-            } catch (InstantiationException e) {
-                String errorMessage = "Can not create token persister instance.";
-                throw new TrustException(errorMessage, e);
-            } catch (IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 String errorMessage = "Can not create token persister instance.";
                 throw new TrustException(errorMessage, e);
             }
@@ -241,22 +247,22 @@ public class TokenIssuerUtil {
                     if (configCtx.getProperty(TokenPersister.TOKEN_PERSISTER_KEY) == null) {
                         TokenPersister tokenPersister = getTokenPersister(config, inMsgCtx);
                         if (tokenPersister != null) {
-                                configCtx.setProperty(TokenPersister.TOKEN_PERSISTER_KEY, tokenPersister);
-                                if (configCtx.getProperty(TokenStorage.TOKEN_STORAGE_KEY) != null) {
-                                    //set persister and storage in Rahas module class to be used for persistence on shutdown.
-                                    Rahas.setPersistanceStorage(tokenPersister, (TokenStorage) configCtx.getProperty(
-                                            TokenStorage.TOKEN_STORAGE_KEY));
-                                }
-                                //set axis2 observer
+                            configCtx.setProperty(TokenPersister.TOKEN_PERSISTER_KEY, tokenPersister);
+                            if (configCtx.getProperty(TokenStorage.TOKEN_STORAGE_KEY) != null) {
+                                //set persister and storage in Rahas module class to be used for persistence on shutdown.
+                                Rahas.setPersistanceStorage(tokenPersister, (TokenStorage) configCtx.getProperty(
+                                        TokenStorage.TOKEN_STORAGE_KEY));
                             }
+                            //set axis2 observer
+                        }
                     }
                 }
             }
             /*set SAMLTokenIssuerConfig in configuration context for reading persister info later.
-            *hence it should be set only once.*/
+             *hence it should be set only once.*/
             if (configCtx.getProperty(STSConstants.KEY_ISSUER_CONFIG) == null) {
                 synchronized (TokenIssuerUtil.class) {
-                    if(configCtx.getProperty(STSConstants.KEY_ISSUER_CONFIG) == null){
+                    if (configCtx.getProperty(STSConstants.KEY_ISSUER_CONFIG) == null) {
                         setIssuerConfigInConfigCtx(config, inMsgCtx);
                     }
                 }
@@ -265,4 +271,35 @@ public class TokenIssuerUtil {
             throw new TrustException("Error in initializing persister settings.", e);
         }
     }
+
+    /**
+     * Retrieve the additional audiences set through the system property <code>sts.saml.additional.audiences</code>
+     *
+     * @param issuerAddress Address of the STS Token requester.
+     * @return A list of additional audiences set through the system property.
+     */
+    public static List<String> getAdditionalAudiences(String issuerAddress) {
+
+        List<String> processedAdditionalAudiences = new ArrayList<>();
+
+        if (StringUtils.isNotBlank(issuerAddress)) {
+            // Retrieve the raw additional audience values from the system property.
+            String rawAdditionalAudiences = System.getProperty("additionalAudienceSTSSAML");
+            // Proceed only if the rawAdditionalAudiences is not empty.
+            if (StringUtils.isNotBlank(rawAdditionalAudiences)) {
+                // Breakdown the audience values (if there are multiple values).
+                if (rawAdditionalAudiences.contains(",")) {
+                    // Add all the broken down values to the list.
+                    processedAdditionalAudiences = Arrays.asList(rawAdditionalAudiences.split(","));
+                } else {
+                    // Only a single audience value hence, adding it to the list.
+                    processedAdditionalAudiences.add(rawAdditionalAudiences);
+                }
+            }
+        }
+
+        // The return can contain multiple audience values or it can also be empty.
+        return processedAdditionalAudiences;
+    }
+
 }
