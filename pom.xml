@@ -555,7 +555,7 @@
         <opensaml1.version>1.1</opensaml1.version>
         <commons.ssl.version>0.3.9</commons.ssl.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <log4j.version>1.2.15</log4j.version>
 
         <!-- distribution properties -->
