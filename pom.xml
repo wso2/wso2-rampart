@@ -418,11 +418,6 @@
                 <artifactId>commons-lang</artifactId>
                 <version>${commons-lang.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.opensaml</groupId>-->
-<!--                <artifactId>opensaml1</artifactId>-->
-<!--                <version>${opensaml1.version}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.ws.security.wso2</groupId>
                 <artifactId>wss4j</artifactId>

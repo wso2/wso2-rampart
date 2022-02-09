@@ -29,7 +29,6 @@ import org.apache.ws.security.handler.WSHandlerConstants;
 import org.apache.ws.security.handler.WSHandlerResult;
 import org.apache.ws.security.KerberosTokenPrincipal;
 import org.apache.ws.security.message.token.SecurityTokenReference;
-//import org.opensaml.SAMLAssertion;
 import org.opensaml.saml2.core.Assertion;
 import org.w3c.dom.Element;
 
@@ -203,8 +202,7 @@ public class RahasData {
 							this.saml2Assertion = (Assertion) wser
 									.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
 						} else {
-//							this.assertion = (SAMLAssertion) wser
-//									.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
+                            throw new TrustException("SAML 1.x is not supported");
 						}
 					} else if (act == WSConstants.KERBEROS || act == WSConstants.KERBEROS_SIGN) {
 						this.principal = (KerberosTokenPrincipal) principalObject;
