@@ -18,7 +18,8 @@
  */
 package org.apache.rahas.impl.util;
 
-import org.opensaml.XML.ParserPool;
+import org.opensaml.xml.parse.ParserPool;
+import org.opensaml.xml.parse.StaticBasicParserPool;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Field;
@@ -27,14 +28,14 @@ import java.lang.reflect.Field;
  * Custom OpenSAML 1.x {@link ParserPool} implementation that uses a DOM aware Axiom implementation
  * instead of requesting a {@link DocumentBuilderFactory} using JAXP.
  */
-public class AxiomParserPool extends ParserPool {
+public class AxiomParserPool extends StaticBasicParserPool {
     public AxiomParserPool() {
         DocumentBuilderFactory dbf = new DOOMDocumentBuilderFactory();
 
         // Unfortunately, ParserPool doesn't allow to set the DocumentBuilderFactory, so that we
         // have to use reflection here.
         try {
-            Field dbfField = ParserPool.class.getDeclaredField("dbf");
+            Field dbfField = StaticBasicParserPool.class.getDeclaredField("builderFactory");
             dbfField.setAccessible(true);
             dbfField.set(this, dbf);
         } catch (IllegalAccessException ex) {

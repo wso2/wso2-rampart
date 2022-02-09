@@ -1,6 +1,6 @@
 package org.apache.rahas.impl.util;
 
-import org.opensaml.SAMLException;
+import org.opensaml.common.SAMLException;
 
 /**
  * SAMLCallback Handler enables you to add data to the

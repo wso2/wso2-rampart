@@ -7,7 +7,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.neethi.Policy;
 import org.apache.ws.secpolicy.SP11Constants;
-import org.opensaml.XML;
 
 import javax.xml.namespace.QName;/*
  * Copyright 2004,2005 The Apache Software Foundation.                         

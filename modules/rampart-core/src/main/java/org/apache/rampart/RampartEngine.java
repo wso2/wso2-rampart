@@ -51,11 +51,11 @@ import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.apache.ws.security.components.crypto.Crypto;
-import org.apache.ws.security.saml.SAMLKeyInfo;
-import org.apache.ws.security.saml.SAMLUtil;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLSubject;
-import org.opensaml.SAMLSubjectStatement;
+//import org.apache.ws.security.saml.SAMLKeyInfo;
+//import org.apache.ws.security.saml.SAMLUtil;
+//import org.opensaml.SAMLAssertion;
+//import org.opensaml.SAMLSubject;
+//import org.opensaml.SAMLSubjectStatement;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Conditions;
 import org.opensaml.saml2.core.Subject;
@@ -319,44 +319,45 @@ public class RampartEngine {
                 }
                 // if this is a SAML1.1 assertion
                 else {
-                    final SAMLAssertion assertion = ((SAMLAssertion) wser
-                            .get(WSSecurityEngineResult.TAG_SAML_ASSERTION));
+//                    final SAMLAssertion assertion = ((SAMLAssertion) wser
+//                            .get(WSSecurityEngineResult.TAG_SAML_ASSERTION));
+//
+//                    Iterator iterator = assertion.getStatements();
+//                    while (iterator.hasNext()) {
+//                        SAMLSubjectStatement samlSubjectStatement = (SAMLSubjectStatement) iterator.next();
+//                        SAMLSubject samlSubject = samlSubjectStatement.getSubject();
+//                        if (samlSubject != null && samlSubject.getNameIdentifier() != null) {
+//                            msgCtx.setProperty(RampartConstants.SAML_SUBJECT_ID,
+//                                               samlSubject.getNameIdentifier().getName());
+//                        }
+//                    }
+//
+//                    // if the subject confirmation method is Bearer, do not try to get the KeyInfo
+//                    if (RahasConstants.SAML11_SUBJECT_CONFIRMATION_BEARER.equals(TrustUtil
+//                                         .getSAML11SubjectConfirmationMethod(assertion)) ||
+//                        RahasConstants.SAML11_SUBJECT_CONFIRMATION_SENDER_VOUCHES.equals(TrustUtil
+//                                         .getSAML11SubjectConfirmationMethod(assertion))) {
+//                        break;
+//                    }
+//
+//                    String id = assertion.getId();
+//                    Date created = assertion.getNotBefore();
+//                    Date expires = assertion.getNotOnOrAfter();
+//                    SAMLKeyInfo samlKi = SAMLUtil.getSAMLKeyInfo(assertion, signatureCrypto,
+//                            tokenCallbackHandler);
+//                    try {
+//                        TokenStorage store = rmd.getTokenStorage();
+//                        if (store.getToken(id) == null) {
+//                            Token token = new Token(id, (OMElement) assertion.toDOM(), created,
+//                                    expires);
+//                            token.setSecret(samlKi.getSecret());
+//                            store.add(token);
+//                        }
+//                    } catch (Exception e) {
+//                        throw new RampartException("errorInAddingTokenIntoStore", e);
+//                    }
 
-                    Iterator iterator = assertion.getStatements();
-                    while (iterator.hasNext()) {
-                        SAMLSubjectStatement samlSubjectStatement = (SAMLSubjectStatement) iterator.next();
-                        SAMLSubject samlSubject = samlSubjectStatement.getSubject();
-                        if (samlSubject != null && samlSubject.getNameIdentifier() != null) {
-                            msgCtx.setProperty(RampartConstants.SAML_SUBJECT_ID,
-                                               samlSubject.getNameIdentifier().getName());
-                        }
-                    }
-
-                    // if the subject confirmation method is Bearer, do not try to get the KeyInfo
-                    if (RahasConstants.SAML11_SUBJECT_CONFIRMATION_BEARER.equals(TrustUtil
-                                         .getSAML11SubjectConfirmationMethod(assertion)) ||
-                        RahasConstants.SAML11_SUBJECT_CONFIRMATION_SENDER_VOUCHES.equals(TrustUtil
-                                         .getSAML11SubjectConfirmationMethod(assertion))) {
-                        break;
-                    }
-
-                    String id = assertion.getId();
-                    Date created = assertion.getNotBefore();
-                    Date expires = assertion.getNotOnOrAfter();
-                    SAMLKeyInfo samlKi = SAMLUtil.getSAMLKeyInfo(assertion, signatureCrypto,
-                            tokenCallbackHandler);
-                    try {
-                        TokenStorage store = rmd.getTokenStorage();
-                        if (store.getToken(id) == null) {
-                            Token token = new Token(id, (OMElement) assertion.toDOM(), created,
-                                    expires);
-                            token.setSecret(samlKi.getSecret());
-                            store.add(token);
-                        }
-                    } catch (Exception e) {
-                        throw new RampartException("errorInAddingTokenIntoStore", e);
-                    }
-
+                    log.error("SAML 1.1 is not supported");
                 }
             } else if (WSConstants.UT == actInt.intValue()) {
 

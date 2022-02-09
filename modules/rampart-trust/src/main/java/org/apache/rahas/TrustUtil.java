@@ -36,8 +36,6 @@ import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.message.token.Reference;
 import org.apache.ws.security.message.token.SecurityTokenReference;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.SAMLSubjectStatement;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.SubjectConfirmation;
 import org.w3c.dom.Document;
@@ -652,24 +650,24 @@ public class TrustUtil {
         return properties;
     }
 
-    /**
-     * Get subject confirmation method of the given SAML 1.1 Assertion
-     * @param assertion SAML 1.1 Assertion
-     * @return  subject confirmation method
-     */
-    public static String getSAML11SubjectConfirmationMethod(SAMLAssertion assertion){
-        String subjectConfirmationMethod =  RahasConstants.SAML11_SUBJECT_CONFIRMATION_HOK;
-        // iterate the statements and get the subject confirmation method.
-        Iterator statements = assertion.getStatements();
-        if(statements.hasNext()){
-            SAMLSubjectStatement stmt = (SAMLSubjectStatement)statements.next();
-            Iterator subjectConfirmations = stmt.getSubject().getConfirmationMethods();
-            if(subjectConfirmations.hasNext()){
-                subjectConfirmationMethod = (String)subjectConfirmations.next();
-            }
-        }
-        return subjectConfirmationMethod;
-    }
+//    /**
+//     * Get subject confirmation method of the given SAML 1.1 Assertion
+//     * @param assertion SAML 1.1 Assertion
+//     * @return  subject confirmation method
+//     */
+//    public static String getSAML11SubjectConfirmationMethod(SAMLAssertion assertion){
+//        String subjectConfirmationMethod =  RahasConstants.SAML11_SUBJECT_CONFIRMATION_HOK;
+//        // iterate the statements and get the subject confirmation method.
+//        Iterator statements = assertion.getStatements();
+//        if(statements.hasNext()){
+//            SAMLSubjectStatement stmt = (SAMLSubjectStatement)statements.next();
+//            Iterator subjectConfirmations = stmt.getSubject().getConfirmationMethods();
+//            if(subjectConfirmations.hasNext()){
+//                subjectConfirmationMethod = (String)subjectConfirmations.next();
+//            }
+//        }
+//        return subjectConfirmationMethod;
+//    }
 
     /**
      * Get the subject confirmation method of a SAML 2.0 assertion

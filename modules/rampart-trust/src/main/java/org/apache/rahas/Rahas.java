@@ -26,9 +26,9 @@ import org.apache.neethi.Assertion;
 import org.apache.neethi.Policy;
 import org.apache.rahas.impl.util.AxiomParserPool;
 import org.opensaml.DefaultBootstrap;
-import org.opensaml.XML;
+import org.opensaml.Configuration;
 import org.opensaml.xml.ConfigurationException;
-
+import org.opensaml.xml.parse.XMLParserException;
 
 public class Rahas implements Module {
 
@@ -41,7 +41,14 @@ public class Rahas implements Module {
             throws AxisFault {
         if (TrustUtil.isDoomParserPoolUsed()) {
             // Set up OpenSAML to use a DOM aware Axiom implementation
-            XML.parserPool = new AxiomParserPool();
+            AxiomParserPool pp = new AxiomParserPool();
+            pp.setMaxPoolSize(50);
+            try {
+                pp.initialize();
+            } catch (XMLParserException e) {
+                throw new AxisFault("Error initializing axiom based parser pool", e);
+            }
+            Configuration.setParserPool(pp);
             try {
                 DefaultBootstrap.bootstrap();
             } catch (ConfigurationException ex) {
