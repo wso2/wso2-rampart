@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.rahas.RahasData;
-import org.opensaml.common.SAMLObject;
+import org.opensaml.saml.common.SAMLObject;
 
 
 @SuppressWarnings({"UnusedDeclaration"})
@@ -26,7 +26,7 @@ public class SAMLAttributeCallback implements SAMLCallback{
 	 * Overloaded  method to support SAML2
 	 * @param attribute SAML2 attribute.
 	 */
-	public void addAttributes(org.opensaml.saml2.core.Attribute attribute){
+	public void addAttributes(org.opensaml.saml.saml2.core.Attribute attribute){
 		attributes.add(attribute);
 	}
 
@@ -34,9 +34,9 @@ public class SAMLAttributeCallback implements SAMLCallback{
 	 * Get the array of SAML2 attributes.
 	 * @return SAML2 attribute list.
 	 */
-	public org.opensaml.saml2.core.Attribute[] getSAML2Attributes(){
-		return (org.opensaml.saml2.core.Attribute[])attributes.toArray
-				(new org.opensaml.saml2.core.Attribute[attributes.size()]);
+	public org.opensaml.saml.saml2.core.Attribute[] getSAML2Attributes(){
+		return (org.opensaml.saml.saml2.core.Attribute[])attributes.toArray
+				(new org.opensaml.saml.saml2.core.Attribute[attributes.size()]);
 	}
 
 	public RahasData getData() {

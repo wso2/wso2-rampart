@@ -29,7 +29,7 @@ import org.apache.ws.security.handler.WSHandlerConstants;
 import org.apache.ws.security.handler.WSHandlerResult;
 import org.apache.ws.security.KerberosTokenPrincipal;
 import org.apache.ws.security.message.token.SecurityTokenReference;
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;

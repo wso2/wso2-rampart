@@ -44,7 +44,15 @@
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
+            <artifactId>opensaml-xacml-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-xacml-saml-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-saml-impl</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -175,17 +183,7 @@
                             org.apache.xml.security.keys.content.x509; version="${imp.pkg.version.xmlsec}",
                             org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
                             org.joda.time,
-                            org.opensaml,
-                            org.opensaml.common,
-                            org.opensaml.saml2.core,
-                            org.opensaml.saml2.core.impl,
-                            org.opensaml.xml,
-                            org.opensaml.xml.io,
-                            org.opensaml.xml.schema,
-                            org.opensaml.xml.schema.impl,
-                            org.opensaml.xml.security.credential,
-                            org.opensaml.xml.security.x509,
-                            org.opensaml.xml.signature,
+                            org.opensaml.*,
                             org.w3c.dom,
                             org.w3c.dom.bootstrap,
                             org.w3c.dom.ls,

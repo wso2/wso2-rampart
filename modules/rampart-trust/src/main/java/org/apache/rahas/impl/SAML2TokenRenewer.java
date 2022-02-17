@@ -20,23 +20,29 @@ import org.apache.ws.security.util.XmlSchemaDateFormat;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.joda.time.DateTime;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.common.impl.SAMLObjectContentReference;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.Conditions;
-import org.opensaml.saml2.core.impl.ConditionsBuilder;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.XMLObjectBuilder;
-import org.opensaml.xml.io.*;
-import org.opensaml.xml.signature.KeyInfo;
-import org.opensaml.xml.signature.Signature;
-import org.opensaml.xml.signature.Signer;
-import org.opensaml.xml.signature.X509Data;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.saml.common.SAMLObjectContentReference;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Conditions;
+import org.opensaml.saml.saml2.core.impl.ConditionsBuilder;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.XMLObjectBuilder;
+import org.opensaml.core.xml.io.*;
+import org.opensaml.core.xml.io.MarshallerFactory;
+import org.opensaml.core.xml.io.Marshaller;
+import org.opensaml.xmlsec.signature.KeyInfo;
+import org.opensaml.xmlsec.signature.Signature;
+import org.opensaml.xmlsec.signature.support.Signer;
+import org.opensaml.xmlsec.signature.X509Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
@@ -108,8 +114,9 @@ public class SAML2TokenRenewer implements TokenRenewer {
             Document document = docBuilder.parse(new ByteArrayInputStream(s.trim().getBytes()));
             Element element = document.getDocumentElement();
             // Unmarshall the DOMElement to build the assertion
-            DefaultBootstrap.bootstrap();
-            UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
+            // TODO: bootstrap here
+            SAMLInitializer.doBootstrap();
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
             Assertion samlAssertion = (Assertion) unmarshaller.unmarshall(element);
 
@@ -135,7 +142,7 @@ public class SAML2TokenRenewer implements TokenRenewer {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
         } catch (UnmarshallingException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
-        } catch (ConfigurationException e) {
+        } catch (InitializationException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
         } catch (IOException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
@@ -184,7 +191,7 @@ public class SAML2TokenRenewer implements TokenRenewer {
     private Assertion signAssertion(Assertion assertion, SignKeyHolder cred) throws TrustException {
 
         // Build the signature object and set the credentials.
-        Signature signature = (Signature) Configuration.getBuilderFactory()
+        Signature signature = (Signature) XMLObjectProviderRegistrySupport.getBuilderFactory()
                 .getBuilder(Signature.DEFAULT_ELEMENT_NAME)
                 .buildObject(Signature.DEFAULT_ELEMENT_NAME);
         signature.setSigningCredential(cred);
@@ -194,7 +201,7 @@ public class SAML2TokenRenewer implements TokenRenewer {
         try {
             KeyInfo keyInfo = (KeyInfo) buildXMLObject(KeyInfo.DEFAULT_ELEMENT_NAME);
             X509Data data = (X509Data) buildXMLObject(X509Data.DEFAULT_ELEMENT_NAME);
-            org.opensaml.xml.signature.X509Certificate cert = (org.opensaml.xml.signature.X509Certificate) buildXMLObject(org.opensaml.xml.signature.X509Certificate.DEFAULT_ELEMENT_NAME);
+            org.opensaml.xmlsec.signature.X509Certificate cert = (org.opensaml.xmlsec.signature.X509Certificate) buildXMLObject(org.opensaml.xmlsec.signature.X509Certificate.DEFAULT_ELEMENT_NAME);
             String value = org.apache.xml.security.utils.Base64.encode(cred.getEntityCertificate().getEncoded());
             cert.setValue(value);
             data.getX509Certificates().add(cert);
@@ -211,7 +218,7 @@ public class SAML2TokenRenewer implements TokenRenewer {
                 }
             }
             signatureList.add(signature);
-            MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
+            MarshallerFactory marshallerFactory = XMLObjectProviderRegistrySupport.getMarshallerFactory();
             Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
             Element assertionElem = marshaller.marshall(assertion);
             org.apache.xml.security.Init.init();
@@ -232,7 +239,7 @@ public class SAML2TokenRenewer implements TokenRenewer {
      * @throws Exception
      */
     protected static XMLObject buildXMLObject(QName objectQName) throws Exception {
-        XMLObjectBuilder builder = org.opensaml.xml.Configuration.getBuilderFactory().getBuilder(objectQName);
+        XMLObjectBuilder builder = XMLObjectProviderRegistrySupport.getBuilderFactory().getBuilder(objectQName);
         if (builder == null) {
             throw new TrustException("Unable to retrieve builder for object QName "
                     + objectQName);

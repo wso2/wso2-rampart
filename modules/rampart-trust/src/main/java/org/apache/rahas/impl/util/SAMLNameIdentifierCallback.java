@@ -1,7 +1,7 @@
 package org.apache.rahas.impl.util;
 
 import org.apache.rahas.RahasData;
-import org.opensaml.saml1.core.NameIdentifier;
+import org.opensaml.saml.saml1.core.NameIdentifier;
 
 /**
  * This is used retrieve data for the SAMLNameIdentifier.

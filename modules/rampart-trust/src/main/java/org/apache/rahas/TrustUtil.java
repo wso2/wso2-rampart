@@ -36,8 +36,8 @@ import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.message.token.Reference;
 import org.apache.ws.security.message.token.SecurityTokenReference;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.SubjectConfirmation;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.SubjectConfirmation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

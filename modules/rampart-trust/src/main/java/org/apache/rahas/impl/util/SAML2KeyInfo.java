@@ -1,6 +1,6 @@
 package org.apache.rahas.impl.util;
 
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 
 import java.security.cert.X509Certificate;/*
  * Copyright 2004,2005 The Apache Software Foundation.                         

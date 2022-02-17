@@ -141,7 +141,15 @@
         </dependency>
         <dependency>
             <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
+            <artifactId>opensaml-xacml-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-xacml-saml-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensaml</groupId>
+            <artifactId>opensaml-saml-impl</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -192,9 +200,7 @@
                             org.apache.ws.secpolicy.model; version="${imp.pkg.version.range.rampart}",
                             org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
                             org.jaxen, org.joda.time,
-                            org.opensaml,
-                            org.opensaml.saml2.core,
-                            org.opensaml.xml,
+                            org.opensaml.*,
                             org.w3c.dom
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
