@@ -22,7 +22,6 @@ import org.opensaml.security.credential.CredentialContextSet;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.x509.X509Credential;
 
-import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -110,7 +109,6 @@ public class SignKeyHolder implements X509Credential {
         return null;
     }
 
-    @Nullable
     @Override
     public CredentialContextSet getCredentialContextSet() {
         return null;

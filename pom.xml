@@ -400,16 +400,6 @@
             </dependency>
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-xacml-impl</artifactId>
-                <version>${opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml-xacml-saml-impl</artifactId>
-                <version>${opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
                 <artifactId>opensaml-saml-impl</artifactId>
                 <version>${opensaml.version}</version>
                 <exclusions>
