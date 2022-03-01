@@ -5,6 +5,7 @@ import org.apache.axiom.om.OMNode;
 import org.apache.axiom.om.impl.dom.jaxp.DocumentBuilderFactoryImpl;
 import org.apache.axiom.soap.SOAPEnvelope;
 import org.apache.axis2.context.MessageContext;
+import org.apache.axis2.description.Parameter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,28 +14,35 @@ import org.apache.rahas.impl.util.SAMLUtils;
 import org.apache.rahas.impl.util.SignKeyHolder;
 import org.apache.ws.security.WSSecurityException;
 import org.apache.ws.security.components.crypto.Crypto;
+import org.apache.ws.security.components.crypto.CryptoFactory;
 import org.apache.ws.security.saml.SAMLUtil;
 import org.apache.ws.security.util.XmlSchemaDateFormat;
 import org.apache.xml.security.c14n.Canonicalizer;
 import org.apache.xml.security.signature.XMLSignature;
 import org.joda.time.DateTime;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.common.impl.SAMLObjectContentReference;
-import org.opensaml.saml2.core.Assertion;
-import org.opensaml.saml2.core.Conditions;
-import org.opensaml.saml2.core.impl.ConditionsBuilder;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.XMLObjectBuilder;
-import org.opensaml.xml.io.*;
-import org.opensaml.xml.signature.KeyInfo;
-import org.opensaml.xml.signature.Signature;
-import org.opensaml.xml.signature.Signer;
-import org.opensaml.xml.signature.X509Data;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.core.xml.io.UnmarshallingException;
+import org.opensaml.saml.common.SAMLObjectContentReference;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Conditions;
+import org.opensaml.saml.saml2.core.impl.ConditionsBuilder;
+import org.opensaml.core.xml.io.Unmarshaller;
+import org.opensaml.core.xml.io.UnmarshallerFactory;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.XMLObjectBuilder;
+import org.opensaml.core.xml.io.*;
+import org.opensaml.core.xml.io.MarshallerFactory;
+import org.opensaml.core.xml.io.Marshaller;
+import org.opensaml.xmlsec.signature.KeyInfo;
+import org.opensaml.xmlsec.signature.Signature;
+import org.opensaml.xmlsec.signature.support.Signer;
+import org.opensaml.xmlsec.signature.X509Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.QName;
@@ -50,7 +58,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer {
+public class SAML2TokenRenewer implements TokenRenewer {
+
+    private String configParamName;
+
+    private OMElement configElement;
+
+    private String configFile;
 
     protected List<Signature> signatureList = new ArrayList<Signature>();
 
@@ -100,8 +114,9 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
             Document document = docBuilder.parse(new ByteArrayInputStream(s.trim().getBytes()));
             Element element = document.getDocumentElement();
             // Unmarshall the DOMElement to build the assertion
-            DefaultBootstrap.bootstrap();
-            UnmarshallerFactory unmarshallerFactory = Configuration.getUnmarshallerFactory();
+            // TODO: bootstrap here
+            SAMLInitializer.doBootstrap();
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);
             Assertion samlAssertion = (Assertion) unmarshaller.unmarshall(element);
 
@@ -127,7 +142,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
         } catch (UnmarshallingException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
-        } catch (ConfigurationException e) {
+        } catch (InitializationException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
         } catch (IOException e) {
             throw new TrustException("Cannot create SAML 2.0 Assertion", e);
@@ -176,7 +191,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
     private Assertion signAssertion(Assertion assertion, SignKeyHolder cred) throws TrustException {
 
         // Build the signature object and set the credentials.
-        Signature signature = (Signature) Configuration.getBuilderFactory()
+        Signature signature = (Signature) XMLObjectProviderRegistrySupport.getBuilderFactory()
                 .getBuilder(Signature.DEFAULT_ELEMENT_NAME)
                 .buildObject(Signature.DEFAULT_ELEMENT_NAME);
         signature.setSigningCredential(cred);
@@ -186,7 +201,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
         try {
             KeyInfo keyInfo = (KeyInfo) buildXMLObject(KeyInfo.DEFAULT_ELEMENT_NAME);
             X509Data data = (X509Data) buildXMLObject(X509Data.DEFAULT_ELEMENT_NAME);
-            org.opensaml.xml.signature.X509Certificate cert = (org.opensaml.xml.signature.X509Certificate) buildXMLObject(org.opensaml.xml.signature.X509Certificate.DEFAULT_ELEMENT_NAME);
+            org.opensaml.xmlsec.signature.X509Certificate cert = (org.opensaml.xmlsec.signature.X509Certificate) buildXMLObject(org.opensaml.xmlsec.signature.X509Certificate.DEFAULT_ELEMENT_NAME);
             String value = org.apache.xml.security.utils.Base64.encode(cred.getEntityCertificate().getEncoded());
             cert.setValue(value);
             data.getX509Certificates().add(cert);
@@ -203,7 +218,7 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
                 }
             }
             signatureList.add(signature);
-            MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
+            MarshallerFactory marshallerFactory = XMLObjectProviderRegistrySupport.getMarshallerFactory();
             Marshaller marshaller = marshallerFactory.getMarshaller(assertion);
             Element assertionElem = marshaller.marshall(assertion);
             org.apache.xml.security.Init.init();
@@ -224,12 +239,124 @@ public class SAML2TokenRenewer extends SAMLTokenRenewer implements TokenRenewer 
      * @throws Exception
      */
     protected static XMLObject buildXMLObject(QName objectQName) throws Exception {
-        XMLObjectBuilder builder = org.opensaml.xml.Configuration.getBuilderFactory().getBuilder(objectQName);
+        XMLObjectBuilder builder = XMLObjectProviderRegistrySupport.getBuilderFactory().getBuilder(objectQName);
         if (builder == null) {
             throw new TrustException("Unable to retrieve builder for object QName "
                     + objectQName);
         }
         return builder.buildObject(objectQName.getNamespaceURI(), objectQName.getLocalPart(),
                 objectQName.getPrefix());
+    }
+
+    /**
+     * set the configuration for SAML 1.1 and 2.0 renewing
+     * @param inMsgCtx
+     * @return
+     * @throws TrustException
+     */
+    protected SAMLTokenIssuerConfig  setConfig(MessageContext inMsgCtx) throws TrustException {
+        SAMLTokenIssuerConfig config = null;
+        if (this.configElement != null) {
+            config = new SAMLTokenIssuerConfig(configElement
+                    .getFirstChildWithName(SAMLTokenIssuerConfig.SAML_ISSUER_CONFIG));
+        }
+        // Look for the file
+        if (config == null && this.configFile != null) {
+            config = new SAMLTokenIssuerConfig(this.configFile);
+        }
+        // Look for the param
+        if (config == null && this.configParamName != null) {
+            Parameter param = inMsgCtx.getParameter(this.configParamName);
+            if (param != null && param.getParameterElement() != null) {
+                config = new SAMLTokenIssuerConfig(param
+                        .getParameterElement().getFirstChildWithName(
+                                SAMLTokenIssuerConfig.SAML_ISSUER_CONFIG));
+            } else {
+                throw new TrustException("expectedParameterMissing",
+                        new String[] { this.configParamName });
+            }
+        }
+        if (config == null) {
+            throw new TrustException("configurationIsNull");
+        }
+        if(config.isTokenStoreDisabled()){
+            throw new TrustException("errorTokenStoreDisabled");
+        }
+        //initialize and set token persister and config in configuration context.
+        if (TokenIssuerUtil.isPersisterConfigured(config)) {
+            TokenIssuerUtil.manageTokenPersistenceSettings(config, inMsgCtx);
+        }
+        return config;
+    }
+
+    /**
+     * create the RSTR element with the token type
+     * @param inMsgCtx
+     * @param data
+     * @param env
+     * @param tokenType
+     * @return
+     * @throws TrustException
+     */
+    protected OMElement buildResponse(MessageContext inMsgCtx, RahasData data, SOAPEnvelope env, String tokenType) throws TrustException {
+        // Create RSTR element, with respective version
+        OMElement rstrElem;
+        int wstVersion = data.getVersion();
+        if (RahasConstants.VERSION_05_02 == wstVersion) {
+            rstrElem = TrustUtil.createRequestSecurityTokenResponseElement(
+                    wstVersion, env.getBody());
+        } else {
+            OMElement rstrcElem = TrustUtil
+                    .createRequestSecurityTokenResponseCollectionElement(
+                            wstVersion, env.getBody());
+            rstrElem = TrustUtil.createRequestSecurityTokenResponseElement(
+                    wstVersion, rstrcElem);
+        }
+        // Create TokenType element
+        TrustUtil.createTokenTypeElement(wstVersion, rstrElem).setText(
+                tokenType);
+        return rstrElem;
+    }
+
+    /**
+     * create the crypto from configuration. Used in SAML2tokenRenewer as well
+     * @param inMsgCtx
+     * @param config
+     * @return
+     */
+    protected Crypto getCrypto(MessageContext inMsgCtx, SAMLTokenIssuerConfig config){
+        Crypto crypto;
+        if (config.cryptoElement != null) {
+            // crypto props defined as elements
+            crypto = CryptoFactory.getInstance(TrustUtil
+                    .toProperties(config.cryptoElement), inMsgCtx
+                    .getAxisService().getClassLoader());
+        } else {
+            // crypto props defined in a properties file
+            crypto = CryptoFactory.getInstance(config.cryptoPropertiesFile,
+                    inMsgCtx.getAxisService().getClassLoader());
+        }
+        return crypto;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setConfigurationFile(String configFile) {
+        this.configFile = configFile;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setConfigurationElement(OMElement configElement) {
+        this.configElement = configElement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setConfigurationParamName(String configParamName) {
+        this.configParamName = configParamName;
     }
 }

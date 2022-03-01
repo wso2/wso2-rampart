@@ -33,18 +33,24 @@ import org.apache.xml.security.exceptions.XMLSecurityException;
 import org.apache.xml.security.keys.KeyInfo;
 import org.apache.xml.security.keys.content.X509Data;
 import org.apache.xml.security.keys.content.x509.XMLX509Certificate;
-import org.opensaml.Configuration;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.saml2.core.*;
-import org.opensaml.xml.ConfigurationException;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.io.*;
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.saml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.AttributeStatement;
+import org.opensaml.saml.saml2.core.Subject;
+import org.opensaml.saml.saml2.core.SubjectConfirmation;
+import org.opensaml.core.config.InitializationException;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.core.xml.io.*;
 import org.w3c.dom.*;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 import org.xml.sax.SAXException;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.saml.saml2.core.SubjectConfirmationData;
+import org.opensaml.saml.saml2.core.AuthnStatement;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -74,7 +80,7 @@ public class SAML2Utils {
             String jaxpProperty = System.getProperty("javax.xml.parsers.DocumentBuilderFactory");
             System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
 
-            MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
+            MarshallerFactory marshallerFactory = XMLObjectProviderRegistrySupport.getMarshallerFactory();
             Marshaller marshaller = marshallerFactory.getMarshaller(xmlObj);
             Element element = marshaller.marshall(xmlObj);
 
@@ -131,7 +137,7 @@ public class SAML2Utils {
 
         //build the assertion by unmarhalling the DOM element.
         try {
-            DefaultBootstrap.bootstrap();
+            SAMLInitializer.doBootstrap();
 
             String keyInfoElementString = elem.toString();
             DocumentBuilderFactory documentBuilderFactory = TrustUtil.getSecuredDocumentBuilderFactory();
@@ -139,14 +145,14 @@ public class SAML2Utils {
             DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new ByteArrayInputStream(keyInfoElementString.trim().getBytes()));
             Element element = document.getDocumentElement();
-            UnmarshallerFactory unmarshallerFactory = Configuration
+            UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport
                     .getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory
                     .getUnmarshaller(element);
             assertion = (Assertion) unmarshaller
                     .unmarshall(element);
         }
-        catch (ConfigurationException e) {
+        catch (InitializationException e) {
             throw new WSSecurityException(
                     WSSecurityException.FAILURE, "Failure in bootstrapping", null, e);
         } catch (UnmarshallingException e) {
@@ -215,7 +221,7 @@ public class SAML2Utils {
                 Iterator<XMLObject> iterator = scDataElements.iterator();
                 while (iterator.hasNext()) {
                     XMLObject xmlObj = iterator.next();
-                    if (xmlObj instanceof org.opensaml.xml.signature.KeyInfo) {
+                    if (xmlObj instanceof org.opensaml.xmlsec.signature.KeyInfo) {
                         KIElem = xmlObj;
                         break;
                     }
@@ -231,7 +237,7 @@ public class SAML2Utils {
                     String jaxpProperty = System.getProperty("javax.xml.parsers.DocumentBuilderFactory");
                     System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
 
-                    MarshallerFactory marshallerFactory = org.opensaml.xml.Configuration.getMarshallerFactory();
+                    MarshallerFactory marshallerFactory = XMLObjectProviderRegistrySupport.getMarshallerFactory();
                     Marshaller marshaller = marshallerFactory.getMarshaller(KIElem);
                     keyInfoElement = marshaller.marshall(KIElem);
 

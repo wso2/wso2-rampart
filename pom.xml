@@ -400,13 +400,38 @@
             </dependency>
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>opensaml</artifactId>
+                <artifactId>opensaml-saml-impl</artifactId>
                 <version>${opensaml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>xmltooling</artifactId>
-                <version>${opensaml.xmltooling.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml-soap-impl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml-storage-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.opensaml</groupId>
+                        <artifactId>opensaml-messaging-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.velocity</groupId>
+                        <artifactId>velocity</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.httpcomponents</groupId>
+                        <artifactId>httpclient</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons.ssl</groupId>
@@ -417,11 +442,6 @@
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>${commons-lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.opensaml</groupId>
-                <artifactId>opensaml1</artifactId>
-                <version>${opensaml1.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.ws.security.wso2</groupId>
@@ -472,6 +492,11 @@
                         <groupId>xalan</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.saml.common</groupId>
+                <artifactId>org.wso2.carbon.identity.saml.common.util</artifactId>
+                <version>${saml.common.util.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -546,13 +571,10 @@
         <axis2.version>1.6.1-wso2v37</axis2.version>
         <axiom.version>1.2.11-wso2v16</axiom.version>
 
-        <wss4j.version>1.5.11-wso2v20</wss4j.version>
-        <xmlsec.version>1.4.2</xmlsec.version>
+        <wss4j.version>1.6.0-wso2v1</wss4j.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
-        <opensaml.version>2.6.6</opensaml.version>
-        <opensaml.xmltooling.version>1.4.6</opensaml.xmltooling.version>
-        <opensaml1.version>1.1</opensaml1.version>
+        <opensaml.version>3.3.1</opensaml.version>
         <commons.ssl.version>0.3.9</commons.ssl.version>
 
         <junit.version>4.12</junit.version>
@@ -570,7 +592,7 @@
         <imp.pkg.version.javax.xml>1.0.1</imp.pkg.version.javax.xml>
         <imp.pkg.version.range.commons.logging>[1.0.4,2.0.0)</imp.pkg.version.range.commons.logging>
         <imp.pkg.version.range.xml.stream>[1.0.1,2.0.0)</imp.pkg.version.range.xml.stream>
-        <imp.pkg.version.xmlsec>[1.4.2, 2.0.0)</imp.pkg.version.xmlsec>
+        <imp.pkg.version.xmlsec>[1.4.2, 2.3.0)</imp.pkg.version.xmlsec>
         <commons-logging.version>1.1.1</commons-logging.version>
         <commons-lang.version>2.3</commons-lang.version>
         <felix-framework.version>1.0.3</felix-framework.version>
@@ -594,6 +616,8 @@
         <target.java.version>1.7</target.java.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
+
+        <saml.common.util.version>1.0.9</saml.common.util.version>
 
     </properties>
 

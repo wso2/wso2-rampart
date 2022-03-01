@@ -23,7 +23,7 @@ import org.apache.rampart.handler.config.OutflowConfiguration;
 import org.apache.rampart.handler.config.InflowConfiguration;
 import org.apache.neethi.Policy;
 import org.apache.ws.secpolicy.SP11Constants;
-import org.opensaml.XML;
+
 
 import javax.xml.namespace.QName;
 public class RahasSAML2TokenTest extends TestClient{

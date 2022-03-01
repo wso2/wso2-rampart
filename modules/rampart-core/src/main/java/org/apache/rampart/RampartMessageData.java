@@ -47,8 +47,7 @@ import org.apache.ws.security.message.WSSecHeader;
 import org.apache.ws.security.message.token.SecurityContextToken;
 import org.apache.ws.security.util.Loader;
 import org.apache.ws.security.util.WSSecurityUtil;
-import org.opensaml.SAMLAssertion;
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 import org.w3c.dom.Document;
 
 import java.util.ArrayList;
@@ -655,10 +654,9 @@ public class RampartMessageData {
 								.get(j);
 						Integer actInt = (Integer) wser.get(WSSecurityEngineResult.TAG_ACTION);
 						if (WSConstants.ST_UNSIGNED == actInt.intValue())
-							if (wser.get(WSSecurityEngineResult.TAG_SAML_ASSERTION) instanceof SAMLAssertion) {
-								SAMLAssertion assertion = (SAMLAssertion) wser
-										.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);
-								return assertion.getId();
+							if (wser.get(WSSecurityEngineResult.TAG_SAML_ASSERTION) instanceof org.opensaml.saml.saml1.core.Assertion) {
+							    // TODO: Add not supported log
+							    return null;
 							} else {
 								Assertion assertion = (Assertion) wser
 										.get(WSSecurityEngineResult.TAG_SAML_ASSERTION);

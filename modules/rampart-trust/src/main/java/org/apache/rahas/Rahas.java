@@ -15,6 +15,7 @@
  */
 package org.apache.rahas;
 
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.description.AxisDescription;
@@ -25,10 +26,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.neethi.Assertion;
 import org.apache.neethi.Policy;
 import org.apache.rahas.impl.util.AxiomParserPool;
-import org.opensaml.DefaultBootstrap;
-import org.opensaml.XML;
-import org.opensaml.xml.ConfigurationException;
-
+import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.config.InitializationException;
+import org.wso2.carbon.identity.saml.common.util.SAMLInitializer;
 
 public class Rahas implements Module {
 
@@ -39,14 +39,23 @@ public class Rahas implements Module {
 
     public void init(ConfigurationContext configurationContext, AxisModule axisModule)
             throws AxisFault {
+
+        try {
+            SAMLInitializer.doBootstrap();
+        } catch (InitializationException ex) {
+            throw new AxisFault("Failed to bootstrap OpenSAML", ex);
+        }
+
         if (TrustUtil.isDoomParserPoolUsed()) {
             // Set up OpenSAML to use a DOM aware Axiom implementation
-            XML.parserPool = new AxiomParserPool();
+            AxiomParserPool pp = new AxiomParserPool();
+            pp.setMaxPoolSize(50);
             try {
-                DefaultBootstrap.bootstrap();
-            } catch (ConfigurationException ex) {
-                throw new AxisFault("Failed to bootstrap OpenSAML", ex);
+                pp.initialize();
+            } catch (ComponentInitializationException e) {
+                throw new AxisFault("Error initializing axiom based parser pool", e);
             }
+            XMLObjectProviderRegistrySupport.setParserPool(pp);
         }
     }
 
