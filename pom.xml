@@ -571,7 +571,7 @@
         <axis2.version>1.6.1-wso2v37</axis2.version>
         <axiom.version>1.2.11-wso2v16</axiom.version>
 
-        <wss4j.version>1.6.0-wso2v1</wss4j.version>
+        <wss4j.version>1.6.17</wss4j.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
         <neethi.version>2.0.4.wso2v5</neethi.version>
         <opensaml.version>3.3.1</opensaml.version>
