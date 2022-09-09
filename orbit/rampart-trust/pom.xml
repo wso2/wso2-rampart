@@ -92,7 +92,7 @@
                     <artifactId>rampart-policy</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.apache.santuario</groupId>
+                    <groupId>org.wso2.santuario.orbit</groupId>
                     <artifactId>xmlsec</artifactId>
                 </exclusion>
                 <exclusion>
