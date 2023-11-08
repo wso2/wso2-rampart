@@ -15,7 +15,7 @@
         <dependencySet>
             <outputDirectory>${dist.dir}/lib</outputDirectory>
             <includes>
-                <include>org.apache.santuario:xmlsec:jar</include>
+                <include>org.wso2.santuario.orbit:xmlsec:jar</include>
                 <include>opensaml:opensaml:jar</include>
                 <include>org.apache.ws.security:wss4j:jar</include>
                 <include>bouncycastle:bcprov-jdk15:jar</include>
