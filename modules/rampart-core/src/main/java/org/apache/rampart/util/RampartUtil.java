@@ -37,6 +37,7 @@ import org.apache.axis2.mex.om.MetadataReference;
 import org.apache.axis2.mex.om.MetadataSection;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.neethi.Policy;
@@ -52,6 +53,7 @@ import org.apache.rampart.RampartConfigCallbackHandler;
 import org.apache.rampart.RampartConstants;
 import org.apache.rampart.RampartException;
 import org.apache.rampart.RampartMessageData;
+import org.apache.rampart.handler.config.ResolverFactory;
 import org.apache.rampart.policy.RampartPolicyData;
 import org.apache.rampart.policy.SupportingPolicyData;
 import org.apache.rampart.policy.model.CryptoConfig;
@@ -92,6 +94,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RampartUtil {
 
@@ -1778,5 +1782,23 @@ public class RampartUtil {
 
     }
 
+    public static Properties updateProperty(Properties prop) {
+        if (prop.size() > 0) {
+            for (Map.Entry<Object, Object> entry : prop.entrySet()) {
+                prop.put(entry.getKey(), getActualValue(entry.getValue().toString()));
+            }
+        }
+        return prop;
+    }
 
+    public static String getActualValue(String value) {
+        if (StringUtils.isNotBlank(value)) {
+            Pattern rePattern = Pattern.compile("(\\$)([_a-zA-Z0-9]+):([_a-zA-Z0-9]+)");
+            Matcher matcher = rePattern.matcher(value);
+            if (matcher.find()) {
+                return ResolverFactory.getInstance().getResolver(value).resolve();
+            }
+        }
+        return value;
+    }
 }

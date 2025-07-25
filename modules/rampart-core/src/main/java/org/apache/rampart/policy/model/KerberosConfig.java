@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.neethi.Assertion;
 import org.apache.neethi.Constants;
 import org.apache.neethi.PolicyComponent;
+import org.apache.rampart.util.RampartUtil;
 
 public class KerberosConfig implements Assertion {
     
@@ -30,7 +31,7 @@ public class KerberosConfig implements Assertion {
     }
 
     public void setProp(Properties prop) {
-        this.prop = prop;
+        this.prop = RampartUtil.updateProperty(prop);
     }
 
     public PolicyComponent normalize() {
