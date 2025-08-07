@@ -89,8 +89,7 @@ public class ResolverFactory {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Added Resolver " + className + " to resolver factory ");
                 }
-            }
-            else {
+            } else {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Failed to Resolver " + className + " to resolver factory. Already exist");
                 }

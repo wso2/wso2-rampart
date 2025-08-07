@@ -475,9 +475,9 @@ public class RampartConfig implements Assertion {
             writer.writeEndElement();
         }
 
-        if (isOptimizeMessageProcessingForTransportBinding()) {
+        if (optimizeMessageProcessingForTransportBinding) {
             writer.writeStartElement(NS, OPTIMIZE_MSG_PROCESSING_TRANSPORT_BINDING);
-            writer.writeCharacters(Boolean.toString(isOptimizeMessageProcessingForTransportBinding()));
+            writer.writeCharacters(Boolean.toString(optimizeMessageProcessingForTransportBinding));
             writer.writeEndElement();
         }
 
