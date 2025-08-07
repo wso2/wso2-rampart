@@ -188,8 +188,7 @@ public class RampartConfigBuilder implements AssertionBuilder {
         childElement = element.getFirstChildWithName(new QName(
                 RampartConfig.NS, RampartConfig.OPTIMIZE_MSG_PROCESSING_TRANSPORT_BINDING));
         if (childElement != null) {
-            rampartConfig.setOptimizeMessageProcessingForTransportBinding(
-                    Boolean.parseBoolean(childElement.getText()));
+            rampartConfig.setOptimizeMessageProcessingForTransportBinding(childElement.getText());
         }
 
         return rampartConfig;

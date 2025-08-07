@@ -10,27 +10,28 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.neethi.Assertion;
 import org.apache.neethi.Constants;
 import org.apache.neethi.PolicyComponent;
+import org.apache.rampart.util.RampartUtil;
 
-public class SSLConfig implements Assertion{
-	public final static String SSL_LN = RampartConfig.SSL_CONFIG;
-	public final static String PROPERTY_LN = "property";
-	public final static String PROPERTY_NAME_ATTR = "name";
-	
-	private Properties prop;
-	
-	public Properties getProp() {
+public class SSLConfig implements Assertion {
+    public final static String SSL_LN = RampartConfig.SSL_CONFIG;
+    public final static String PROPERTY_LN = "property";
+    public final static String PROPERTY_NAME_ATTR = "name";
+    private Properties prop;
+
+    public Properties getProp() {
         return prop;
     }
+
     public void setProp(Properties prop) {
-        this.prop = prop;
+        this.prop = RampartUtil.updateProperty(prop);
     }
-	
-	public PolicyComponent normalize() {
+
+    public PolicyComponent normalize() {
         // TODO TODO
         throw new UnsupportedOperationException("TODO");
     }
-	
-	public QName getName() {
+
+    public QName getName() {
         return new QName(RampartConfig.NS, SSL_LN);
     }
 
@@ -38,7 +39,7 @@ public class SSLConfig implements Assertion{
         // TODO TODO
         throw new UnsupportedOperationException("TODO");
     }
-    
+
     public void serialize(XMLStreamWriter writer) throws XMLStreamException {
         String prefix = writer.getPrefix(RampartConfig.NS);
         
@@ -63,7 +64,7 @@ public class SSLConfig implements Assertion{
         
         writer.writeEndElement();
     }
-    
+
     public short getType() {
         return Constants.TYPE_ASSERTION;
     }

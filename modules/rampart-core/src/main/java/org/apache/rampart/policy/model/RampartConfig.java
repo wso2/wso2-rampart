@@ -19,6 +19,7 @@ package org.apache.rampart.policy.model;
 import org.apache.neethi.Assertion;
 import org.apache.neethi.Constants;
 import org.apache.neethi.PolicyComponent;
+import org.apache.rampart.util.RampartUtil;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -27,9 +28,9 @@ import java.util.Map;
 
 /**
  * Rampart policy model bean to capture Rampart configuration assertion info.
- * 
+ *
  * Example:
- * 
+ *
  * <pre>
  *  &lt;ramp:RampartConfig xmlns:ramp=&quot;http://ws.apache.org/rampart/policy&quot;&gt; 
  *  &lt;ramp:user&gt;alice&lt;/ramp:user&gt;
@@ -42,7 +43,7 @@ import java.util.Map;
  *  &lt;ramp:timestampMaxSkew&gt;0&lt;/ramp:timestampMaxSkew&gt;
  *  &lt;ramp:tokenStoreClass&gt;org.apache.rahas.StorageImpl&lt;/ramp:tokenStoreClass&gt;
  *  &lt;ramp:nonceLifeTime&gt;org.apache.rahas.StorageImpl&lt;/ramp:nonceLifeTime&gt;
- *  
+ *
  *  &lt;ramp:signatureCrypto&gt;
  *  &lt;ramp:crypto provider=&quot;org.apache.ws.security.components.crypto.Merlin&quot;&gt;
  *  &lt;ramp:property name=&quot;keystoreType&quot;&gt;JKS&lt;/ramp:property&gt;
@@ -50,7 +51,7 @@ import java.util.Map;
  *  &lt;ramp:property name=&quot;keystorePassword&quot;&gt;password&lt;/ramp:property&gt;
  *  &lt;/ramp:crypto&gt;
  *  &lt;/ramp:signatureCrypto&gt;
- *  
+ *
  *  &lt;ramp:tokenIssuerPolicy&gt;
  *  &lt;wsp:Policy&gt;
  *  ....
@@ -58,9 +59,9 @@ import java.util.Map;
  *  &lt;/wsp:Policy&gt;
  *  &lt;/ramp:tokenIssuerPolicy&gt;
  *  &lt;/ramp:RampartConfig&gt;
- * 
+ *
  * </pre>
- * 
+ *
  */
 public class RampartConfig implements Assertion {
 
@@ -191,7 +192,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setMustUnderstand(int mustUnderstand) {
-        this.mustUnderstand = mustUnderstand;
+        this.mustUnderstand = Integer.parseInt(RampartUtil.getActualValue(String.valueOf(mustUnderstand)));
     }
 
     public String getActor() {
@@ -199,7 +200,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setActor(String actor) {
-        this.actor = actor;
+        this.actor = RampartUtil.getActualValue(actor);
     }
 
     public KerberosConfig getKerberosConfig() {
@@ -230,7 +231,7 @@ public class RampartConfig implements Assertion {
      *            The tokenStoreClass to set.
      */
     public void setTokenStoreClass(String tokenStoreClass) {
-        this.tokenStoreClass = tokenStoreClass;
+        this.tokenStoreClass = RampartUtil.getActualValue(tokenStoreClass);;
     }
 
     /**
@@ -245,7 +246,7 @@ public class RampartConfig implements Assertion {
      *            The life time of a nonce to set (in seconds).
      */
     public void setNonceLifeTime(String nonceLife) {
-        this.nonceLifeTime = nonceLife;
+        this.nonceLifeTime = RampartUtil.getActualValue(nonceLifeTime);
     }
 
     public CryptoConfig getDecCryptoConfig() {
@@ -269,7 +270,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setEncryptionUser(String encryptionUser) {
-        this.encryptionUser = encryptionUser;
+        this.encryptionUser = RampartUtil.getActualValue(encryptionUser);
     }
 
     public String getPwCbClass() {
@@ -277,7 +278,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setPwCbClass(String pwCbClass) {
-        this.pwCbClass = pwCbClass;
+        this.pwCbClass = RampartUtil.getActualValue(pwCbClass);
     }
 
     public String getPolicyValidatorCbClass() {
@@ -285,7 +286,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setPolicyValidatorCbClass(String policyValidatorCbClass) {
-        this.policyValidatorCbClass = policyValidatorCbClass;
+        this.policyValidatorCbClass = RampartUtil.getActualValue(policyValidatorCbClass);;
     }
 
     public String getRampartConfigCbClass() {
@@ -293,7 +294,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setRampartConfigCbClass(String rampartConfigCbClass) {
-        this.rampartConfigCbClass = rampartConfigCbClass;
+        this.rampartConfigCbClass = RampartUtil.getActualValue(rampartConfigCbClass);
     }
 
     public CryptoConfig getSigCryptoConfig() {
@@ -309,7 +310,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setUser(String user) {
-        this.user = user;
+        this.user = RampartUtil.getActualValue(user);
     }
 
     public String getUserCertAlias() {
@@ -317,7 +318,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setUserCertAlias(String userCertAlias) {
-        this.userCertAlias = userCertAlias;
+        this.userCertAlias = RampartUtil.getActualValue(userCertAlias);
     }
 
     public Map<String, String> getPropertyMap() {
@@ -484,7 +485,7 @@ public class RampartConfig implements Assertion {
             writer.writeStartElement(NS, KERBEROS_CONFIG);
             kerberosConfig.serialize(writer);
             writer.writeEndElement();
-            
+
         }
 
         writer.writeEndElement();
@@ -507,11 +508,12 @@ public class RampartConfig implements Assertion {
         return optimizeMessageProcessingForTransportBinding;
     }
 
-    public void setOptimizeMessageProcessingForTransportBinding(boolean optimizeMessageProcessingForTransportBinding) {
-        this.optimizeMessageProcessingForTransportBinding = optimizeMessageProcessingForTransportBinding;
+    public void setOptimizeMessageProcessingForTransportBinding(String optimizeMessageProcessingForTransportBinding) {
+        this.optimizeMessageProcessingForTransportBinding = Boolean.parseBoolean(
+                RampartUtil.getActualValue(optimizeMessageProcessingForTransportBinding));
     }
     public void setTimestampPrecisionInMilliseconds(String timestampPrecisionInMilliseconds) {
-        this.timestampPrecisionInMilliseconds = timestampPrecisionInMilliseconds;
+        this.timestampPrecisionInMilliseconds = RampartUtil.getActualValue(timestampPrecisionInMilliseconds);
     }
 
     /**
@@ -526,7 +528,7 @@ public class RampartConfig implements Assertion {
      *            The timestampTTL to set.
      */
     public void setTimestampTTL(String timestampTTL) {
-        this.timestampTTL = timestampTTL;
+        this.timestampTTL = RampartUtil.getActualValue(timestampTTL);
     }
 
     /**
@@ -541,7 +543,7 @@ public class RampartConfig implements Assertion {
      *            The timestampMaxSkew to set.
      */
     public void setTimestampMaxSkew(String timestampMaxSkew) {
-        this.timestampMaxSkew = timestampMaxSkew;
+        this.timestampMaxSkew = RampartUtil.getActualValue(timestampMaxSkew);
     }
 
     public OptimizePartsConfig getOptimizeParts() {
@@ -557,7 +559,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setStsAlias(String stsAlias) {
-        this.stsAlias = stsAlias;
+        this.stsAlias = RampartUtil.getActualValue(stsAlias);
     }
 
     public CryptoConfig getStsCryptoConfig() {
@@ -573,7 +575,7 @@ public class RampartConfig implements Assertion {
     }
 
     public void setTimeStampStrict(String timeStampStrict) {
-        this.timeStampStrict = timeStampStrict;
+        this.timeStampStrict = RampartUtil.getActualValue(timeStampStrict);
     }
 
     public String getEnableTTLCheck() {
@@ -581,6 +583,6 @@ public class RampartConfig implements Assertion {
     }
 
     public void setEnableTTLCheck(String enableTTLCheck) {
-        this.enableTTLCheck = enableTTLCheck;
+        this.enableTTLCheck = RampartUtil.getActualValue(enableTTLCheck);
     }
 }

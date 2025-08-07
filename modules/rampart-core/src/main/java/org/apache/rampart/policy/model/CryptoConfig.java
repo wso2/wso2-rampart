@@ -19,6 +19,7 @@ package org.apache.rampart.policy.model;
 import org.apache.neethi.Assertion;
 import org.apache.neethi.Constants;
 import org.apache.neethi.PolicyComponent;
+import org.apache.rampart.util.RampartUtil;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
@@ -78,7 +79,7 @@ public class CryptoConfig implements Assertion {
     }
 
     public void setProp(Properties prop) {
-        this.prop = prop;
+        this.prop = RampartUtil.updateProperty(prop);
     }
 
     public String getProvider() {
