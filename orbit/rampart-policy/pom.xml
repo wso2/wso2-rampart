@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.apache.rampart.wso2</groupId>
         <artifactId>rampart-orbit</artifactId>
-        <version>1.7.0-wso2v6-SNAPSHOT</version>
+        <version>1.7.0-wso2v7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
