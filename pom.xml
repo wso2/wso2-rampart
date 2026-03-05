@@ -570,6 +570,7 @@
 
         <axis2.version>1.6.1-wso2v37</axis2.version>
         <axiom.version>1.2.11-wso2v16</axiom.version>
+        <axiom.org.jaxen.imp.pkg.version.range>[1.2.0, 3.0.0)</axiom.org.jaxen.imp.pkg.version.range>
 
         <wss4j.version>1.6.0-wso2v1</wss4j.version>
         <xercesImpl.version>2.8.1.wso2v2</xercesImpl.version>
