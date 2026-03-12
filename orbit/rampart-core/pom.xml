@@ -191,7 +191,8 @@
                             org.apache.ws.secpolicy; version="${imp.pkg.version.range.rampart}",
                             org.apache.ws.secpolicy.model; version="${imp.pkg.version.range.rampart}",
                             org.apache.xml.security.utils; version="${imp.pkg.version.xmlsec}",
-                            org.jaxen, org.joda.time,
+                            org.jaxen; version="${axiom.org.jaxen.imp.pkg.version.range}",
+                            org.joda.time,
                             org.opensaml.*,
                             org.w3c.dom
                         </Import-Package>
