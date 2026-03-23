@@ -573,8 +573,8 @@
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
-        <axis2.version>1.6.1-wso2v122-SNAPSHOT</axis2.version>
-        <axiom.version>1.2.11-wso2v16</axiom.version>
+        <axis2.version>1.6.1-wso2v123</axis2.version>
+        <axiom.version>1.2.11-wso2v36</axiom.version>
         <axiom.org.jaxen.imp.pkg.version.range>[1.2.0, 3.0.0)</axiom.org.jaxen.imp.pkg.version.range>
 
         <wss4j.version>1.6.0-wso2v1</wss4j.version>
