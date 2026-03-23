@@ -498,6 +498,11 @@
                 <artifactId>org.wso2.carbon.identity.saml.common.util</artifactId>
                 <version>${saml.common.util.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.wso2</groupId>
+                <artifactId>axis2</artifactId>
+                <version>${axis2.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -568,8 +573,8 @@
         <rampart.mar.version>${rampart.version}</rampart.mar.version>
         <rahas.mar.version>${rampart.version}</rahas.mar.version>
 
-        <axis2.version>1.6.1-wso2v37</axis2.version>
-        <axiom.version>1.2.11-wso2v16</axiom.version>
+        <axis2.version>1.6.1-wso2v123</axis2.version>
+        <axiom.version>1.2.11-wso2v36</axiom.version>
         <axiom.org.jaxen.imp.pkg.version.range>[1.2.0, 3.0.0)</axiom.org.jaxen.imp.pkg.version.range>
 
         <wss4j.version>1.6.0-wso2v1</wss4j.version>
@@ -603,7 +608,7 @@
         <build.plugin.version>1.3</build.plugin.version>
         <compiler.plugin.version>3.8.1</compiler.plugin.version>
 
-        <bundle.plugin.version>4.1.0</bundle.plugin.version>
+        <bundle.plugin.version>5.1.9</bundle.plugin.version>
         <antrun.plugin.version>1.8</antrun.plugin.version>
 
         <incremental-build.plugin.version>1.3.1</incremental-build.plugin.version>
@@ -613,8 +618,8 @@
         
         <maven.buildnumber.plugin.version>1.4</maven.buildnumber.plugin.version>
 
-        <src.java.version>1.7</src.java.version>
-        <target.java.version>1.7</target.java.version>
+        <src.java.version>1.8</src.java.version>
+        <target.java.version>1.8</target.java.version>
 
         <project.scm.id>my-scm-server</project.scm.id>
 
